@@ -1,0 +1,51 @@
+parameters:
+    level: 3
+    paths:
+        - energy-alabama-kc.php
+        - includes/
+    bootstrapFiles:
+        - vendor/php-stubs/wordpress-stubs/wordpress-stubs.php
+    ignoreErrors:
+        # WordPress globals
+        - '#Undefined variable: \$wpdb#'
+        - '#Undefined variable: \$wp_query#'
+        - '#Undefined variable: \$post#'
+        - '#Undefined variable: \$wp_filesystem#'
+        - '#Undefined variable: \$current_user#'
+        - '#Undefined variable: \$pagenow#'
+        - '#Undefined variable: \$typenow#'
+        
+        # WordPress functions that may not be defined during analysis
+        - '#Function [a-zA-Z_]+\(\) not found#'
+        - '#Call to undefined function [a-zA-Z_\\\\]+\(\)#'
+        
+        # Mixed types common in WordPress
+        - '#Parameter .* expects .*, mixed given#'
+        - '#Cannot call method .* on mixed#'
+        - '#Offset .* does not exist on array#'
+        
+        # WordPress hook system
+        - '#Parameter .* of function add_action expects#'
+        - '#Parameter .* of function add_filter expects#'
+        
+        # Common WordPress patterns
+        - '#Strict comparison using#'
+        - '#Variable .* might not be defined#'
+        - '#Property .* does not exist#'
+        - '#Method .* does not exist#'
+        
+        # Array access patterns
+        - '#Offset string does not exist on array#'
+        - '#Cannot access offset .* on mixed#'
+        
+    # Relax type checking
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    checkMissingCallableSignature: false
+    checkTooWideReturnTypesInProtectedAndPublicMethods: false
+    checkUninitializedProperties: false
+    checkDynamicProperties: false
+    reportUnmatchedIgnoredErrors: false
+    
+    # Allow mixed types
+    treatPhpDocTypesAsCertain: false

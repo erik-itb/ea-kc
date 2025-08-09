@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<ruleset name="Energy Alabama KC">
+    <description>Custom PHP CodeSniffer ruleset for Energy Alabama KC plugin</description>
+
+    <!-- Files to check -->
+    <file>.</file>
+
+    <!-- Exclude vendor and other directories -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/tests/*</exclude-pattern>
+    <exclude-pattern>*/.git/*</exclude-pattern>
+
+    <!-- Use WordPress coding standards as base but with relaxed rules -->
+    <rule ref="WordPress">
+        <!-- Disable overly strict formatting rules -->
+        <exclude name="WordPress.Arrays.ArrayIndentation"/>
+        <exclude name="WordPress.Arrays.ArrayKeySpacingRestrictions"/>
+        <exclude name="WordPress.Files.FileName"/>
+        <exclude name="WordPress.NamingConventions.ValidVariableName"/>
+        <exclude name="WordPress.NamingConventions.ValidFunctionName"/>
+        <exclude name="WordPress.NamingConventions.ValidHookName"/>
+        
+        <!-- Disable strict indentation rules -->
+        <exclude name="Generic.WhiteSpace.ScopeIndent"/>
+        <exclude name="Generic.WhiteSpace.DisallowTabIndent"/>
+        <exclude name="PEAR.Functions.FunctionCallSignature"/>
+        
+        <!-- Disable strict comment formatting -->
+        <exclude name="Squiz.Commenting.FunctionComment"/>
+        <exclude name="Squiz.Commenting.ClassComment"/>
+        <exclude name="Squiz.Commenting.FileComment"/>
+        <exclude name="Squiz.Commenting.VariableComment"/>
+        <exclude name="Squiz.Commenting.InlineComment"/>
+        
+        <!-- Disable strict line length rules -->
+        <exclude name="Generic.Files.LineLength"/>
+        
+        <!-- Disable strict spacing rules -->
+        <exclude name="WordPress.WhiteSpace.OperatorSpacing"/>
+        <exclude name="WordPress.WhiteSpace.CastStructureSpacing"/>
+        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
+        
+        <!-- Disable strict brace formatting -->
+        <exclude name="Squiz.ControlStructures.ControlSignature"/>
+        <exclude name="PSR2.Classes.ClassDeclaration"/>
+        
+        <!-- Keep important security and functionality rules -->
+        <!-- These are kept: WordPress.Security.*, WordPress.DB.*, etc. -->
+    </rule>
+
+    <!-- Allow relaxed line length -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="150"/>
+            <property name="absoluteLineLimit" value="200"/>
+        </properties>
+    </rule>
+
+    <!-- Allow mixed case function names (common in WordPress) -->
+    <rule ref="WordPress.NamingConventions.ValidFunctionName">
+        <properties>
+            <property name="strict" value="false"/>
+        </properties>
+    </rule>
+
+    <!-- Show progress -->
+    <arg value="p"/>
+    
+    <!-- Use colors -->
+    <arg name="colors"/>
+    
+    <!-- Show sniff names -->
+    <arg value="s"/>
+</ruleset>

@@ -1,0 +1,53 @@
+# Git and GitHub
+/.git
+/.github
+.gitignore
+
+# Development dependencies
+/node_modules
+/vendor
+
+# Development/Test files
+/tests
+/docs
+*.md
+!README.md
+
+# Editor and IDE
+.editorconfig
+.vscode
+.idea
+*.sublime-*
+
+# Build and development tools
+.distignore
+composer.json
+composer.lock
+package.json
+package-lock.json
+yarn.lock
+phpcs.xml
+phpstan.neon
+.php-cs-fixer.dist.php
+.phpunit.result.cache
+
+# Scripts and utilities
+*.sh
+*.py
+claude_context.md
+
+# Backup and temporary files
+*.bak
+*.orig
+*.tmp
+*.log
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# WordPress.org assets
+/.wordpress-org
+/assets-wp-repo
