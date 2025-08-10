@@ -190,82 +190,50 @@ class Energy_Alabama_KC_Admin {
         $kc_submenu = $submenu['edit.php?post_type=kc_article'];
         $new_submenu = array();
 
-        // Find all menu items and organize them
-        $dashboard_item = null;
-        $all_articles_item = null;
-        $add_article_item = null;
-        $categories_item = null;
-        $tags_item = null;
-        $all_dockets_item = null;
-        $add_docket_item = null;
-        $jurisdictions_item = null;
-        $import_item = null;
-        $settings_item = null;
+        // Define the exact order we want
+        $desired_order = array(
+            'energy-alabama-kc-dashboard' => 1,
+            'edit.php?post_type=kc_article' => 2,
+            'post-new.php?post_type=kc_article' => 3,
+            'edit-tags.php?taxonomy=kc_category&post_type=kc_article' => 4,
+            'edit-tags.php?taxonomy=kc_tags&post_type=kc_article' => 5,
+            'edit.php?post_type=docket' => 6,
+            'post-new.php?post_type=docket' => 7,
+            'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket' => 8,
+            'energy-alabama-kc-import' => 9,
+            'energy-alabama-kc-settings' => 10
+        );
 
+        // Create array to hold items by their menu slug
+        $menu_items = array();
+        
         foreach ( $kc_submenu as $item ) {
-            switch ( $item[2] ) {
-                case 'energy-alabama-kc-dashboard':
-                    $dashboard_item = $item;
-                    break;
-                case 'edit.php?post_type=kc_article':
-                    $all_articles_item = $item;
-                    break;
-                case 'post-new.php?post_type=kc_article':
-                    $add_article_item = $item;
-                    break;
-                case 'edit-tags.php?taxonomy=kc_category&amp;post_type=kc_article':
-                case 'edit-tags.php?taxonomy=kc_category&post_type=kc_article':
-                    $categories_item = $item;
-                    break;
-                case 'edit-tags.php?taxonomy=kc_tags&amp;post_type=kc_article':
-                case 'edit-tags.php?taxonomy=kc_tags&post_type=kc_article':
-                    $tags_item = $item;
-                    break;
-                case 'edit.php?post_type=docket':
-                    $all_dockets_item = $item;
-                    break;
-                case 'post-new.php?post_type=docket':
-                    $add_docket_item = $item;
-                    break;
-                case 'edit-tags.php?taxonomy=docket_type&amp;post_type=docket':
-                case 'edit-tags.php?taxonomy=docket_type&post_type=docket':
-                    $jurisdictions_item = $item;
-                    break;
-                case 'energy-alabama-kc-import':
-                    $import_item = $item;
-                    break;
-                case 'energy-alabama-kc-settings':
-                    $settings_item = $item;
-                    break;
+            $menu_slug = $item[2];
+            
+            // Handle URL encoded versions
+            $menu_slug = str_replace('&amp;', '&', $menu_slug);
+            
+            $menu_items[$menu_slug] = $item;
+        }
+
+        // Build new menu in desired order
+        foreach ( $desired_order as $slug => $position ) {
+            if ( isset( $menu_items[$slug] ) ) {
+                $new_submenu[$position] = $menu_items[$slug];
+                unset( $menu_items[$slug] );
             }
         }
 
-        // Build the new menu in the desired order
-        if ( $dashboard_item ) $new_submenu[] = $dashboard_item;
-        if ( $all_articles_item ) $new_submenu[] = $all_articles_item;
-        if ( $add_article_item ) $new_submenu[] = $add_article_item;
-        if ( $categories_item ) $new_submenu[] = $categories_item;
-        if ( $tags_item ) $new_submenu[] = $tags_item;
-        if ( $all_dockets_item ) $new_submenu[] = $all_dockets_item;
-        if ( $add_docket_item ) $new_submenu[] = $add_docket_item;
-        if ( $jurisdictions_item ) $new_submenu[] = $jurisdictions_item;
-        if ( $import_item ) $new_submenu[] = $import_item;
-        if ( $settings_item ) $new_submenu[] = $settings_item;
-
-        // Add any remaining items that we might have missed
-        foreach ( $kc_submenu as $item ) {
-            $found = false;
-            foreach ( $new_submenu as $new_item ) {
-                if ( $new_item[2] === $item[2] ) {
-                    $found = true;
-                    break;
-                }
-            }
-            if ( ! $found ) {
-                $new_submenu[] = $item;
-            }
+        // Add any remaining items that weren't in our desired order
+        $next_position = max( array_keys( $new_submenu ) ) + 1;
+        foreach ( $menu_items as $item ) {
+            $new_submenu[$next_position] = $item;
+            $next_position++;
         }
 
+        // Sort by key to ensure proper order
+        ksort( $new_submenu );
+        
         // Replace the submenu
         $submenu['edit.php?post_type=kc_article'] = $new_submenu;
     }

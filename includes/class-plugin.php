@@ -236,7 +236,7 @@ class Energy_Alabama_KC {
 
 		// Admin menu and settings
 		$this->loader->add_action( 'admin_menu', $this->plugin_admin, 'add_admin_menu' );
-		$this->loader->add_action( 'admin_menu', $this->plugin_admin, 'reorder_admin_menu', 999 );
+		$this->loader->add_action( 'admin_menu', $this->plugin_admin, 'reorder_admin_menu', PHP_INT_MAX );
 		$this->loader->add_action( 'admin_init', $this->plugin_admin, 'register_settings' );
 
 		// Custom admin columns for KC Articles
@@ -293,10 +293,8 @@ class Energy_Alabama_KC {
 		// Taxonomies
 		$this->loader->add_action( 'init', $this->taxonomies, 'register_taxonomies' );
 
-		// Meta Fields
-		$this->loader->add_action( 'add_meta_boxes', $this->meta_fields, 'add_meta_boxes' );
-		
-		// Note: Meta field saving should be handled by the respective classes that create the meta boxes
+		// Meta Fields - just register the fields, meta boxes are handled by admin class
+		// The meta boxes are added and saved through the admin class
 
 		// Template Manager
 		$this->loader->add_filter( 'template_include', $this->template_manager, 'load_template' );
