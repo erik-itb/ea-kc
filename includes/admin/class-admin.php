@@ -143,20 +143,13 @@ class Energy_Alabama_KC_Admin {
      * @since    1.0.0
      */
     public function add_admin_menu() {
-        // Add top-level menu page
-        add_menu_page(
-            __( 'Knowledge Center', 'energy-alabama-kc' ),        // Page title
-            __( 'Knowledge Center', 'energy-alabama-kc' ),        // Menu title
-            'manage_options',                                       // Capability
-            'energy-alabama-kc',                                   // Menu slug
-            array( $this, 'display_main_page' ),                  // Callback function
-            'dashicons-book-alt',                                  // Icon
-            25                                                     // Position
-        );
-
-        // Add settings submenu page
+        // Remove the default "Add New" from the main menu to clean it up
+        global $submenu;
+        
+        // Add settings submenu page under the existing Knowledge Center menu
+        // (The main Knowledge Center menu is created by the post type registration)
         add_submenu_page(
-            'energy-alabama-kc',                                   // Parent slug
+            'edit.php?post_type=kc_article',                      // Parent slug (existing KC menu)
             __( 'KC Settings', 'energy-alabama-kc' ),             // Page title
             __( 'Settings', 'energy-alabama-kc' ),                // Menu title
             'manage_options',                                       // Capability
@@ -164,15 +157,43 @@ class Energy_Alabama_KC_Admin {
             array( $this, 'display_settings_page' )               // Callback function
         );
 
-        // Add other submenu pages as needed
+        // Add import submenu page
         add_submenu_page(
-            'energy-alabama-kc',                                   // Parent slug
+            'edit.php?post_type=kc_article',                      // Parent slug (existing KC menu)
             __( 'Import Content', 'energy-alabama-kc' ),          // Page title
             __( 'Import', 'energy-alabama-kc' ),                  // Menu title
             'manage_options',                                       // Capability
             'energy-alabama-kc-import',                            // Menu slug
             array( $this, 'display_import_page' )                 // Callback function
         );
+
+        // Add dashboard submenu page at the top
+        add_submenu_page(
+            'edit.php?post_type=kc_article',                      // Parent slug (existing KC menu)
+            __( 'Knowledge Center Dashboard', 'energy-alabama-kc' ), // Page title
+            __( 'Dashboard', 'energy-alabama-kc' ),               // Menu title
+            'manage_options',                                       // Capability
+            'energy-alabama-kc-dashboard',                         // Menu slug
+            array( $this, 'display_main_page' )                   // Callback function
+        );
+
+        // Reorder submenu items to put Dashboard first
+        if ( isset( $submenu['edit.php?post_type=kc_article'] ) ) {
+            // Find the dashboard item and move it to position 1 (after "All KC Articles")
+            $dashboard_item = null;
+            foreach ( $submenu['edit.php?post_type=kc_article'] as $key => $item ) {
+                if ( $item[2] === 'energy-alabama-kc-dashboard' ) {
+                    $dashboard_item = $item;
+                    unset( $submenu['edit.php?post_type=kc_article'][$key] );
+                    break;
+                }
+            }
+            
+            if ( $dashboard_item ) {
+                // Insert dashboard at position 1
+                array_splice( $submenu['edit.php?post_type=kc_article'], 1, 0, array( $dashboard_item ) );
+            }
+        }
     }
 
     /**
@@ -250,8 +271,13 @@ class Energy_Alabama_KC_Admin {
         // Get post counts for dashboard
         $kc_articles = wp_count_posts( 'kc_article' );
         $dockets = wp_count_posts( 'docket' );
-        $categories = wp_count_terms( array( 'taxonomy' => 'kc_category', 'hide_empty' => false ) );
-        $docket_types = wp_count_terms( array( 'taxonomy' => 'docket_type', 'hide_empty' => false ) );
+        
+        // Get term counts safely
+        $categories_count = wp_count_terms( array( 'taxonomy' => 'kc_category', 'hide_empty' => false ) );
+        $categories = is_wp_error( $categories_count ) ? 0 : $categories_count;
+        
+        $docket_types_count = wp_count_terms( array( 'taxonomy' => 'docket_type', 'hide_empty' => false ) );
+        $docket_types = is_wp_error( $docket_types_count ) ? 0 : $docket_types_count;
 
         ?>
         <div class="wrap">
@@ -319,12 +345,12 @@ class Energy_Alabama_KC_Admin {
                         <h2 class="hndle"><span><?php _e( 'Quick Actions', 'energy-alabama-kc' ); ?></span></h2>
                         <div class="inside">
                             <div class="eakc-quick-actions">
-                                <a href="<?php echo admin_url( 'admin.php?page=energy-alabama-kc-settings' ); ?>" class="button button-large">
+                                <a href="<?php echo admin_url( 'edit.php?post_type=kc_article&page=energy-alabama-kc-settings' ); ?>" class="button button-large">
                                     <span class="dashicons dashicons-admin-settings"></span>
                                     <?php _e( 'Plugin Settings', 'energy-alabama-kc' ); ?>
                                 </a>
                                 
-                                <a href="<?php echo admin_url( 'admin.php?page=energy-alabama-kc-import' ); ?>" class="button button-large">
+                                <a href="<?php echo admin_url( 'edit.php?post_type=kc_article&page=energy-alabama-kc-import' ); ?>" class="button button-large">
                                     <span class="dashicons dashicons-upload"></span>
                                     <?php _e( 'Import Content', 'energy-alabama-kc' ); ?>
                                 </a>
