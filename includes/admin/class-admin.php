@@ -143,9 +143,6 @@ class Energy_Alabama_KC_Admin {
      * @since    1.0.0
      */
     public function add_admin_menu() {
-        // Remove the default "Add New" from the main menu to clean it up
-        global $submenu;
-        
         // Add settings submenu page under the existing Knowledge Center menu
         // (The main Knowledge Center menu is created by the post type registration)
         add_submenu_page(
@@ -176,24 +173,101 @@ class Energy_Alabama_KC_Admin {
             'energy-alabama-kc-dashboard',                         // Menu slug
             array( $this, 'display_main_page' )                   // Callback function
         );
+    }
 
-        // Reorder submenu items to put Dashboard first
-        if ( isset( $submenu['edit.php?post_type=kc_article'] ) ) {
-            // Find the dashboard item and move it to position 1 (after "All KC Articles")
-            $dashboard_item = null;
-            foreach ( $submenu['edit.php?post_type=kc_article'] as $key => $item ) {
-                if ( $item[2] === 'energy-alabama-kc-dashboard' ) {
+    /**
+     * Reorder the Knowledge Center submenu items.
+     *
+     * @since    1.0.0
+     */
+    public function reorder_admin_menu() {
+        global $submenu;
+        
+        if ( ! isset( $submenu['edit.php?post_type=kc_article'] ) ) {
+            return;
+        }
+
+        $kc_submenu = $submenu['edit.php?post_type=kc_article'];
+        $new_submenu = array();
+
+        // Find all menu items and organize them
+        $dashboard_item = null;
+        $all_articles_item = null;
+        $add_article_item = null;
+        $categories_item = null;
+        $tags_item = null;
+        $all_dockets_item = null;
+        $add_docket_item = null;
+        $jurisdictions_item = null;
+        $import_item = null;
+        $settings_item = null;
+
+        foreach ( $kc_submenu as $item ) {
+            switch ( $item[2] ) {
+                case 'energy-alabama-kc-dashboard':
                     $dashboard_item = $item;
-                    unset( $submenu['edit.php?post_type=kc_article'][$key] );
+                    break;
+                case 'edit.php?post_type=kc_article':
+                    $all_articles_item = $item;
+                    break;
+                case 'post-new.php?post_type=kc_article':
+                    $add_article_item = $item;
+                    break;
+                case 'edit-tags.php?taxonomy=kc_category&amp;post_type=kc_article':
+                case 'edit-tags.php?taxonomy=kc_category&post_type=kc_article':
+                    $categories_item = $item;
+                    break;
+                case 'edit-tags.php?taxonomy=kc_tags&amp;post_type=kc_article':
+                case 'edit-tags.php?taxonomy=kc_tags&post_type=kc_article':
+                    $tags_item = $item;
+                    break;
+                case 'edit.php?post_type=docket':
+                    $all_dockets_item = $item;
+                    break;
+                case 'post-new.php?post_type=docket':
+                    $add_docket_item = $item;
+                    break;
+                case 'edit-tags.php?taxonomy=docket_type&amp;post_type=docket':
+                case 'edit-tags.php?taxonomy=docket_type&post_type=docket':
+                    $jurisdictions_item = $item;
+                    break;
+                case 'energy-alabama-kc-import':
+                    $import_item = $item;
+                    break;
+                case 'energy-alabama-kc-settings':
+                    $settings_item = $item;
+                    break;
+            }
+        }
+
+        // Build the new menu in the desired order
+        if ( $dashboard_item ) $new_submenu[] = $dashboard_item;
+        if ( $all_articles_item ) $new_submenu[] = $all_articles_item;
+        if ( $add_article_item ) $new_submenu[] = $add_article_item;
+        if ( $categories_item ) $new_submenu[] = $categories_item;
+        if ( $tags_item ) $new_submenu[] = $tags_item;
+        if ( $all_dockets_item ) $new_submenu[] = $all_dockets_item;
+        if ( $add_docket_item ) $new_submenu[] = $add_docket_item;
+        if ( $jurisdictions_item ) $new_submenu[] = $jurisdictions_item;
+        if ( $import_item ) $new_submenu[] = $import_item;
+        if ( $settings_item ) $new_submenu[] = $settings_item;
+
+        // Add any remaining items that we might have missed
+        foreach ( $kc_submenu as $item ) {
+            $found = false;
+            foreach ( $new_submenu as $new_item ) {
+                if ( $new_item[2] === $item[2] ) {
+                    $found = true;
                     break;
                 }
             }
-            
-            if ( $dashboard_item ) {
-                // Insert dashboard at position 1
-                array_splice( $submenu['edit.php?post_type=kc_article'], 1, 0, array( $dashboard_item ) );
+            if ( ! $found ) {
+                $new_submenu[] = $item;
             }
         }
+
+        // Replace the submenu
+        $submenu['edit.php?post_type=kc_article'] = $new_submenu;
     }
 
     /**

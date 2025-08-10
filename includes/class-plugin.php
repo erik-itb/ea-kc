@@ -233,6 +233,7 @@ class Energy_Alabama_KC {
 
 		// Admin menu and settings
 		$this->loader->add_action( 'admin_menu', $this->plugin_admin, 'add_admin_menu' );
+		$this->loader->add_action( 'admin_menu', $this->plugin_admin, 'reorder_admin_menu', 999 );
 		$this->loader->add_action( 'admin_init', $this->plugin_admin, 'register_settings' );
 
 		// Custom admin columns for KC Articles
