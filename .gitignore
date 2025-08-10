@@ -75,6 +75,6 @@ gruntfile.js
 
 # Claude context (if you keep it in main dir)
 claude_context.md
-
-
+project_context.md
+claude_context.py
 
