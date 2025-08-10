@@ -231,6 +231,9 @@ class Energy_Alabama_KC {
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $this->plugin_admin, 'enqueue_scripts' );
 
+		// Meta boxes functionality (handled through admin class)
+		// The meta boxes class is instantiated within the admin class and handles its own hooks
+
 		// Admin menu and settings
 		$this->loader->add_action( 'admin_menu', $this->plugin_admin, 'add_admin_menu' );
 		$this->loader->add_action( 'admin_menu', $this->plugin_admin, 'reorder_admin_menu', 999 );
@@ -292,7 +295,8 @@ class Energy_Alabama_KC {
 
 		// Meta Fields
 		$this->loader->add_action( 'add_meta_boxes', $this->meta_fields, 'add_meta_boxes' );
-		$this->loader->add_action( 'save_post', $this->meta_fields, 'save_meta_fields' );
+		
+		// Note: Meta field saving should be handled by the respective classes that create the meta boxes
 
 		// Template Manager
 		$this->loader->add_filter( 'template_include', $this->template_manager, 'load_template' );
