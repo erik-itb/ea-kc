@@ -238,6 +238,10 @@ class Energy_Alabama_KC {
 		$this->loader->add_action( 'admin_menu', $this->plugin_admin, 'add_admin_menu' );
 		$this->loader->add_action( 'admin_menu', $this->plugin_admin, 'reorder_admin_menu', PHP_INT_MAX );
 		$this->loader->add_action( 'admin_init', $this->plugin_admin, 'register_settings' );
+		
+		// Fix menu highlighting for taxonomy pages
+		$this->loader->add_filter( 'parent_file', $this->plugin_admin, 'fix_taxonomy_parent_menu' );
+		$this->loader->add_filter( 'submenu_file', $this->plugin_admin, 'fix_taxonomy_submenu' );
 
 		// Custom admin columns for KC Articles
 		$this->loader->add_filter( 'manage_kc_article_posts_columns', $this->plugin_admin, 'add_kc_article_columns' );

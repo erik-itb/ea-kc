@@ -173,6 +173,38 @@ class Energy_Alabama_KC_Admin {
     }
 
     /**
+     * Fix parent menu highlighting for taxonomy pages
+     *
+     * @since    1.0.0
+     */
+    public function fix_taxonomy_parent_menu( $parent_file ) {
+        global $current_screen;
+        
+        // Check if we're on a docket-related taxonomy page
+        if ( $current_screen && $current_screen->taxonomy === 'docket_jurisdiction' ) {
+            $parent_file = 'edit.php?post_type=kc_article';
+        }
+        
+        return $parent_file;
+    }
+    
+    /**
+     * Fix submenu highlighting for taxonomy pages
+     *
+     * @since    1.0.0
+     */
+    public function fix_taxonomy_submenu( $submenu_file ) {
+        global $current_screen, $pagenow;
+        
+        // Check if we're on the docket jurisdiction taxonomy page
+        if ( $pagenow === 'edit-tags.php' && isset( $_GET['taxonomy'] ) && $_GET['taxonomy'] === 'docket_jurisdiction' ) {
+            $submenu_file = 'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket';
+        }
+        
+        return $submenu_file;
+    }
+    
+    /**
      * Reorder the Knowledge Center submenu items.
      *
      * @since    1.0.0
