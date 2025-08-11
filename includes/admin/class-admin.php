@@ -1007,27 +1007,7 @@ class Energy_Alabama_KC_Admin {
      * @since    1.0.0
      */
     public function admin_notices() {
-        // Check if we're on a KC-related page
-        $screen = get_current_screen();
-        if ( ! $screen || ! in_array( $screen->post_type, array( 'kc_article', 'docket' ) ) ) {
-            return;
-        }
-
-        // Show welcome notice for new installations
-        if ( ! get_option( 'eakc_welcome_notice_dismissed' ) ) {
-            ?>
-            <div class="notice notice-info is-dismissible" data-notice="eakc-welcome">
-                <p>
-                    <strong><?php _e( 'Welcome to Energy Alabama Knowledge Center!', 'energy-alabama-kc' ); ?></strong>
-                    <?php _e( 'Thank you for installing the plugin. ', 'energy-alabama-kc' ); ?>
-                    <a href="<?php echo esc_url( admin_url( 'options-general.php?page=energy-alabama-kc-settings' ) ); ?>">
-                        <?php _e( 'Configure your settings', 'energy-alabama-kc' ); ?>
-                    </a>
-                    <?php _e( ' to get started.', 'energy-alabama-kc' ); ?>
-                </p>
-            </div>
-            <?php
-        }
+        // Welcome notice removed - not needed for this installation
     }
 
     /**
@@ -1040,14 +1020,7 @@ class Energy_Alabama_KC_Admin {
             wp_die( 'Security check failed' );
         }
 
-        $notice = sanitize_text_field( $_POST['notice'] );
-        
-        switch ( $notice ) {
-            case 'eakc-welcome':
-                update_option( 'eakc_welcome_notice_dismissed', true );
-                break;
-        }
-
+        // No notices to dismiss currently
         wp_die();
     }
 
