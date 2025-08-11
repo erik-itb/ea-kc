@@ -152,6 +152,24 @@ class Energy_Alabama_KC_Admin {
             'energy-alabama-kc-dashboard',                         // Menu slug
             array( $this, 'display_dashboard_page' )              // Callback function
         );
+        
+        // Add the "Add New Docket" submenu item
+        add_submenu_page(
+            'edit.php?post_type=kc_article',
+            __( 'Add New Docket', 'energy-alabama-kc' ),
+            __( 'Add New Docket', 'energy-alabama-kc' ),
+            'edit_posts',
+            'post-new.php?post_type=docket'
+        );
+        
+        // Add jurisdictions submenu
+        add_submenu_page(
+            'edit.php?post_type=kc_article',
+            __( 'Jurisdictions', 'energy-alabama-kc' ),
+            __( 'Jurisdictions', 'energy-alabama-kc' ),
+            'manage_categories',
+            'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket'
+        );
     }
 
     /**
