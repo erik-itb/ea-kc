@@ -73,8 +73,5 @@ webpack.mix.js
 gulpfile.js
 gruntfile.js
 
-# Claude context (if you keep it in main dir)
-claude_context.md
+includes/admin/class-admin-backup.php
 project_context.md
-claude_context.py
-

@@ -137,7 +137,7 @@ class Energy_Alabama_KC_Taxonomies {
             ),
         );
 
-        register_taxonomy('kc_tag', array('kc_article', 'docket'), $args);
+        register_taxonomy('kc_tags', array('kc_article'), $args);
     }
 
     /**
@@ -290,7 +290,7 @@ class Energy_Alabama_KC_Taxonomies {
         }
 
         // Create some default tags
-        if (!term_exists('solar', 'kc_tag')) {
+        if (!term_exists('solar', 'kc_tags')) {
             $tags = array(
                 'solar', 'wind', 'hydroelectric', 'biomass', 'geothermal',
                 'energy-efficiency', 'renewable-energy', 'sustainability',
@@ -298,7 +298,7 @@ class Energy_Alabama_KC_Taxonomies {
             );
 
             foreach ($tags as $tag) {
-                wp_insert_term($tag, 'kc_tag');
+                wp_insert_term($tag, 'kc_tags');
             }
         }
     }

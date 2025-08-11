@@ -21,7 +21,6 @@ class Energy_Alabama_KC_Post_Types {
      */
     public function __construct() {
         add_action('init', array($this, 'register_post_types'));
-        add_action('admin_menu', array($this, 'add_docket_submenu'), 999); // Run late to ensure proper order
         add_filter('post_updated_messages', array($this, 'updated_messages'));
         
         // Check if we need to flush rewrite rules
@@ -108,7 +107,7 @@ class Energy_Alabama_KC_Post_Types {
             'show_in_rest'       => true,
             'rest_base'          => 'kc-articles',
             'rest_controller_class' => 'WP_REST_Posts_Controller',
-            'taxonomies'         => array('kc_category', 'kc_tag'),
+            'taxonomies'         => array('kc_category', 'kc_tags'),
             'template'           => array(
                 array('core/paragraph', array(
                     'placeholder' => __('Start writing your knowledge center article...', 'energy-alabama-kc')
@@ -177,7 +176,7 @@ class Energy_Alabama_KC_Post_Types {
             'show_in_rest'       => true,
             'rest_base'          => 'dockets',
             'rest_controller_class' => 'WP_REST_Posts_Controller',
-            'taxonomies'         => array('docket_jurisdiction', 'kc_tag'),
+            'taxonomies'         => array('docket_jurisdiction'),
             'template'           => array(
                 array('core/paragraph', array(
                     'placeholder' => __('Enter docket description...', 'energy-alabama-kc')
@@ -188,62 +187,6 @@ class Energy_Alabama_KC_Post_Types {
         register_post_type('docket', $args);
     }
 
-    /**
-     * Add docket submenu items manually
-     */
-    public function add_docket_submenu() {
-        global $submenu;
-        
-        // Add the "Add New Docket" submenu item after "All Dockets"
-        add_submenu_page(
-            'edit.php?post_type=kc_article',
-            __('Add New Docket', 'energy-alabama-kc'),
-            __('Add New Docket', 'energy-alabama-kc'),
-            'edit_posts',
-            'post-new.php?post_type=docket'
-        );
-        
-        // Add jurisdictions submenu at the end
-        add_submenu_page(
-            'edit.php?post_type=kc_article',
-            __('Jurisdictions', 'energy-alabama-kc'),
-            __('Jurisdictions', 'energy-alabama-kc'),
-            'manage_categories',
-            'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket'
-        );
-        
-        // Reorder the submenu items to get the desired order
-        if (isset($submenu['edit.php?post_type=kc_article'])) {
-            $kc_submenu = $submenu['edit.php?post_type=kc_article'];
-            $reordered = array();
-            
-            // Expected order based on WordPress default positions:
-            // All KC Articles (5)
-            // Add New KC Article (10) 
-            // Categories (15)
-            // Tags (16)
-            // All Dockets (appears automatically)
-            // Add New Docket (we'll position this)
-            // Jurisdictions (we'll position this)
-            
-            foreach ($kc_submenu as $position => $item) {
-                if (strpos($item[2], 'post-new.php?post_type=docket') !== false) {
-                    // Move "Add New Docket" to position after "All Dockets"
-                    $reordered[25] = $item;
-                } elseif (strpos($item[2], 'edit-tags.php?taxonomy=docket_jurisdiction') !== false) {
-                    // Move "Jurisdictions" to the end
-                    $reordered[30] = $item;
-                } else {
-                    // Keep other items in their original positions
-                    $reordered[$position] = $item;
-                }
-            }
-            
-            // Sort by position and reassign
-            ksort($reordered);
-            $submenu['edit.php?post_type=kc_article'] = $reordered;
-        }
-    }
 
     /**
      * Maybe flush rewrite rules if needed

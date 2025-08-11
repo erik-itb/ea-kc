@@ -143,35 +143,14 @@ class Energy_Alabama_KC_Admin {
      * @since    1.0.0
      */
     public function add_admin_menu() {
-        // Add settings submenu page under the existing Knowledge Center menu
-        // (The main Knowledge Center menu is created by the post type registration)
-        add_submenu_page(
-            'edit.php?post_type=kc_article',                      // Parent slug (existing KC menu)
-            __( 'KC Settings', 'energy-alabama-kc' ),             // Page title
-            __( 'Settings', 'energy-alabama-kc' ),                // Menu title
-            'manage_options',                                       // Capability
-            'energy-alabama-kc-settings',                          // Menu slug
-            array( $this, 'display_settings_page' )               // Callback function
-        );
-
-        // Add import submenu page
-        add_submenu_page(
-            'edit.php?post_type=kc_article',                      // Parent slug (existing KC menu)
-            __( 'Import Content', 'energy-alabama-kc' ),          // Page title
-            __( 'Import', 'energy-alabama-kc' ),                  // Menu title
-            'manage_options',                                       // Capability
-            'energy-alabama-kc-import',                            // Menu slug
-            array( $this, 'display_import_page' )                 // Callback function
-        );
-
-        // Add dashboard submenu page at the top
+        // Add dashboard submenu page that combines Dashboard, Import, and Settings
         add_submenu_page(
             'edit.php?post_type=kc_article',                      // Parent slug (existing KC menu)
             __( 'Knowledge Center Dashboard', 'energy-alabama-kc' ), // Page title
             __( 'Dashboard', 'energy-alabama-kc' ),               // Menu title
             'manage_options',                                       // Capability
             'energy-alabama-kc-dashboard',                         // Menu slug
-            array( $this, 'display_main_page' )                   // Callback function
+            array( $this, 'display_dashboard_page' )              // Callback function
         );
     }
 
@@ -199,9 +178,7 @@ class Energy_Alabama_KC_Admin {
             'edit-tags.php?taxonomy=kc_tags&post_type=kc_article' => 5,
             'edit.php?post_type=docket' => 6,
             'post-new.php?post_type=docket' => 7,
-            'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket' => 8,
-            'energy-alabama-kc-import' => 9,
-            'energy-alabama-kc-settings' => 10
+            'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket' => 8
         );
 
         // Create array to hold items by their menu slug
@@ -301,11 +278,11 @@ class Energy_Alabama_KC_Admin {
     }
 
     /**
-     * Display the main Knowledge Center page.
+     * Display the combined Dashboard page with Overview, Import, and Settings.
      *
      * @since    1.0.0
      */
-    public function display_main_page() {
+    public function display_dashboard_page() {
         if ( ! current_user_can( 'manage_options' ) ) {
             wp_die( __( 'You do not have sufficient permissions to access this page.', 'energy-alabama-kc' ) );
         }
@@ -325,6 +302,14 @@ class Energy_Alabama_KC_Admin {
         <div class="wrap">
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
             
+            <!-- Tabbed Navigation -->
+            <h2 class="nav-tab-wrapper">
+                <a href="#overview" class="nav-tab nav-tab-active" data-tab="overview"><?php _e( 'Overview', 'energy-alabama-kc' ); ?></a>
+                <a href="#import" class="nav-tab" data-tab="import"><?php _e( 'Import', 'energy-alabama-kc' ); ?></a>
+                <a href="#settings" class="nav-tab" data-tab="settings"><?php _e( 'Settings', 'energy-alabama-kc' ); ?></a>
+            </h2>
+            
+            <!-- Overview Tab Content (default visible) -->
             <div class="eakc-dashboard">
                 <div class="eakc-dashboard-widgets">
                     
@@ -387,12 +372,12 @@ class Energy_Alabama_KC_Admin {
                         <h2 class="hndle"><span><?php _e( 'Quick Actions', 'energy-alabama-kc' ); ?></span></h2>
                         <div class="inside">
                             <div class="eakc-quick-actions">
-                                <a href="<?php echo admin_url( 'edit.php?post_type=kc_article&page=energy-alabama-kc-settings' ); ?>" class="button button-large">
+                                <a href="#settings" class="button button-large nav-tab-link" data-tab="settings">
                                     <span class="dashicons dashicons-admin-settings"></span>
                                     <?php _e( 'Plugin Settings', 'energy-alabama-kc' ); ?>
                                 </a>
                                 
-                                <a href="<?php echo admin_url( 'edit.php?post_type=kc_article&page=energy-alabama-kc-import' ); ?>" class="button button-large">
+                                <a href="#import" class="button button-large nav-tab-link" data-tab="import">
                                     <span class="dashicons dashicons-upload"></span>
                                     <?php _e( 'Import Content', 'energy-alabama-kc' ); ?>
                                 </a>
@@ -439,6 +424,16 @@ class Energy_Alabama_KC_Admin {
                     </div>
 
                 </div>
+            </div>
+
+            <!-- Import Tab Content -->
+            <div id="import-tab" class="tab-content" style="display: none;">
+                <?php $this->display_import_tab_content(); ?>
+            </div>
+            
+            <!-- Settings Tab Content -->
+            <div id="settings-tab" class="tab-content" style="display: none;">
+                <?php $this->display_settings_tab_content(); ?>
             </div>
 
             <style>
@@ -513,6 +508,10 @@ class Energy_Alabama_KC_Admin {
                     color: #999;
                 }
                 
+                .tab-content {
+                    margin-top: 20px;
+                }
+                
                 @media (max-width: 782px) {
                     .eakc-dashboard-widgets {
                         grid-template-columns: 1fr;
@@ -527,23 +526,50 @@ class Energy_Alabama_KC_Admin {
                     }
                 }
             </style>
+            
+            <script>
+            jQuery(document).ready(function($) {
+                // Tab switching
+                $('.nav-tab, .nav-tab-link').on('click', function(e) {
+                    e.preventDefault();
+                    var tab = $(this).data('tab');
+                    
+                    // Update active tab
+                    $('.nav-tab').removeClass('nav-tab-active');
+                    $('.nav-tab[data-tab="' + tab + '"]').addClass('nav-tab-active');
+                    
+                    // Show/hide content
+                    if (tab === 'overview') {
+                        $('.eakc-dashboard').show();
+                        $('.tab-content').hide();
+                    } else {
+                        $('.eakc-dashboard').hide();
+                        $('.tab-content').hide();
+                        $('#' + tab + '-tab').show();
+                    }
+                    
+                    // Update URL hash
+                    window.location.hash = tab;
+                });
+                
+                // Handle initial hash
+                var hash = window.location.hash.substring(1);
+                if (hash && ['import', 'settings'].includes(hash)) {
+                    $('.nav-tab[data-tab="' + hash + '"]').trigger('click');
+                }
+            });
+            </script>
         </div>
         <?php
     }
 
     /**
-     * Display the import page.
+     * Display the import tab content.
      *
      * @since    1.0.0
      */
-    public function display_import_page() {
-        if ( ! current_user_can( 'manage_options' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.', 'energy-alabama-kc' ) );
-        }
+    private function display_import_tab_content() {
         ?>
-        <div class="wrap">
-            <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-            
             <div class="eakc-import-tools">
                 <div class="postbox">
                     <h2 class="hndle"><span><?php _e( 'Bulk Import Tools', 'energy-alabama-kc' ); ?></span></h2>
@@ -565,23 +591,17 @@ class Energy_Alabama_KC_Admin {
                     </div>
                 </div>
             </div>
-        </div>
         <?php
     }
+    
     /**
-     * Display the settings page.
+     * Display the settings tab content.
      *
      * @since    1.0.0
      */
-    public function display_settings_page() {
-        if ( ! current_user_can( 'manage_options' ) ) {
-            wp_die( __( 'You do not have sufficient permissions to access this page.', 'energy-alabama-kc' ) );
-        }
+    private function display_settings_tab_content() {
         ?>
-        <div class="wrap">
-            <h1><?php _e( 'Knowledge Center Settings', 'energy-alabama-kc' ); ?></h1>
-            
-            <?php settings_errors(); ?>
+            <h2><?php _e( 'Knowledge Center Settings', 'energy-alabama-kc' ); ?></h2>
             
             <form method="post" action="options.php">
                 <?php
@@ -598,8 +618,42 @@ class Energy_Alabama_KC_Admin {
                    <a href="https://github.com/erik-itb/ea-kc" target="_blank"><?php _e( 'GitHub Repository', 'energy-alabama-kc' ); ?></a>
                 </p>
             </div>
-        </div>
         <?php
+    }
+    
+    /**
+     * Display the main Knowledge Center page.
+     * Kept for backward compatibility - redirects to dashboard.
+     *
+     * @since    1.0.0
+     * @deprecated 1.0.0 Use display_dashboard_page() instead
+     */
+    public function display_main_page() {
+        $this->display_dashboard_page();
+    }
+    
+    /**
+     * Display the import page.
+     * Kept for backward compatibility - redirects to dashboard.
+     *
+     * @since    1.0.0
+     * @deprecated 1.0.0 Use display_dashboard_page() instead
+     */
+    public function display_import_page() {
+        wp_redirect( admin_url( 'edit.php?post_type=kc_article&page=energy-alabama-kc-dashboard#import' ) );
+        exit;
+    }
+    
+    /**
+     * Display the settings page.
+     * Kept for backward compatibility - redirects to dashboard.
+     *
+     * @since    1.0.0
+     * @deprecated 1.0.0 Use display_dashboard_page() instead
+     */
+    public function display_settings_page() {
+        wp_redirect( admin_url( 'edit.php?post_type=kc_article&page=energy-alabama-kc-dashboard#settings' ) );
+        exit;
     }
 
     /**
