@@ -301,7 +301,7 @@ class Energy_Alabama_KC {
 		// The meta boxes are added and saved through the admin class
 
 		// Template Manager
-		$this->loader->add_filter( 'template_include', $this->template_manager, 'load_template' );
+		$this->loader->add_filter( 'template_include', $this->template_manager, 'load_custom_templates' );
 		$this->loader->add_action( 'wp_enqueue_scripts', $this->template_manager, 'enqueue_template_assets' );
 
 		// Modify main query for archives
