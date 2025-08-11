@@ -63,14 +63,7 @@ class Energy_Alabama_KC_Template_Manager {
 
         // Handle knowledge center landing page
         if (is_page() && $post && $post->post_name === 'knowledge-center') {
-            // Try full template
             $custom_template = $this->get_template('page-knowledge-center.php');
-            if ($custom_template) {
-                return $custom_template;
-            }
-            
-            // Fallback to simple template
-            $custom_template = $this->get_template('page-knowledge-center-simple.php');
             if ($custom_template) {
                 return $custom_template;
             }
