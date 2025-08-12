@@ -24,49 +24,8 @@ define('EAKC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('EAKC_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('EAKC_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
-/**
- * Enqueue admin assets
- */
-function eakc_enqueue_admin_assets($hook) {
-    // Get current screen
-    $screen = get_current_screen();
-    
-    // Only enqueue on KC-related admin pages
-    if ($screen && (
-        $screen->post_type === 'kc_article' || 
-        $screen->post_type === 'docket' ||
-        strpos($hook, 'energy-alabama-kc') !== false
-    )) {
-        // Enqueue admin CSS
-        wp_enqueue_style(
-            'eakc-admin-css',
-            EAKC_PLUGIN_URL . 'assets/css/admin.css',
-            array(),
-            EAKC_VERSION
-        );
-        
-        // Enqueue admin JS
-        wp_enqueue_script(
-            'eakc-admin-js',
-            EAKC_PLUGIN_URL . 'assets/js/admin.js',
-            array('jquery', 'wp-util'),
-            EAKC_VERSION,
-            true
-        );
-        
-        // Localize admin script
-        wp_localize_script('eakc-admin-js', 'eakc_admin', array(
-            'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('eakc_admin_nonce'),
-            'strings' => array(
-                'confirm_delete' => __('Are you sure you want to delete this item?', 'energy-alabama-kc'),
-                'saving' => __('Saving...', 'energy-alabama-kc'),
-                'saved' => __('Saved!', 'energy-alabama-kc'),
-            )
-        ));
-    }
-}
-add_action('admin_enqueue_scripts', 'eakc_enqueue_admin_assets');
+// Admin assets are handled by the Energy_Alabama_KC_Admin class
+// See includes/admin/class-admin.php
 
 /**
  * Load plugin textdomain for translations

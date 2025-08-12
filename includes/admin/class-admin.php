@@ -113,13 +113,22 @@ class Energy_Alabama_KC_Admin {
      * @since    1.0.0
      */
     public function enqueue_scripts() {
+        // Get current screen
+        $screen = get_current_screen();
+        
+        // Only enqueue on KC post edit screens where meta boxes are shown
+        if ( $screen && in_array( $screen->post_type, array( 'kc_article', 'docket' ) ) ) {
+            // Enqueue jQuery UI sortable for the repeater fields
+            wp_enqueue_script( 'jquery-ui-sortable' );
+        }
+        
         /**
          * Enqueue admin scripts for meta boxes.
          */
         wp_enqueue_script( 
             $this->plugin_name . '-admin', 
             plugin_dir_url( dirname( __FILE__ ) ) . '../assets/js/meta-boxes.js', 
-            array( 'jquery', 'wp-color-picker' ), 
+            array( 'jquery', 'jquery-ui-sortable', 'wp-color-picker' ), 
             $this->version, 
             false 
         );
