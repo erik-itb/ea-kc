@@ -103,6 +103,15 @@ class Energy_Alabama_KC {
 	protected $template_manager;
 
 	/**
+	 * The frontend handler.
+	 *
+	 * @since    1.0.0
+	 * @access   protected
+	 * @var      Energy_Alabama_KC_Frontend    $plugin_frontend    The frontend handler.
+	 */
+	protected $plugin_frontend;
+
+	/**
 	 * Define the core functionality of the plugin.
 	 *
 	 * Set the plugin name and the plugin version that can be used throughout the plugin.
@@ -163,6 +172,12 @@ class Energy_Alabama_KC {
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/admin/class-admin.php';
 
 		/**
+		 * The class responsible for defining all actions that occur in the public-facing
+		 * side of the site.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-frontend.php';
+
+		/**
 		 * The class responsible for defining custom post types.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/core/class-post-types.php';
@@ -194,6 +209,14 @@ class Energy_Alabama_KC {
 		if ( is_admin() ) {
 			$this->plugin_admin = new Energy_Alabama_KC_Admin( $this->get_plugin_name(), $this->get_version() );
 		}
+
+		// Initialize frontend
+		$this->plugin_frontend = new Energy_Alabama_KC_Frontend( $this->get_plugin_name(), $this->get_version() );
+
+		$this->set_locale();
+		$this->define_core_hooks();
+		$this->define_admin_hooks();
+		$this->define_public_hooks();
 
 	}
 
@@ -275,10 +298,36 @@ class Energy_Alabama_KC {
 	 */
 	private function define_public_hooks() {
 
-		// TODO: Implement when class-frontend.php is created
-		// $plugin_public = new Energy_Alabama_KC_Public( $this->get_plugin_name(), $this->get_version() );
-		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_styles' );
-		// $this->loader->add_action( 'wp_enqueue_scripts', $plugin_public, 'enqueue_scripts' );
+		// Frontend styles and scripts
+		$this->loader->add_action( 'wp_enqueue_scripts', $this->plugin_frontend, 'enqueue_styles' );
+		$this->loader->add_action( 'wp_enqueue_scripts', $this->plugin_frontend, 'enqueue_scripts' );
+
+		// AJAX handlers for logged-in and non-logged-in users
+		$this->loader->add_action( 'wp_ajax_eakc_search', $this->plugin_frontend, 'ajax_search' );
+		$this->loader->add_action( 'wp_ajax_nopriv_eakc_search', $this->plugin_frontend, 'ajax_search' );
+		
+		$this->loader->add_action( 'wp_ajax_eakc_load_more', $this->plugin_frontend, 'ajax_load_more' );
+		$this->loader->add_action( 'wp_ajax_nopriv_eakc_load_more', $this->plugin_frontend, 'ajax_load_more' );
+		
+		$this->loader->add_action( 'wp_ajax_eakc_filter_articles', $this->plugin_frontend, 'ajax_filter_articles' );
+		$this->loader->add_action( 'wp_ajax_nopriv_eakc_filter_articles', $this->plugin_frontend, 'ajax_filter_articles' );
+		
+		$this->loader->add_action( 'wp_ajax_eakc_get_resource', $this->plugin_frontend, 'ajax_get_resource' );
+		$this->loader->add_action( 'wp_ajax_nopriv_eakc_get_resource', $this->plugin_frontend, 'ajax_get_resource' );
+
+		// Spanish content toggle
+		$this->loader->add_action( 'init', $this->plugin_frontend, 'handle_spanish_toggle' );
+
+		// SEO and structured data
+		$this->loader->add_action( 'wp_head', $this->plugin_frontend, 'add_open_graph_tags' );
+		$this->loader->add_action( 'wp_head', $this->plugin_frontend, 'add_structured_data' );
+		$this->loader->add_action( 'wp_head', $this->plugin_frontend, 'add_print_styles' );
+
+		// Query modifications
+		$this->loader->add_action( 'pre_get_posts', $this->plugin_frontend, 'modify_archive_query' );
+
+		// Body classes
+		$this->loader->add_filter( 'body_class', $this->plugin_frontend, 'add_body_classes' );
 
 	}
 
