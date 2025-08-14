@@ -405,3 +405,8 @@
         flex-wrap: wrap;
     }
 }
+
+/* Dashboard Box Headers */
+.postbox .hndle {
+    padding-left: 15px;
+}

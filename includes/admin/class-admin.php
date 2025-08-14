@@ -441,7 +441,7 @@ class Energy_Alabama_KC_Admin {
                                     <?php _e( 'Import Content', 'energy-alabama-kc' ); ?>
                                 </a>
                                 
-                                <a href="<?php echo get_post_type_archive_link( 'kc_article' ); ?>" class="button button-large" target="_blank">
+                                <a href="<?php echo home_url( '/knowledge-center' ); ?>" class="button button-large" target="_blank">
                                     <span class="dashicons dashicons-external"></span>
                                     <?php _e( 'View Knowledge Center', 'energy-alabama-kc' ); ?>
                                 </a>
@@ -670,13 +670,6 @@ class Energy_Alabama_KC_Admin {
                 ?>
             </form>
             
-            <div class="eakc-admin-info">
-                <h3><?php _e( 'Plugin Information', 'energy-alabama-kc' ); ?></h3>
-                <p><strong><?php _e( 'Version:', 'energy-alabama-kc' ); ?></strong> <?php echo esc_html( $this->version ); ?></p>
-                <p><strong><?php _e( 'Documentation:', 'energy-alabama-kc' ); ?></strong> 
-                   <a href="https://github.com/erik-itb/ea-kc" target="_blank"><?php _e( 'GitHub Repository', 'energy-alabama-kc' ); ?></a>
-                </p>
-            </div>
         <?php
     }
     
