@@ -43,7 +43,7 @@ function eakc_get_resource_icon($type) {
         <section class="eakc-hero">
             <div class="eakc-container">
                 <div class="eakc-hero-content">
-                    <h1 class="eakc-hero-title"><?php the_title(); ?></h1>
+                    <h1 class="eakc-hero-title">Energy Alabama<br>Knowledge Center</h1>
                     
                     <?php if (has_excerpt()): ?>
                         <p class="eakc-hero-description">
