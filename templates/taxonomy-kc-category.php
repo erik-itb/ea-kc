@@ -159,20 +159,16 @@ $category_color = eakc_get_category_color($category_slug);
                                         </a>
                                     </div>
                                 <?php elseif ($featured_icon): ?>
-                                    <div class="eakc-card-icon">
-                                        <a href="<?php the_permalink(); ?>">
-                                            <i class="<?php echo esc_attr($featured_icon); ?>" style="color: <?php echo esc_attr($icon_color); ?>;"></i>
-                                        </a>
-                                    </div>
+                                    <a href="<?php the_permalink(); ?>" class="eakc-card-icon">
+                                        <i class="<?php echo esc_attr($featured_icon); ?>" style="color: <?php echo esc_attr($icon_color); ?>;"></i>
+                                    </a>
                                 <?php else: ?>
-                                    <div class="eakc-card-icon">
-                                        <a href="<?php the_permalink(); ?>">
-                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                                            </svg>
-                                        </a>
-                                    </div>
+                                    <a href="<?php the_permalink(); ?>" class="eakc-card-icon">
+                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                                            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                                        </svg>
+                                    </a>
                                 <?php endif; ?>
                                 
                                 <div class="eakc-card-meta">
