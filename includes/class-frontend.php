@@ -776,58 +776,141 @@ class Energy_Alabama_KC_Frontend {
             wp_send_json_error( 'Query too short' );
         }
 
-        // Build query arguments
-        $args = array(
-            'post_type' => $post_type,
-            'post_status' => 'publish',
-            's' => $query,
-            'posts_per_page' => 6,
-            'orderby' => 'relevance',
-            'order' => 'DESC'
-        );
+        // Get prioritized search results
+        $results = $this->get_prioritized_search_results( $query, $post_type, $category_slug, $tag_slug, $jurisdiction_slug );
 
-        // Add taxonomy filters
-        $tax_query = array();
+        wp_send_json_success( $results );
+    }
 
+    /**
+     * Get prioritized search results based on search term location
+     *
+     * @since    1.0.0
+     * @param    string    $query               The search query
+     * @param    string    $post_type           Post type to search
+     * @param    string    $category_slug       Category filter
+     * @param    string    $tag_slug           Tag filter
+     * @param    string    $jurisdiction_slug   Jurisdiction filter
+     * @return   array                         Prioritized search results
+     */
+    private function get_prioritized_search_results( $query, $post_type, $category_slug = '', $tag_slug = '', $jurisdiction_slug = '' ) {
+        global $wpdb;
+        
+        $search_term = $wpdb->esc_like( $query );
+        $search_term_lower = strtolower( $search_term );
+        
+        // Build taxonomy filter conditions
+        $tax_join = '';
+        $tax_where = '';
+        
         if ( $post_type === 'kc_article' ) {
             if ( ! empty( $category_slug ) ) {
-                $tax_query[] = array(
-                    'taxonomy' => 'kc_category',
-                    'field' => 'slug',
-                    'terms' => $category_slug
-                );
+                $tax_join .= " INNER JOIN {$wpdb->term_relationships} tr_cat ON p.ID = tr_cat.object_id 
+                              INNER JOIN {$wpdb->term_taxonomy} tt_cat ON tr_cat.term_taxonomy_id = tt_cat.term_taxonomy_id 
+                              INNER JOIN {$wpdb->terms} t_cat ON tt_cat.term_id = t_cat.term_id ";
+                $tax_where .= $wpdb->prepare( " AND tt_cat.taxonomy = 'kc_category' AND t_cat.slug = %s ", $category_slug );
             }
-
+            
             if ( ! empty( $tag_slug ) ) {
-                $tax_query[] = array(
-                    'taxonomy' => 'kc_tag',
-                    'field' => 'slug',
-                    'terms' => $tag_slug
-                );
+                $tag_alias = empty( $category_slug ) ? 'tr_tag' : 'tr_tag2';
+                $tt_alias = empty( $category_slug ) ? 'tt_tag' : 'tt_tag2';
+                $t_alias = empty( $category_slug ) ? 't_tag' : 't_tag2';
+                
+                $tax_join .= " INNER JOIN {$wpdb->term_relationships} {$tag_alias} ON p.ID = {$tag_alias}.object_id 
+                              INNER JOIN {$wpdb->term_taxonomy} {$tt_alias} ON {$tag_alias}.term_taxonomy_id = {$tt_alias}.term_taxonomy_id 
+                              INNER JOIN {$wpdb->terms} {$t_alias} ON {$tt_alias}.term_id = {$t_alias}.term_id ";
+                $tax_where .= $wpdb->prepare( " AND {$tt_alias}.taxonomy = 'kc_tag' AND {$t_alias}.slug = %s ", $tag_slug );
             }
         } elseif ( $post_type === 'docket' && ! empty( $jurisdiction_slug ) ) {
-            $tax_query[] = array(
-                'taxonomy' => 'docket_jurisdiction',
-                'field' => 'slug',
-                'terms' => $jurisdiction_slug
-            );
+            $tax_join .= " INNER JOIN {$wpdb->term_relationships} tr_jur ON p.ID = tr_jur.object_id 
+                          INNER JOIN {$wpdb->term_taxonomy} tt_jur ON tr_jur.term_taxonomy_id = tt_jur.term_taxonomy_id 
+                          INNER JOIN {$wpdb->terms} t_jur ON tt_jur.term_id = t_jur.term_id ";
+            $tax_where .= $wpdb->prepare( " AND tt_jur.taxonomy = 'docket_jurisdiction' AND t_jur.slug = %s ", $jurisdiction_slug );
         }
-
-        if ( ! empty( $tax_query ) ) {
-            $args['tax_query'] = $tax_query;
-        }
-
-        // Perform the search
-        $search_query = new WP_Query( $args );
+        
+        // Priority 1: Search term in English title (non-Spanish content)
+        $sql1 = $wpdb->prepare( "
+            SELECT p.ID, p.post_title, p.post_content, p.post_excerpt, 1 as priority
+            FROM {$wpdb->posts} p
+            LEFT JOIN {$wpdb->postmeta} pm_spanish ON p.ID = pm_spanish.post_id AND pm_spanish.meta_key = '_eakc_is_spanish_content'
+            {$tax_join}
+            WHERE p.post_type = %s 
+            AND p.post_status = 'publish'
+            AND LOWER(p.post_title) LIKE %s
+            AND (pm_spanish.meta_value IS NULL OR pm_spanish.meta_value = '' OR pm_spanish.meta_value = '0')
+            {$tax_where}
+            ORDER BY p.post_date DESC
+            LIMIT 6
+        ", $post_type, '%' . $search_term_lower . '%' );
+        
+        // Priority 2: Search term in English content (non-Spanish content)
+        $sql2 = $wpdb->prepare( "
+            SELECT p.ID, p.post_title, p.post_content, p.post_excerpt, 2 as priority
+            FROM {$wpdb->posts} p
+            LEFT JOIN {$wpdb->postmeta} pm_spanish ON p.ID = pm_spanish.post_id AND pm_spanish.meta_key = '_eakc_is_spanish_content'
+            {$tax_join}
+            WHERE p.post_type = %s 
+            AND p.post_status = 'publish'
+            AND LOWER(p.post_content) LIKE %s
+            AND LOWER(p.post_title) NOT LIKE %s
+            AND (pm_spanish.meta_value IS NULL OR pm_spanish.meta_value = '' OR pm_spanish.meta_value = '0')
+            {$tax_where}
+            ORDER BY p.post_date DESC
+            LIMIT 6
+        ", $post_type, '%' . $search_term_lower . '%', '%' . $search_term_lower . '%' );
+        
+        // Priority 3: Search term in Spanish title
+        $sql3 = $wpdb->prepare( "
+            SELECT p.ID, p.post_title, p.post_content, p.post_excerpt, 3 as priority
+            FROM {$wpdb->posts} p
+            INNER JOIN {$wpdb->postmeta} pm_spanish ON p.ID = pm_spanish.post_id AND pm_spanish.meta_key = '_eakc_is_spanish_content'
+            {$tax_join}
+            WHERE p.post_type = %s 
+            AND p.post_status = 'publish'
+            AND LOWER(p.post_title) LIKE %s
+            AND pm_spanish.meta_value = '1'
+            {$tax_where}
+            ORDER BY p.post_date DESC
+            LIMIT 6
+        ", $post_type, '%' . $search_term_lower . '%' );
+        
+        // Priority 4: Search term in Spanish content
+        $sql4 = $wpdb->prepare( "
+            SELECT p.ID, p.post_title, p.post_content, p.post_excerpt, 4 as priority
+            FROM {$wpdb->posts} p
+            INNER JOIN {$wpdb->postmeta} pm_spanish ON p.ID = pm_spanish.post_id AND pm_spanish.meta_key = '_eakc_is_spanish_content'
+            {$tax_join}
+            WHERE p.post_type = %s 
+            AND p.post_status = 'publish'
+            AND LOWER(p.post_content) LIKE %s
+            AND LOWER(p.post_title) NOT LIKE %s
+            AND pm_spanish.meta_value = '1'
+            {$tax_where}
+            ORDER BY p.post_date DESC
+            LIMIT 6
+        ", $post_type, '%' . $search_term_lower . '%', '%' . $search_term_lower . '%' );
+        
+        // Combine all queries with UNION and order by priority
+        $final_sql = "
+            ({$sql1}) 
+            UNION 
+            ({$sql2}) 
+            UNION 
+            ({$sql3}) 
+            UNION 
+            ({$sql4})
+            ORDER BY priority ASC, post_title ASC
+            LIMIT 6
+        ";
+        
+        $search_results = $wpdb->get_results( $final_sql );
         $results = array();
-
-        if ( $search_query->have_posts() ) {
-            while ( $search_query->have_posts() ) {
-                $search_query->the_post();
-                
-                $post_id = get_the_ID();
-                $post_title = get_the_title();
-                $post_excerpt = wp_trim_words( get_the_excerpt(), 20, '...' );
+        
+        if ( $search_results ) {
+            foreach ( $search_results as $result ) {
+                $post_id = $result->ID;
+                $post_title = $result->post_title;
+                $post_excerpt = wp_trim_words( $result->post_excerpt ?: $result->post_content, 20, '...' );
                 
                 // Get thumbnail
                 $thumbnail = '';
@@ -855,13 +938,13 @@ class Energy_Alabama_KC_Frontend {
                     'url' => get_permalink( $post_id ),
                     'thumbnail' => $thumbnail,
                     'category' => $category,
-                    'post_type' => $post_type
+                    'post_type' => $post_type,
+                    'priority' => $result->priority
                 );
             }
-            wp_reset_postdata();
         }
-
-        wp_send_json_success( $results );
+        
+        return $results;
     }
 
     /**

@@ -730,7 +730,7 @@ class Energy_Alabama_KC_Meta_Boxes {
      */
     private function save_article_meta($post_id) {
         // Verify nonces
-        if (!wp_verify_nonce($_POST['eakc_article_details_nonce'] ?? '', 'eakc_article_details_nonce')) {
+        if (!isset($_POST['eakc_article_details_nonce']) || !wp_verify_nonce($_POST['eakc_article_details_nonce'], 'eakc_article_details_nonce')) {
             return;
         }
 
@@ -809,7 +809,7 @@ class Energy_Alabama_KC_Meta_Boxes {
      */
     private function save_docket_meta($post_id) {
         // Verify nonces
-        if (!wp_verify_nonce($_POST['eakc_docket_details_nonce'] ?? '', 'eakc_docket_details_nonce')) {
+        if (!isset($_POST['eakc_docket_details_nonce']) || !wp_verify_nonce($_POST['eakc_docket_details_nonce'], 'eakc_docket_details_nonce')) {
             return;
         }
 
