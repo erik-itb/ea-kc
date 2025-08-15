@@ -95,6 +95,15 @@ class Energy_Alabama_KC_Frontend {
             true 
         );
 
+        // Enqueue search script
+        wp_enqueue_script( 
+            $this->plugin_name . '-search', 
+            plugin_dir_url( dirname( __FILE__ ) ) . 'assets/js/search.js', 
+            array( 'jquery' ), 
+            $this->version, 
+            true 
+        );
+
         // Localize script for AJAX
         wp_localize_script( $this->plugin_name, 'eakc_ajax', array(
             'ajax_url' => admin_url( 'admin-ajax.php' ),
@@ -109,6 +118,13 @@ class Energy_Alabama_KC_Frontend {
                 'download' => __( 'Download', 'energy-alabama-kc' ),
                 'open_link' => __( 'Open Link', 'energy-alabama-kc' ),
             )
+        ));
+
+        // Localize search script
+        wp_localize_script( $this->plugin_name . '-search', 'eakc_search', array(
+            'ajax_url' => admin_url( 'admin-ajax.php' ),
+            'nonce' => wp_create_nonce( 'eakc_search_nonce' ),
+            'home_url' => home_url()
         ));
     }
 
@@ -726,6 +742,117 @@ class Energy_Alabama_KC_Frontend {
         if ( $template ) {
             include $template;
         }
+    }
+
+    /**
+     * Handle AJAX live search request
+     *
+     * @since    1.0.0
+     */
+    public function ajax_live_search() {
+        // Verify nonce
+        if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'eakc_search_nonce' ) ) {
+            wp_send_json_error( 'Security check failed' );
+        }
+
+        $query = isset( $_POST['query'] ) ? sanitize_text_field( $_POST['query'] ) : '';
+        $post_type = isset( $_POST['post_type'] ) ? sanitize_text_field( $_POST['post_type'] ) : 'kc_article';
+        
+        // Get taxonomy filters
+        $category_slug = isset( $_POST['category'] ) ? sanitize_text_field( $_POST['category'] ) : '';
+        $tag_slug = isset( $_POST['tag'] ) ? sanitize_text_field( $_POST['tag'] ) : '';
+        $jurisdiction_slug = isset( $_POST['jurisdiction'] ) ? sanitize_text_field( $_POST['jurisdiction'] ) : '';
+
+        if ( strlen( $query ) < 2 ) {
+            wp_send_json_error( 'Query too short' );
+        }
+
+        // Build query arguments
+        $args = array(
+            'post_type' => $post_type,
+            'post_status' => 'publish',
+            's' => $query,
+            'posts_per_page' => 6,
+            'orderby' => 'relevance',
+            'order' => 'DESC'
+        );
+
+        // Add taxonomy filters
+        $tax_query = array();
+
+        if ( $post_type === 'kc_article' ) {
+            if ( ! empty( $category_slug ) ) {
+                $tax_query[] = array(
+                    'taxonomy' => 'kc_category',
+                    'field' => 'slug',
+                    'terms' => $category_slug
+                );
+            }
+
+            if ( ! empty( $tag_slug ) ) {
+                $tax_query[] = array(
+                    'taxonomy' => 'kc_tag',
+                    'field' => 'slug',
+                    'terms' => $tag_slug
+                );
+            }
+        } elseif ( $post_type === 'docket' && ! empty( $jurisdiction_slug ) ) {
+            $tax_query[] = array(
+                'taxonomy' => 'docket_jurisdiction',
+                'field' => 'slug',
+                'terms' => $jurisdiction_slug
+            );
+        }
+
+        if ( ! empty( $tax_query ) ) {
+            $args['tax_query'] = $tax_query;
+        }
+
+        // Perform the search
+        $search_query = new WP_Query( $args );
+        $results = array();
+
+        if ( $search_query->have_posts() ) {
+            while ( $search_query->have_posts() ) {
+                $search_query->the_post();
+                
+                $post_id = get_the_ID();
+                $post_title = get_the_title();
+                $post_excerpt = wp_trim_words( get_the_excerpt(), 20, '...' );
+                
+                // Get thumbnail
+                $thumbnail = '';
+                if ( has_post_thumbnail( $post_id ) ) {
+                    $thumbnail = get_the_post_thumbnail_url( $post_id, 'thumbnail' );
+                } else {
+                    // Generate placeholder image URL
+                    $first_letter = strtoupper( substr( $post_title, 0, 1 ) );
+                    $thumbnail = "https://placehold.it/60x60/3b82f6/ffffff?text=" . urlencode( $first_letter );
+                }
+                
+                // Get category for articles
+                $category = '';
+                if ( $post_type === 'kc_article' ) {
+                    $categories = get_the_terms( $post_id, 'kc_category' );
+                    if ( $categories && ! is_wp_error( $categories ) ) {
+                        $category = $categories[0]->name;
+                    }
+                }
+                
+                $results[] = array(
+                    'id' => $post_id,
+                    'title' => $post_title,
+                    'excerpt' => $post_excerpt,
+                    'url' => get_permalink( $post_id ),
+                    'thumbnail' => $thumbnail,
+                    'category' => $category,
+                    'post_type' => $post_type
+                );
+            }
+            wp_reset_postdata();
+        }
+
+        wp_send_json_success( $results );
     }
 
     /**

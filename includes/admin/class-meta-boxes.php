@@ -341,8 +341,23 @@ class Energy_Alabama_KC_Meta_Boxes {
 
         $spanish_available = get_post_meta($post->ID, '_eakc_spanish_available', true);
         $spanish_post_id = get_post_meta($post->ID, '_eakc_spanish_post_id', true);
+        $is_spanish_content = get_post_meta($post->ID, '_eakc_is_spanish_content', true);
         ?>
         <div class="eakc-spanish-content">
+            <p>
+                <label>
+                    <input type="checkbox" 
+                           name="eakc_is_spanish_content" 
+                           value="1" 
+                           <?php checked($is_spanish_content, 1); ?> 
+                           class="eakc-spanish-content-toggle">
+                    <?php _e('Spanish Content', 'energy-alabama-kc'); ?>
+                </label>
+            </p>
+            <p class="description" style="margin-top: -10px; margin-bottom: 15px; font-style: italic; color: #666;">
+                <?php _e('Check this if this article is written in Spanish.', 'energy-alabama-kc'); ?>
+            </p>
+            
             <p>
                 <label>
                     <input type="checkbox" 
@@ -353,6 +368,9 @@ class Energy_Alabama_KC_Meta_Boxes {
                     <?php _e('Spanish version available', 'energy-alabama-kc'); ?>
                 </label>
             </p>
+            <p class="description" style="margin-top: -10px; margin-bottom: 15px; font-style: italic; color: #666;">
+                <?php _e('Check this if a Spanish version of this English article exists.', 'energy-alabama-kc'); ?>
+            </p>
             
             <div class="eakc-spanish-fields" style="<?php echo $spanish_available ? '' : 'display: none;'; ?>">
                 <p>
@@ -360,11 +378,19 @@ class Energy_Alabama_KC_Meta_Boxes {
                     <select name="eakc_spanish_post_id" id="eakc_spanish_post_id" class="widefat">
                         <option value=""><?php _e('Select Spanish Article', 'energy-alabama-kc'); ?></option>
                         <?php
+                        // Only show articles that are marked as Spanish content
                         $spanish_articles = get_posts(array(
                             'post_type' => 'kc_article',
                             'posts_per_page' => -1,
                             'post_status' => array('publish', 'draft'),
                             'exclude' => array($post->ID),
+                            'meta_query' => array(
+                                array(
+                                    'key' => '_eakc_is_spanish_content',
+                                    'value' => '1',
+                                    'compare' => '='
+                                )
+                            ),
                             'orderby' => 'title',
                             'order' => 'ASC'
                         ));
@@ -382,7 +408,7 @@ class Energy_Alabama_KC_Meta_Boxes {
                 </p>
                 
                 <p class="description">
-                    <?php _e('Link to the Spanish version of this article.', 'energy-alabama-kc'); ?>
+                    <?php _e('Link to the Spanish version of this article. Only articles marked as "Spanish Content" are shown.', 'energy-alabama-kc'); ?>
                 </p>
             </div>
         </div>
@@ -698,13 +724,25 @@ class Energy_Alabama_KC_Meta_Boxes {
 
         // Save Spanish content
         if (wp_verify_nonce($_POST['eakc_spanish_content_nonce'] ?? '', 'eakc_spanish_content_nonce')) {
+            $is_spanish_content = isset($_POST['eakc_is_spanish_content']);
             $spanish_available = isset($_POST['eakc_spanish_available']);
-            update_post_meta($post_id, '_eakc_spanish_available', $spanish_available);
             
-            if ($spanish_available && isset($_POST['eakc_spanish_post_id'])) {
-                update_post_meta($post_id, '_eakc_spanish_post_id', absint($_POST['eakc_spanish_post_id']));
-            } else {
+            // Save Spanish content flag
+            update_post_meta($post_id, '_eakc_is_spanish_content', $is_spanish_content);
+            
+            // If marked as Spanish content, cannot have Spanish version available
+            if ($is_spanish_content) {
+                update_post_meta($post_id, '_eakc_spanish_available', false);
                 delete_post_meta($post_id, '_eakc_spanish_post_id');
+            } else {
+                // Save Spanish version available
+                update_post_meta($post_id, '_eakc_spanish_available', $spanish_available);
+                
+                if ($spanish_available && isset($_POST['eakc_spanish_post_id'])) {
+                    update_post_meta($post_id, '_eakc_spanish_post_id', absint($_POST['eakc_spanish_post_id']));
+                } else {
+                    delete_post_meta($post_id, '_eakc_spanish_post_id');
+                }
             }
         }
 

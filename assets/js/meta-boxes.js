@@ -106,6 +106,7 @@
      * Initialize Spanish content toggle
      */
     function initSpanishContentToggle() {
+        // Handle Spanish version available toggle
         $(document).on('change', '.eakc-spanish-toggle', function() {
             var $fields = $(this).closest('.eakc-spanish-content').find('.eakc-spanish-fields');
             
@@ -114,6 +115,55 @@
             } else {
                 $fields.slideUp();
             }
+        });
+        
+        // Handle Spanish content toggle (mutual exclusion)
+        $(document).on('change', '.eakc-spanish-content-toggle', function() {
+            var $container = $(this).closest('.eakc-spanish-content');
+            var $spanishAvailableToggle = $container.find('.eakc-spanish-toggle');
+            var $spanishFields = $container.find('.eakc-spanish-fields');
+            
+            if ($(this).is(':checked')) {
+                // If marking as Spanish content, disable and uncheck Spanish version available
+                $spanishAvailableToggle.prop('checked', false).prop('disabled', true);
+                $spanishFields.slideUp();
+                
+                // Clear the selected Spanish post
+                $container.find('#eakc_spanish_post_id').val('');
+            } else {
+                // If unchecking Spanish content, re-enable Spanish version available
+                $spanishAvailableToggle.prop('disabled', false);
+            }
+        });
+        
+        // Handle Spanish version available toggle (mutual exclusion)
+        $(document).on('change', '.eakc-spanish-toggle', function() {
+            var $container = $(this).closest('.eakc-spanish-content');
+            var $spanishContentToggle = $container.find('.eakc-spanish-content-toggle');
+            
+            if ($(this).is(':checked')) {
+                // If marking Spanish version available, disable Spanish content
+                $spanishContentToggle.prop('disabled', true);
+            } else {
+                // If unchecking Spanish version available, re-enable Spanish content
+                $spanishContentToggle.prop('disabled', false);
+            }
+        });
+        
+        // Initialize states on page load
+        $(document).ready(function() {
+            $('.eakc-spanish-content').each(function() {
+                var $container = $(this);
+                var $spanishContentToggle = $container.find('.eakc-spanish-content-toggle');
+                var $spanishAvailableToggle = $container.find('.eakc-spanish-toggle');
+                
+                // Set initial disabled states based on checked status
+                if ($spanishContentToggle.is(':checked')) {
+                    $spanishAvailableToggle.prop('disabled', true);
+                } else if ($spanishAvailableToggle.is(':checked')) {
+                    $spanishContentToggle.prop('disabled', true);
+                }
+            });
         });
     }
 

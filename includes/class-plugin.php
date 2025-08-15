@@ -314,6 +314,10 @@ class Energy_Alabama_KC {
 		
 		$this->loader->add_action( 'wp_ajax_eakc_get_resource', $this->plugin_frontend, 'ajax_get_resource' );
 		$this->loader->add_action( 'wp_ajax_nopriv_eakc_get_resource', $this->plugin_frontend, 'ajax_get_resource' );
+		
+		// Live search AJAX handler
+		$this->loader->add_action( 'wp_ajax_eakc_ajax_search', $this->plugin_frontend, 'ajax_live_search' );
+		$this->loader->add_action( 'wp_ajax_nopriv_eakc_ajax_search', $this->plugin_frontend, 'ajax_live_search' );
 
 		// Spanish content toggle
 		$this->loader->add_action( 'init', $this->plugin_frontend, 'handle_spanish_toggle' );

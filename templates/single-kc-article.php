@@ -20,6 +20,31 @@ $read_time = get_post_meta(get_the_ID(), '_eakc_read_time', true);
 $resources = $meta_fields->get_article_resources(get_the_ID());
 $spanish_available = get_post_meta(get_the_ID(), '_eakc_spanish_available', true);
 $spanish_post_id = get_post_meta(get_the_ID(), '_eakc_spanish_post_id', true);
+$is_spanish_content = get_post_meta(get_the_ID(), '_eakc_is_spanish_content', true);
+
+// Function to find English version of Spanish article
+function eakc_find_english_version($spanish_article_id) {
+    $english_articles = get_posts(array(
+        'post_type' => 'kc_article',
+        'posts_per_page' => -1,
+        'post_status' => array('publish', 'draft'),
+        'meta_query' => array(
+            array(
+                'key' => '_eakc_spanish_post_id',
+                'value' => $spanish_article_id,
+                'compare' => '='
+            )
+        )
+    ));
+    
+    return !empty($english_articles) ? $english_articles[0] : null;
+}
+
+// Get English version if this is a Spanish article
+$english_version = null;
+if ($is_spanish_content) {
+    $english_version = eakc_find_english_version(get_the_ID());
+}
 
 // Helper function for resource icons
 function eakc_get_resource_icon($type) {
@@ -44,12 +69,6 @@ function eakc_get_resource_icon($type) {
             <div class="eakc-container">
                 <div class="eakc-hero-content">
                     <h1 class="eakc-hero-title">Energy Alabama<br>Knowledge Center</h1>
-                    
-                    <?php if (has_excerpt()): ?>
-                        <p class="eakc-hero-description">
-                            <?php the_excerpt(); ?>
-                        </p>
-                    <?php endif; ?>
                     
                     <!-- Search Form -->
                     <div class="eakc-search-container">
@@ -126,6 +145,12 @@ function eakc_get_resource_icon($type) {
                     <?php if ($spanish_available && $spanish_post_id): ?>
                         <a href="<?php echo esc_url(get_permalink($spanish_post_id)); ?>" class="eakc-spanish-link">
                             <?php _e('Ver en español', 'energy-alabama-kc'); ?>
+                        </a>
+                    <?php endif; ?>
+                    
+                    <?php if ($is_spanish_content && $english_version): ?>
+                        <a href="<?php echo esc_url(get_permalink($english_version->ID)); ?>" class="eakc-english-link">
+                            <?php _e('View in English', 'energy-alabama-kc'); ?>
                         </a>
                     <?php endif; ?>
                 </div>

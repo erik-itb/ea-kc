@@ -410,3 +410,31 @@
 .postbox .hndle {
     padding-left: 15px;
 }
+
+/* Spanish Content Metabox Styles */
+.eakc-spanish-content label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.eakc-spanish-content input[type="checkbox"]:disabled + span,
+.eakc-spanish-content label:has(input[type="checkbox"]:disabled) {
+    opacity: 0.5;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+.eakc-spanish-content input[type="checkbox"]:disabled {
+    cursor: not-allowed;
+}
+
+.eakc-spanish-content .description {
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.eakc-spanish-content p {
+    margin-bottom: 10px;
+}

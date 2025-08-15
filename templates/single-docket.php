@@ -57,13 +57,7 @@ function eakc_get_document_icon($type) {
         <section class="eakc-hero">
             <div class="eakc-container">
                 <div class="eakc-hero-content">
-                    <h1 class="eakc-hero-title"><?php the_title(); ?></h1>
-                    
-                    <?php if (has_excerpt()): ?>
-                        <p class="eakc-hero-description">
-                            <?php the_excerpt(); ?>
-                        </p>
-                    <?php endif; ?>
+                    <h1 class="eakc-hero-title">Energy Alabama<br>Knowledge Center</h1>
                     
                     <!-- Search Form -->
                     <div class="eakc-search-container">
