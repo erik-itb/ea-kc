@@ -49,7 +49,7 @@ if (!class_exists('EAKC_Landing_Template_Helpers')) {
 // Get template manager instance for helper functions
 $template_manager = Energy_Alabama_KC_Template_Manager::get_instance();
 $categories       = $template_manager->get_kc_categories();
-$recent_articles  = $template_manager->get_recent_articles(6);
+$recent_articles  = $template_manager->get_recent_articles(3);
 $helpers          = new EAKC_Landing_Template_Helpers();
 ?>
 
@@ -145,41 +145,79 @@ $helpers          = new EAKC_Landing_Template_Helpers();
 					<?php
 					foreach ($recent_articles as $article) :
 						$article_link = get_permalink($article->ID);
-						$excerpt      = wp_trim_words($article->post_content, 20);
-						$categories   = get_the_terms($article->ID, 'kc_category');
-						$difficulty   = get_post_meta($article->ID, '_eakc_difficulty_level', true);
+						$excerpt = wp_trim_words($article->post_excerpt ?: $article->post_content, 20, '...');
+						$categories = get_the_terms($article->ID, 'kc_category');
+						$difficulty = get_post_meta($article->ID, '_eakc_difficulty_level', true);
+						$read_time = get_post_meta($article->ID, '_eakc_read_time', true);
+						$featured_icon = get_post_meta($article->ID, '_eakc_featured_icon', true);
 					?>
-						<article class="eakc-article-card">
-							<a href="<?php echo esc_url($article_link); ?>" class="eakc-article-link">
-								
-								<?php if (has_post_thumbnail($article->ID)) : ?>
-									<div class="eakc-article-image">
-										<?php echo get_the_post_thumbnail($article->ID, 'medium', array( 'alt' => get_the_title($article->ID) )); ?>
+						<article class="eakc-article-card" data-difficulty="<?php echo esc_attr($difficulty); ?>">
+							<div class="eakc-card-header">
+								<?php if (has_post_thumbnail($article->ID)): ?>
+									<div class="eakc-card-image">
+										<a href="<?php echo esc_url($article_link); ?>">
+											<?php echo get_the_post_thumbnail($article->ID, 'medium', array('loading' => 'lazy', 'alt' => esc_attr($article->post_title))); ?>
+										</a>
+									</div>
+								<?php elseif ($featured_icon): ?>
+									<div class="eakc-card-icon">
+										<span class="eakc-icon-<?php echo esc_attr($featured_icon); ?>"></span>
+									</div>
+								<?php else: ?>
+									<div class="eakc-card-icon">
+										<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+											<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+											<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+										</svg>
 									</div>
 								<?php endif; ?>
 								
-								<div class="eakc-article-content">
-									<h3 class="eakc-article-title"><?php echo esc_html($article->post_title); ?></h3>
-									
-									<?php if ($excerpt) : ?>
-										<p class="eakc-article-excerpt"><?php echo esc_html($excerpt); ?></p>
+								<div class="eakc-card-meta">
+									<?php if ($difficulty): ?>
+										<span class="eakc-difficulty-badge eakc-difficulty-<?php echo esc_attr($difficulty); ?>">
+											<?php echo esc_html(ucfirst($difficulty)); ?>
+										</span>
 									<?php endif; ?>
 									
-									<div class="eakc-article-meta">
-										<?php if ($categories && !is_wp_error($categories)) : ?>
-											<span class="eakc-article-category">
-												<?php echo esc_html($categories[0]->name); ?>
-											</span>
-										<?php endif; ?>
-										
-										<?php if ($difficulty) : ?>
-											<span class="eakc-article-difficulty eakc-difficulty-<?php echo esc_attr($difficulty); ?>">
-												<?php echo esc_html(ucfirst($difficulty)); ?>
-											</span>
-										<?php endif; ?>
-									</div>
+									<?php if ($read_time): ?>
+										<span class="eakc-read-time">
+											<?php printf(__('%d min read', 'energy-alabama-kc'), $read_time); ?>
+										</span>
+									<?php endif; ?>
 								</div>
-							</a>
+							</div>
+							
+							<div class="eakc-card-content">
+								<h3 class="eakc-card-title">
+									<a href="<?php echo esc_url($article_link); ?>"><?php echo esc_html($article->post_title); ?></a>
+								</h3>
+								
+								<?php if ($categories && !is_wp_error($categories)): ?>
+									<div class="eakc-card-category">
+										<a href="<?php echo esc_url(get_term_link($categories[0])); ?>" class="eakc-category-link">
+											<?php echo esc_html($categories[0]->name); ?>
+										</a>
+									</div>
+								<?php endif; ?>
+								
+								<div class="eakc-card-excerpt">
+									<?php echo esc_html($excerpt); ?>
+								</div>
+								
+								<div class="eakc-card-footer">
+									<time class="eakc-card-date" datetime="<?php echo esc_attr(get_the_date('c', $article->ID)); ?>">
+										<?php echo get_the_date('M j, Y', $article->ID); ?>
+									</time>
+									
+									<a href="<?php echo esc_url($article_link); ?>" class="eakc-read-more">
+										<?php _e('Read More', 'energy-alabama-kc'); ?>
+										<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+											<line x1="7" y1="17" x2="17" y2="7"/>
+											<polyline points="7,7 17,7 17,17"/>
+										</svg>
+									</a>
+								</div>
+							</div>
 						</article>
 					<?php endforeach; ?>
 				</div>
