@@ -165,6 +165,10 @@ function eakc_get_resource_icon($type) {
                 </div>
                 
                 <!-- Resources Section -->
+                <?php if (WP_DEBUG): ?>
+                    <!-- DEBUG: Resources found: <?php echo count($resources); ?> -->
+                    <!-- DEBUG: Resources JSON: <?php echo esc_html(wp_json_encode($resources)); ?> -->
+                <?php endif; ?>
                 <?php if (!empty($resources)): ?>
                     <div class="eakc-resources-section">
                         <h3><?php _e('Resources & Downloads', 'energy-alabama-kc'); ?></h3>

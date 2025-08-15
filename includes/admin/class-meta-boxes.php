@@ -68,7 +68,7 @@ class Energy_Alabama_KC_Meta_Boxes {
             array($this, 'render_article_resources_meta_box'),
             'kc_article',
             'normal',
-            'default'
+            'high'
         );
 
         add_meta_box(
@@ -758,17 +758,17 @@ class Energy_Alabama_KC_Meta_Boxes {
         }
 
         // Save resources
-        if (wp_verify_nonce($_POST['eakc_article_resources_nonce'] ?? '', 'eakc_article_resources_nonce')) {
+        if (isset($_POST['eakc_article_resources_nonce']) && wp_verify_nonce($_POST['eakc_article_resources_nonce'], 'eakc_article_resources_nonce')) {
             $resources = array();
             if (isset($_POST['eakc_resources']) && is_array($_POST['eakc_resources'])) {
                 foreach ($_POST['eakc_resources'] as $resource_data) {
                     if (!empty($resource_data['title']) || !empty($resource_data['url'])) {
                         $resources[] = array(
-                            'title' => sanitize_text_field($resource_data['title'] ?? ''),
-                            'type' => sanitize_text_field($resource_data['type'] ?? 'external'),
-                            'url' => esc_url_raw($resource_data['url'] ?? ''),
-                            'description' => sanitize_textarea_field($resource_data['description'] ?? ''),
-                            'embed_preference' => sanitize_text_field($resource_data['embed_preference'] ?? 'link')
+                            'title' => sanitize_text_field(isset($resource_data['title']) ? $resource_data['title'] : ''),
+                            'type' => sanitize_text_field(isset($resource_data['type']) ? $resource_data['type'] : 'external'),
+                            'url' => esc_url_raw(isset($resource_data['url']) ? $resource_data['url'] : ''),
+                            'description' => sanitize_textarea_field(isset($resource_data['description']) ? $resource_data['description'] : ''),
+                            'embed_preference' => sanitize_text_field(isset($resource_data['embed_preference']) ? $resource_data['embed_preference'] : 'link')
                         );
                     }
                 }
@@ -777,7 +777,7 @@ class Energy_Alabama_KC_Meta_Boxes {
         }
 
         // Save Spanish content
-        if (wp_verify_nonce($_POST['eakc_spanish_content_nonce'] ?? '', 'eakc_spanish_content_nonce')) {
+        if (isset($_POST['eakc_spanish_content_nonce']) && wp_verify_nonce($_POST['eakc_spanish_content_nonce'], 'eakc_spanish_content_nonce')) {
             $is_spanish_content = isset($_POST['eakc_is_spanish_content']);
             $spanish_available = isset($_POST['eakc_spanish_available']);
             
