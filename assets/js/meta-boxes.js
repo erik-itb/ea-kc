@@ -377,6 +377,9 @@
                         $typeSelect.val(typeMapping[fileExtension]);
                     }
                 }
+                
+                // Close the media frame
+                frame.close();
             });
 
             frame.open();
