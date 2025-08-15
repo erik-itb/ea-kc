@@ -553,7 +553,9 @@
     border: 1px solid #e5e7eb;
     overflow: hidden;
     transition: all 0.3s ease;
-    height: fit-content;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .eakc-article-card:hover {
@@ -602,6 +604,11 @@
     color: white;
 }
 
+.eakc-card-icon i {
+    color: white !important;
+    font-size: 40px;
+}
+
 .eakc-card-meta {
     position: absolute;
     top: 15px;
@@ -632,6 +639,9 @@
 .eakc-card-content,
 .eakc-article-content {
     padding: 25px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .eakc-card-title,
@@ -666,6 +676,7 @@
     align-items: center;
     padding-top: 15px;
     border-top: 1px solid #f3f4f6;
+    margin-top: auto;
 }
 
 .eakc-card-date {

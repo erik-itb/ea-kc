@@ -120,7 +120,7 @@ get_header();
                                     </div>
                                 <?php elseif ($featured_icon): ?>
                                     <div class="eakc-card-icon">
-                                        <i class="<?php echo esc_attr($featured_icon); ?>" style="font-size: 40px;"></i>
+                                        <i class="<?php echo esc_attr($featured_icon); ?>"></i>
                                     </div>
                                 <?php else: ?>
                                     <div class="eakc-card-icon">

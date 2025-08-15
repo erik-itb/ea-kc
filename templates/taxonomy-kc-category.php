@@ -159,7 +159,7 @@ $category_color = eakc_get_category_color($category_slug);
                                     </div>
                                 <?php elseif ($featured_icon): ?>
                                     <div class="eakc-card-icon">
-                                        <i class="<?php echo esc_attr($featured_icon); ?>" style="font-size: 40px;"></i>
+                                        <i class="<?php echo esc_attr($featured_icon); ?>"></i>
                                     </div>
                                 <?php endif; ?>
                                 
