@@ -190,7 +190,7 @@
     background: white;
     border-radius: 0 0 12px 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    z-index: 9999;
+    z-index: 999999;
     max-height: 400px;
     overflow-y: auto;
     border: 1px solid #e5e7eb;
@@ -455,6 +455,8 @@
 .eakc-categories {
     padding: 80px 0;
     background: white;
+    position: relative;
+    z-index: 1;
 }
 
 .eakc-category-grid {
@@ -736,6 +738,8 @@
     background: #f8fafc;
     padding: 2rem 0;
     border-bottom: 1px solid #e2e8f0;
+    position: relative;
+    z-index: 1;
 }
 
 .eakc-article-meta,
@@ -882,8 +886,11 @@
    ================================================================= */
 
 .eakc-article-content,
-.eakc-docket-content {
+.eakc-docket-content,
+.eakc-category-content {
     padding: 60px 0;
+    position: relative;
+    z-index: 1;
 }
 
 .eakc-main-content {
