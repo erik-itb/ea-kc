@@ -20,14 +20,14 @@
      * Initialize resource management for KC articles
      */
     function initResourceManagement() {
-        // Add new resource
-        $(document).on('click', '.eakc-add-resource-btn', function(e) {
+        // Add new resource (remove any existing handlers first)
+        $(document).off('click', '.eakc-add-resource-btn').on('click', '.eakc-add-resource-btn', function(e) {
             e.preventDefault();
             addResource();
         });
 
         // Remove resource
-        $(document).on('click', '.eakc-remove-resource', function(e) {
+        $(document).off('click', '.eakc-remove-resource').on('click', '.eakc-remove-resource', function(e) {
             e.preventDefault();
             if (confirm(eakc_meta.strings.confirm_remove)) {
                 $(this).closest('.eakc-resource-item').remove();
@@ -36,7 +36,7 @@
         });
 
         // Toggle resource content
-        $(document).on('click', '.eakc-toggle-resource', function(e) {
+        $(document).off('click', '.eakc-toggle-resource').on('click', '.eakc-toggle-resource', function(e) {
             e.preventDefault();
             var $content = $(this).closest('.eakc-resource-item').find('.eakc-resource-content');
             var $icon = $(this).find('.dashicons');
@@ -46,7 +46,7 @@
         });
 
         // Update resource title display when typing
-        $(document).on('input', '.eakc-resource-title-input', function() {
+        $(document).off('input', '.eakc-resource-title-input').on('input', '.eakc-resource-title-input', function() {
             var title = $(this).val() || eakc_meta.strings.new_resource || 'New Resource';
             $(this).closest('.eakc-resource-item').find('.eakc-resource-title-display').text(title);
         });
