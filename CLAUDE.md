@@ -41,13 +41,15 @@ WordPress plugin for Energy Alabama's Knowledge Center featuring bilingual conte
 - Added proper CSS styling for language filter controls
 - Default behavior: English Only content shown on page load
 
-### ✅ Icon Picker Implementation **[JUST COMPLETED]**
-- Integrated Font Awesome 6.5.1 for icon library
+### ✅ Icon Picker Implementation with Phosphor Icons **[JUST COMPLETED]**
+- Switched from Font Awesome to Phosphor Icons (cleaner, modern design)
 - Created searchable modal interface for icon selection
-- Added category filtering (Solid, Regular, Brands)
+- Added WordPress color picker for custom icon colors
+- Category filtering (Regular and Fill styles)
 - Implemented real-time search with debouncing
 - Icon data stored in `/assets/js/icon-picker-data.js`
-- Icons display on article cards across all templates
+- Icons display with custom colors on article cards
+- Each article can have unique icon and color combination
 
 ## Key Files Modified
 
@@ -68,8 +70,8 @@ WordPress plugin for Energy Alabama's Knowledge Center featuring bilingual conte
 - `/assets/css/frontend.css` - Typography, z-index, language filter styling
 - `/assets/css/meta-boxes.css` - Icon picker modal styles
 - `/assets/js/search.js` - AJAX search functionality
-- `/assets/js/meta-boxes.js` - Icon picker functionality
-- `/assets/js/icon-picker-data.js` - Font Awesome icon definitions
+- `/assets/js/meta-boxes.js` - Icon picker and color picker functionality
+- `/assets/js/icon-picker-data.js` - Phosphor Icons definitions
 
 ### Backend
 - `/includes/class-frontend.php` - AJAX search endpoint
@@ -81,6 +83,14 @@ WordPress plugin for Energy Alabama's Knowledge Center featuring bilingual conte
 - Language filter dropdown options: "All Languages", "English Only" (default), "Spanish Only"
 - JavaScript filtering based on `data-language` attribute on article cards
 - Automatic filtering to English-only content on page load
+
+### Icon System
+- Uses Phosphor Icons library (v2.0.3) via CDN
+- Two icon styles: Regular and Fill
+- Custom color picker using WordPress built-in color picker
+- Stores icon class in `_eakc_featured_icon` meta field
+- Stores icon color in `_eakc_icon_color` meta field (default: #ffffff)
+- Icons display on blue gradient background when no featured image
 
 ### Search Functionality
 - Live AJAX search with 300ms debounce
@@ -134,5 +144,5 @@ WordPress plugin for Energy Alabama's Knowledge Center featuring bilingual conte
 - CSS and JS files loaded directly (no compilation needed)
 
 ---
-*Last updated: Icon picker with Font Awesome integration completed*
-*Status: All current requirements fulfilled, including icon picker*
+*Last updated: Icon picker switched to Phosphor Icons with color customization*
+*Status: All current requirements fulfilled, including enhanced icon picker with color selection*

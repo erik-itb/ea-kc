@@ -150,6 +150,7 @@ $helpers          = new EAKC_Landing_Template_Helpers();
 						$difficulty = get_post_meta($article->ID, '_eakc_difficulty_level', true);
 						$read_time = get_post_meta($article->ID, '_eakc_read_time', true);
 						$featured_icon = get_post_meta($article->ID, '_eakc_featured_icon', true);
+						$icon_color = get_post_meta($article->ID, '_eakc_icon_color', true) ?: '#ffffff';
 					?>
 						<article class="eakc-article-card" data-difficulty="<?php echo esc_attr($difficulty); ?>">
 							<div class="eakc-card-header">
@@ -161,8 +162,8 @@ $helpers          = new EAKC_Landing_Template_Helpers();
 									</div>
 								<?php elseif ($featured_icon): ?>
 									<div class="eakc-card-icon">
-										<!-- Icon: <?php echo esc_html($featured_icon); ?> -->
-										<i class="<?php echo esc_attr($featured_icon); ?>"></i>
+										<!-- Icon: <?php echo esc_html($featured_icon); ?> | Color: <?php echo esc_html($icon_color); ?> -->
+										<i class="<?php echo esc_attr($featured_icon); ?>" style="color: <?php echo esc_attr($icon_color); ?>;"></i>
 									</div>
 								<?php else: ?>
 									<div class="eakc-card-icon">

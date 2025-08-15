@@ -137,13 +137,25 @@ class Energy_Alabama_KC_Meta_Boxes {
             EAKC_VERSION
         );
 
-        // Enqueue Font Awesome for icon picker
+        // Enqueue Phosphor Icons for icon picker
         wp_enqueue_style(
-            'font-awesome',
-            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+            'phosphor-icons',
+            'https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css',
             array(),
-            '6.5.1'
+            '2.0.3'
         );
+        
+        // Also enqueue the fill style for more icon options
+        wp_enqueue_style(
+            'phosphor-icons-fill',
+            'https://unpkg.com/@phosphor-icons/web@2.0.3/src/fill/style.css',
+            array(),
+            '2.0.3'
+        );
+        
+        // Enqueue WordPress color picker
+        wp_enqueue_style( 'wp-color-picker' );
+        wp_enqueue_script( 'wp-color-picker' );
 
         wp_localize_script('eakc-meta-boxes', 'eakc_meta', array(
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -165,6 +177,7 @@ class Energy_Alabama_KC_Meta_Boxes {
 
         $difficulty = get_post_meta($post->ID, '_eakc_difficulty_level', true) ?: 'beginner';
         $featured_icon = get_post_meta($post->ID, '_eakc_featured_icon', true);
+        $icon_color = get_post_meta($post->ID, '_eakc_icon_color', true) ?: '#ffffff';
         $read_time = get_post_meta($post->ID, '_eakc_read_time', true);
         ?>
         <table class="form-table eakc-meta-table">
@@ -188,9 +201,9 @@ class Energy_Alabama_KC_Meta_Boxes {
                 <td>
                     <div class="eakc-icon-picker">
                         <input type="hidden" name="eakc_featured_icon" id="eakc_featured_icon" value="<?php echo esc_attr($featured_icon); ?>">
-                        <div class="eakc-icon-preview">
+                        <div class="eakc-icon-preview" style="background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);">
                             <?php if ($featured_icon): ?>
-                                <i class="<?php echo esc_attr($featured_icon); ?>" style="font-size: 32px;"></i>
+                                <i class="<?php echo esc_attr($featured_icon); ?>" style="font-size: 32px; color: <?php echo esc_attr($icon_color); ?>;"></i>
                             <?php else: ?>
                                 <span class="eakc-no-icon"><?php _e('No icon selected', 'energy-alabama-kc'); ?></span>
                             <?php endif; ?>
@@ -198,7 +211,11 @@ class Energy_Alabama_KC_Meta_Boxes {
                         <button type="button" class="button eakc-choose-icon"><?php _e('Choose Icon', 'energy-alabama-kc'); ?></button>
                         <button type="button" class="button eakc-remove-icon" <?php echo $featured_icon ? '' : 'style="display:none;"'; ?>><?php _e('Remove Icon', 'energy-alabama-kc'); ?></button>
                     </div>
-                    <p class="description"><?php _e('Optional icon to represent this article.', 'energy-alabama-kc'); ?></p>
+                    <div class="eakc-icon-color-picker" style="margin-top: 10px;">
+                        <label for="eakc_icon_color"><?php _e('Icon Color:', 'energy-alabama-kc'); ?></label>
+                        <input type="text" name="eakc_icon_color" id="eakc_icon_color" class="eakc-color-picker" value="<?php echo esc_attr($icon_color); ?>" data-default-color="#ffffff">
+                    </div>
+                    <p class="description"><?php _e('Optional icon to represent this article. Choose an icon and customize its color.', 'energy-alabama-kc'); ?></p>
                 </td>
             </tr>
             <tr>
@@ -224,10 +241,9 @@ class Energy_Alabama_KC_Meta_Boxes {
                     <div class="eakc-icon-search">
                         <input type="text" id="eakc-icon-search" placeholder="<?php _e('Search icons...', 'energy-alabama-kc'); ?>" />
                         <select id="eakc-icon-category">
-                            <option value=""><?php _e('All Categories', 'energy-alabama-kc'); ?></option>
-                            <option value="solid"><?php _e('Solid', 'energy-alabama-kc'); ?></option>
+                            <option value=""><?php _e('All Icons', 'energy-alabama-kc'); ?></option>
                             <option value="regular"><?php _e('Regular', 'energy-alabama-kc'); ?></option>
-                            <option value="brands"><?php _e('Brands', 'energy-alabama-kc'); ?></option>
+                            <option value="fill"><?php _e('Fill', 'energy-alabama-kc'); ?></option>
                         </select>
                     </div>
                     <div class="eakc-icon-grid" id="eakc-icon-grid">
@@ -732,6 +748,10 @@ class Energy_Alabama_KC_Meta_Boxes {
 
         if (isset($_POST['eakc_featured_icon'])) {
             update_post_meta($post_id, '_eakc_featured_icon', sanitize_text_field($_POST['eakc_featured_icon']));
+        }
+        
+        if (isset($_POST['eakc_icon_color'])) {
+            update_post_meta($post_id, '_eakc_icon_color', sanitize_hex_color($_POST['eakc_icon_color']));
         }
 
         // Handle read time

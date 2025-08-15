@@ -75,12 +75,20 @@ class Energy_Alabama_KC_Frontend {
             'all' 
         );
         
-        // Enqueue Font Awesome for icons
+        // Enqueue Phosphor Icons for icons
         wp_enqueue_style(
-            'font-awesome',
-            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+            'phosphor-icons',
+            'https://unpkg.com/@phosphor-icons/web@2.0.3/src/regular/style.css',
             array(),
-            '6.5.1'
+            '2.0.3'
+        );
+        
+        // Also enqueue the fill style for more icon options
+        wp_enqueue_style(
+            'phosphor-icons-fill',
+            'https://unpkg.com/@phosphor-icons/web@2.0.3/src/fill/style.css',
+            array(),
+            '2.0.3'
         );
     }
 

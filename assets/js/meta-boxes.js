@@ -275,12 +275,13 @@
         // Select icon
         $(document).on('click', '.eakc-icon-item', function() {
             const iconClass = $(this).data('icon');
+            const currentColor = $('#eakc_icon_color').val() || '#ffffff';
             
             // Update hidden input
             $('#eakc_featured_icon').val(iconClass);
             
-            // Update preview
-            $('.eakc-icon-preview').html('<i class="' + iconClass + '" style="font-size: 32px;"></i>');
+            // Update preview with current color
+            $('.eakc-icon-preview').html('<i class="' + iconClass + '" style="font-size: 32px; color: ' + currentColor + ';"></i>');
             
             // Show remove button
             $('.eakc-remove-icon').show();
@@ -303,6 +304,25 @@
                 $(this).fadeOut(200);
             }
         });
+        
+        // Initialize color picker
+        if ($('.eakc-color-picker').length) {
+            $('.eakc-color-picker').wpColorPicker({
+                change: function(event, ui) {
+                    const color = ui.color.toString();
+                    const iconClass = $('#eakc_featured_icon').val();
+                    if (iconClass) {
+                        $('.eakc-icon-preview i').css('color', color);
+                    }
+                },
+                clear: function() {
+                    const iconClass = $('#eakc_featured_icon').val();
+                    if (iconClass) {
+                        $('.eakc-icon-preview i').css('color', '#ffffff');
+                    }
+                }
+            });
+        }
     }
 
     /**

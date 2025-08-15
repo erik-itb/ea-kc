@@ -1,86 +1,93 @@
 /**
- * Font Awesome Free Icons Data
- * This file contains a curated list of commonly used Font Awesome free icons
+ * Phosphor Icons Data
+ * This file contains a curated list of commonly used Phosphor icons
+ * Documentation: https://phosphoricons.com/
  */
 
 const eakcIconData = {
-    solid: [
-        // Common UI
-        'fa-solid fa-house', 'fa-solid fa-magnifying-glass', 'fa-solid fa-user', 'fa-solid fa-gear',
-        'fa-solid fa-bell', 'fa-solid fa-envelope', 'fa-solid fa-calendar', 'fa-solid fa-clock',
-        'fa-solid fa-star', 'fa-solid fa-heart', 'fa-solid fa-thumbs-up', 'fa-solid fa-comment',
+    regular: [
+        // Common UI & Navigation
+        'ph-house', 'ph-magnifying-glass', 'ph-user', 'ph-gear', 'ph-bell', 'ph-envelope',
+        'ph-calendar', 'ph-clock', 'ph-star', 'ph-heart', 'ph-thumbs-up', 'ph-chat-circle',
+        'ph-arrow-right', 'ph-arrow-left', 'ph-arrow-up', 'ph-arrow-down', 'ph-caret-right',
+        'ph-caret-left', 'ph-caret-up', 'ph-caret-down', 'ph-check', 'ph-x', 'ph-plus', 'ph-minus',
         
         // Energy & Environment
-        'fa-solid fa-bolt', 'fa-solid fa-lightbulb', 'fa-solid fa-sun', 'fa-solid fa-wind',
-        'fa-solid fa-water', 'fa-solid fa-fire', 'fa-solid fa-leaf', 'fa-solid fa-tree',
-        'fa-solid fa-plug', 'fa-solid fa-battery-full', 'fa-solid fa-solar-panel', 'fa-solid fa-industry',
+        'ph-lightning', 'ph-lightbulb', 'ph-sun', 'ph-moon', 'ph-cloud-sun', 'ph-wind',
+        'ph-drop', 'ph-fire', 'ph-leaf', 'ph-tree', 'ph-flower', 'ph-plant',
+        'ph-plug', 'ph-battery-full', 'ph-battery-charging', 'ph-solar-panel', 'ph-factory',
+        'ph-thermometer', 'ph-gauge', 'ph-lightning-slash', 'ph-power',
         
         // Documents & Education
-        'fa-solid fa-file', 'fa-solid fa-file-pdf', 'fa-solid fa-book', 'fa-solid fa-graduation-cap',
-        'fa-solid fa-newspaper', 'fa-solid fa-clipboard', 'fa-solid fa-pen', 'fa-solid fa-pencil',
-        'fa-solid fa-folder', 'fa-solid fa-folder-open', 'fa-solid fa-file-lines', 'fa-solid fa-file-word',
+        'ph-file', 'ph-file-text', 'ph-file-pdf', 'ph-book', 'ph-book-open', 'ph-notebook',
+        'ph-graduation-cap', 'ph-newspaper', 'ph-clipboard-text', 'ph-pen', 'ph-pencil',
+        'ph-folder', 'ph-folder-open', 'ph-archive', 'ph-file-doc', 'ph-certificate',
+        'ph-bookmark', 'ph-bookmark-simple', 'ph-note', 'ph-note-pencil', 'ph-article',
         
         // Business & Finance
-        'fa-solid fa-chart-line', 'fa-solid fa-chart-bar', 'fa-solid fa-chart-pie', 'fa-solid fa-dollar-sign',
-        'fa-solid fa-coins', 'fa-solid fa-money-bill', 'fa-solid fa-briefcase', 'fa-solid fa-building',
-        'fa-solid fa-handshake', 'fa-solid fa-scale-balanced', 'fa-solid fa-gavel', 'fa-solid fa-landmark',
+        'ph-chart-line', 'ph-chart-bar', 'ph-chart-pie-slice', 'ph-trend-up', 'ph-trend-down',
+        'ph-currency-dollar', 'ph-coins', 'ph-money', 'ph-briefcase', 'ph-buildings',
+        'ph-handshake', 'ph-scales', 'ph-gavel', 'ph-bank', 'ph-calculator',
+        'ph-receipt', 'ph-invoice', 'ph-wallet', 'ph-piggy-bank', 'ph-credit-card',
         
-        // Technology
-        'fa-solid fa-computer', 'fa-solid fa-laptop', 'fa-solid fa-mobile', 'fa-solid fa-tablet',
-        'fa-solid fa-wifi', 'fa-solid fa-database', 'fa-solid fa-cloud', 'fa-solid fa-server',
-        'fa-solid fa-microchip', 'fa-solid fa-robot', 'fa-solid fa-code', 'fa-solid fa-terminal',
+        // Technology & Innovation
+        'ph-desktop', 'ph-laptop', 'ph-device-mobile', 'ph-tablet', 'ph-monitor',
+        'ph-wifi-high', 'ph-database', 'ph-cloud', 'ph-cloud-arrow-up', 'ph-cloud-arrow-down',
+        'ph-cpu', 'ph-robot', 'ph-code', 'ph-terminal-window', 'ph-globe',
+        'ph-broadcast', 'ph-rss', 'ph-link', 'ph-git-branch', 'ph-rocket',
         
         // People & Teams
-        'fa-solid fa-users', 'fa-solid fa-user-group', 'fa-solid fa-person', 'fa-solid fa-people-group',
-        'fa-solid fa-user-tie', 'fa-solid fa-hard-hat', 'fa-solid fa-helmet-safety', 'fa-solid fa-vest',
+        'ph-users', 'ph-users-three', 'ph-user-circle', 'ph-user-plus', 'ph-user-gear',
+        'ph-identification-card', 'ph-address-book', 'ph-hand-waving', 'ph-handshake',
+        'ph-hands-clapping', 'ph-person', 'ph-person-simple-walk', 'ph-hard-hat',
         
-        // Transportation
-        'fa-solid fa-car', 'fa-solid fa-truck', 'fa-solid fa-bus', 'fa-solid fa-train',
-        'fa-solid fa-plane', 'fa-solid fa-ship', 'fa-solid fa-bicycle', 'fa-solid fa-charging-station',
+        // Transportation & Infrastructure
+        'ph-car', 'ph-truck', 'ph-bus', 'ph-train', 'ph-airplane', 'ph-boat',
+        'ph-bicycle', 'ph-charging-station', 'ph-gas-pump', 'ph-traffic-sign',
+        'ph-road-horizon', 'ph-bridge', 'ph-lighthouse', 'ph-factory',
         
         // Communication
-        'fa-solid fa-phone', 'fa-solid fa-message', 'fa-solid fa-comments', 'fa-solid fa-video',
-        'fa-solid fa-microphone', 'fa-solid fa-bullhorn', 'fa-solid fa-tower-broadcast', 'fa-solid fa-satellite-dish',
-        
-        // Arrows & Navigation
-        'fa-solid fa-arrow-right', 'fa-solid fa-arrow-left', 'fa-solid fa-arrow-up', 'fa-solid fa-arrow-down',
-        'fa-solid fa-circle-arrow-right', 'fa-solid fa-circle-arrow-left', 'fa-solid fa-angles-right', 'fa-solid fa-angles-left',
-        
-        // Actions
-        'fa-solid fa-download', 'fa-solid fa-upload', 'fa-solid fa-share', 'fa-solid fa-print',
-        'fa-solid fa-save', 'fa-solid fa-trash', 'fa-solid fa-edit', 'fa-solid fa-copy',
-        'fa-solid fa-plus', 'fa-solid fa-minus', 'fa-solid fa-check', 'fa-solid fa-xmark',
-        
-        // Info & Status
-        'fa-solid fa-info-circle', 'fa-solid fa-question-circle', 'fa-solid fa-exclamation-triangle', 'fa-solid fa-exclamation-circle',
-        'fa-solid fa-shield', 'fa-solid fa-lock', 'fa-solid fa-unlock', 'fa-solid fa-key',
-        'fa-solid fa-certificate', 'fa-solid fa-award', 'fa-solid fa-trophy', 'fa-solid fa-medal',
+        'ph-phone', 'ph-phone-call', 'ph-chat', 'ph-chats', 'ph-video-camera',
+        'ph-microphone', 'ph-megaphone', 'ph-broadcast', 'ph-antenna', 'ph-rss-simple',
+        'ph-envelope', 'ph-envelope-open', 'ph-paper-plane', 'ph-telegram-logo',
         
         // Tools & Settings
-        'fa-solid fa-wrench', 'fa-solid fa-screwdriver', 'fa-solid fa-hammer', 'fa-solid fa-toolbox',
-        'fa-solid fa-gauge', 'fa-solid fa-tachometer-alt', 'fa-solid fa-temperature-high', 'fa-solid fa-temperature-low',
+        'ph-wrench', 'ph-screwdriver', 'ph-hammer', 'ph-toolbox', 'ph-gear-six',
+        'ph-sliders', 'ph-faders', 'ph-equalizer', 'ph-toggle-left', 'ph-toggle-right',
+        
+        // Info & Status
+        'ph-info', 'ph-question', 'ph-warning', 'ph-warning-circle', 'ph-check-circle',
+        'ph-x-circle', 'ph-shield', 'ph-shield-check', 'ph-lock', 'ph-lock-open',
+        'ph-key', 'ph-fingerprint', 'ph-eye', 'ph-eye-slash', 'ph-flag',
         
         // Maps & Location
-        'fa-solid fa-map', 'fa-solid fa-location-dot', 'fa-solid fa-map-pin', 'fa-solid fa-globe',
-        'fa-solid fa-earth-americas', 'fa-solid fa-compass', 'fa-solid fa-route', 'fa-solid fa-signs-post'
+        'ph-map-pin', 'ph-map-trifold', 'ph-navigation-arrow', 'ph-compass', 'ph-globe-hemisphere-west',
+        'ph-signpost', 'ph-path', 'ph-target', 'ph-crosshair', 'ph-map-pin-line',
+        
+        // Actions
+        'ph-download', 'ph-upload', 'ph-share', 'ph-share-network', 'ph-printer',
+        'ph-floppy-disk', 'ph-trash', 'ph-pencil-simple', 'ph-copy', 'ph-scissors',
+        'ph-paperclip', 'ph-link-simple', 'ph-play', 'ph-pause', 'ph-stop'
     ],
     
-    regular: [
-        'fa-regular fa-user', 'fa-regular fa-envelope', 'fa-regular fa-calendar', 'fa-regular fa-clock',
-        'fa-regular fa-star', 'fa-regular fa-heart', 'fa-regular fa-thumbs-up', 'fa-regular fa-comment',
-        'fa-regular fa-file', 'fa-regular fa-file-pdf', 'fa-regular fa-folder', 'fa-regular fa-folder-open',
-        'fa-regular fa-newspaper', 'fa-regular fa-clipboard', 'fa-regular fa-bell', 'fa-regular fa-bookmark',
-        'fa-regular fa-circle', 'fa-regular fa-square', 'fa-regular fa-circle-check', 'fa-regular fa-square-check',
-        'fa-regular fa-lightbulb', 'fa-regular fa-sun', 'fa-regular fa-moon', 'fa-regular fa-handshake',
-        'fa-regular fa-building', 'fa-regular fa-chart-bar', 'fa-regular fa-message', 'fa-regular fa-comments',
-        'fa-regular fa-images', 'fa-regular fa-image', 'fa-regular fa-credit-card', 'fa-regular fa-flag'
-    ],
-    
-    brands: [
-        'fa-brands fa-twitter', 'fa-brands fa-facebook', 'fa-brands fa-instagram', 'fa-brands fa-linkedin',
-        'fa-brands fa-youtube', 'fa-brands fa-github', 'fa-brands fa-google', 'fa-brands fa-apple',
-        'fa-brands fa-windows', 'fa-brands fa-android', 'fa-brands fa-whatsapp', 'fa-brands fa-telegram',
-        'fa-brands fa-slack', 'fa-brands fa-discord', 'fa-brands fa-reddit', 'fa-brands fa-pinterest'
+    fill: [
+        // Common filled versions
+        'ph-house-fill', 'ph-user-fill', 'ph-gear-fill', 'ph-bell-fill', 'ph-envelope-fill',
+        'ph-star-fill', 'ph-heart-fill', 'ph-thumbs-up-fill', 'ph-chat-circle-fill',
+        
+        // Energy filled
+        'ph-lightning-fill', 'ph-lightbulb-fill', 'ph-sun-fill', 'ph-moon-fill', 'ph-drop-fill',
+        'ph-fire-fill', 'ph-leaf-fill', 'ph-battery-full-fill', 'ph-plug-fill',
+        
+        // Documents filled
+        'ph-file-fill', 'ph-file-text-fill', 'ph-book-fill', 'ph-folder-fill', 'ph-bookmark-simple-fill',
+        
+        // Business filled
+        'ph-chart-line-fill', 'ph-chart-bar-fill', 'ph-chart-pie-slice-fill', 'ph-briefcase-fill',
+        
+        // Status filled
+        'ph-info-fill', 'ph-question-fill', 'ph-warning-fill', 'ph-check-circle-fill', 'ph-x-circle-fill',
+        'ph-shield-fill', 'ph-lock-fill', 'ph-flag-fill'
     ]
 };
 

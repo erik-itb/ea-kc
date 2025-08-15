@@ -115,6 +115,7 @@ $tag_slug = $current_tag->slug;
                         $difficulty = get_post_meta(get_the_ID(), '_eakc_difficulty_level', true);
                         $read_time = get_post_meta(get_the_ID(), '_eakc_read_time', true);
                         $featured_icon = get_post_meta(get_the_ID(), '_eakc_featured_icon', true);
+                        $icon_color = get_post_meta(get_the_ID(), '_eakc_icon_color', true) ?: '#ffffff';
                         $is_spanish_content = get_post_meta(get_the_ID(), '_eakc_is_spanish_content', true);
                         
                         // Get categories for this article
@@ -134,7 +135,7 @@ $tag_slug = $current_tag->slug;
                                     </div>
                                 <?php elseif ($featured_icon): ?>
                                     <div class="eakc-card-icon">
-                                        <i class="<?php echo esc_attr($featured_icon); ?>"></i>
+                                        <i class="<?php echo esc_attr($featured_icon); ?>" style="color: <?php echo esc_attr($icon_color); ?>;"></i>
                                     </div>
                                 <?php else: ?>
                                     <div class="eakc-card-icon">
