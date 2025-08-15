@@ -335,17 +335,25 @@
             var $button = $(this);
             var $input = $button.siblings('input[type="url"]');
             
+            // If frame already exists, remove previous event handlers
+            if (typeof window.eakcMediaFrame !== 'undefined') {
+                window.eakcMediaFrame.off('select');
+            }
+            
             // Create WordPress media uploader
-            var frame = wp.media({
+            window.eakcMediaFrame = wp.media({
                 title: 'Select or Upload File',
                 button: {
                     text: 'Use this file'
                 },
-                multiple: false
+                multiple: false,
+                library: {
+                    type: ['image', 'video', 'audio', 'application']
+                }
             });
 
-            frame.on('select', function() {
-                var attachment = frame.state().get('selection').first().toJSON();
+            window.eakcMediaFrame.on('select', function() {
+                var attachment = window.eakcMediaFrame.state().get('selection').first().toJSON();
                 $input.val(attachment.url);
                 
                 // Try to auto-detect file type based on URL
@@ -377,12 +385,15 @@
                         $typeSelect.val(typeMapping[fileExtension]);
                     }
                 }
-                
-                // Close the media frame
-                frame.close();
             });
 
-            frame.open();
+            // Add close event handler
+            window.eakcMediaFrame.on('close', function() {
+                // Clean up event handlers when modal closes
+                window.eakcMediaFrame.off('select');
+            });
+
+            window.eakcMediaFrame.open();
         });
     }
 
