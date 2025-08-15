@@ -580,22 +580,22 @@
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s;
-    background: white;
+    background: #f9f9f9;
 }
 
 .eakc-icon-item:hover {
     border-color: #2271b1;
-    background: #f0f6fc;
+    background: #2271b1;
     transform: scale(1.1);
 }
 
 .eakc-icon-item i {
     font-size: 24px;
-    color: #333;
+    color: #333 !important;
 }
 
 .eakc-icon-item:hover i {
-    color: #2271b1;
+    color: #ffffff !important;
 }
 
 .eakc-no-icons {

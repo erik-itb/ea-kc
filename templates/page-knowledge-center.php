@@ -162,8 +162,13 @@ $helpers          = new EAKC_Landing_Template_Helpers();
 									</div>
 								<?php elseif ($featured_icon): ?>
 									<div class="eakc-card-icon">
-										<!-- Icon: <?php echo esc_html($featured_icon); ?> | Color: <?php echo esc_html($icon_color); ?> -->
-										<i class="<?php echo esc_attr($featured_icon); ?>" style="color: <?php echo esc_attr($icon_color); ?>;"></i>
+										<!-- DEBUG: Icon Class = "<?php echo esc_html($featured_icon); ?>" | Color = "<?php echo esc_html($icon_color); ?>" -->
+										<i class="<?php echo esc_attr($featured_icon); ?>" style="color: <?php echo esc_attr($icon_color); ?>; font-size: 48px;"></i>
+										<?php if (WP_DEBUG): ?>
+											<div style="position: absolute; bottom: 0; left: 0; background: red; color: white; padding: 2px 5px; font-size: 10px;">
+												<?php echo esc_html($featured_icon); ?>
+											</div>
+										<?php endif; ?>
 									</div>
 								<?php else: ?>
 									<div class="eakc-card-icon">
