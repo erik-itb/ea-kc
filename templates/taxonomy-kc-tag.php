@@ -84,6 +84,12 @@ $tag_slug = $current_tag->slug;
             <!-- Filters and Sort Controls -->
             <div class="eakc-category-filters">
                 <div class="eakc-filter-controls">
+                    <select class="eakc-language-filter" onchange="eakc_filterByLanguage(this.value)">
+                        <option value=""><?php _e('All Languages', 'energy-alabama-kc'); ?></option>
+                        <option value="english" selected><?php _e('English Only', 'energy-alabama-kc'); ?></option>
+                        <option value="spanish"><?php _e('Spanish Only', 'energy-alabama-kc'); ?></option>
+                    </select>
+                    
                     <select class="eakc-difficulty-filter" onchange="eakc_filterByDifficulty(this.value)">
                         <option value=""><?php _e('All Difficulty Levels', 'energy-alabama-kc'); ?></option>
                         <option value="beginner"><?php _e('Beginner', 'energy-alabama-kc'); ?></option>
@@ -109,12 +115,16 @@ $tag_slug = $current_tag->slug;
                         $difficulty = get_post_meta(get_the_ID(), '_eakc_difficulty_level', true);
                         $read_time = get_post_meta(get_the_ID(), '_eakc_read_time', true);
                         $featured_icon = get_post_meta(get_the_ID(), '_eakc_featured_icon', true);
+                        $is_spanish_content = get_post_meta(get_the_ID(), '_eakc_is_spanish_content', true);
                         
                         // Get categories for this article
                         $categories = get_the_terms(get_the_ID(), 'kc_category');
+                        
+                        // Determine language for filtering
+                        $language = $is_spanish_content ? 'spanish' : 'english';
                         ?>
                         
-                        <article class="eakc-article-card" data-difficulty="<?php echo esc_attr($difficulty); ?>">
+                        <article class="eakc-article-card" data-difficulty="<?php echo esc_attr($difficulty); ?>" data-language="<?php echo esc_attr($language); ?>">
                             <div class="eakc-card-header">
                                 <?php if (has_post_thumbnail()): ?>
                                     <div class="eakc-card-image">
@@ -256,6 +266,18 @@ $tag_slug = $current_tag->slug;
 
 <script>
 // Simple filtering functions for the tag page
+function eakc_filterByLanguage(language) {
+    const articles = document.querySelectorAll('.eakc-article-card');
+    
+    articles.forEach(function(article) {
+        if (language === '' || article.getAttribute('data-language') === language) {
+            article.style.display = 'block';
+        } else {
+            article.style.display = 'none';
+        }
+    });
+}
+
 function eakc_filterByDifficulty(difficulty) {
     const articles = document.querySelectorAll('.eakc-article-card');
     
