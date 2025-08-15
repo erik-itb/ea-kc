@@ -13,7 +13,6 @@
         initSpanishContentToggle();
         initSortable();
         initIconPicker();
-        initFileUpload();
     });
 
     /**
@@ -325,70 +324,6 @@
         }
     }
 
-    /**
-     * Initialize file upload functionality
-     */
-    function initFileUpload() {
-        $(document).on('click', '.eakc-upload-file', function(e) {
-            e.preventDefault();
-            
-            var $button = $(this);
-            var $input = $button.siblings('input[type="url"]');
-            
-            // Create WordPress media uploader with unique instance
-            var frame = wp.media({
-                title: 'Select or Upload File',
-                button: {
-                    text: 'Select File'
-                },
-                multiple: false
-            });
-
-            // Handle file selection
-            frame.on('select', function() {
-                var attachment = frame.state().get('selection').first().toJSON();
-                
-                // Set the URL in the input field
-                $input.val(attachment.url);
-                
-                // Try to auto-detect file type based on URL
-                var fileExtension = attachment.url.split('.').pop().toLowerCase();
-                var $typeSelect = $input.closest('tr').find('select[name*="[type]"]');
-                
-                if ($typeSelect.length) {
-                    var typeMapping = {
-                        'pdf': 'pdf',
-                        'doc': 'doc',
-                        'docx': 'doc',
-                        'xls': 'sheet',
-                        'xlsx': 'sheet',
-                        'csv': 'sheet',
-                        'ppt': 'presentation',
-                        'pptx': 'presentation',
-                        'mp4': 'video',
-                        'avi': 'video',
-                        'mov': 'video',
-                        'mp3': 'audio',
-                        'wav': 'audio',
-                        'jpg': 'image',
-                        'jpeg': 'image',
-                        'png': 'image',
-                        'gif': 'image'
-                    };
-                    
-                    if (typeMapping[fileExtension]) {
-                        $typeSelect.val(typeMapping[fileExtension]);
-                    }
-                }
-                
-                // Trigger change event to update any UI
-                $input.trigger('change');
-            });
-
-            // Open the modal
-            frame.open();
-        });
-    }
 
     /**
      * Add new resource

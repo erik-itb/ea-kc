@@ -341,8 +341,8 @@ class Energy_Alabama_KC_Meta_Boxes {
                                    name="eakc_resources[<?php echo esc_attr($index); ?>][url]" 
                                    value="<?php echo esc_attr($url); ?>" 
                                    class="regular-text" 
-                                   placeholder="<?php esc_attr_e('https://example.com/file.pdf', 'energy-alabama-kc'); ?>">
-                            <button type="button" class="button eakc-upload-file"><?php _e('Upload File', 'energy-alabama-kc'); ?></button>
+                                   placeholder="<?php esc_attr_e('https://example.com/file.pdf or copy URL from Media Library', 'energy-alabama-kc'); ?>">
+                            <p class="description"><?php _e('Paste the file URL here. To get a file URL: go to Media > Library, click the file, and copy the "File URL".', 'energy-alabama-kc'); ?></p>
                         </td>
                     </tr>
                     <tr>
