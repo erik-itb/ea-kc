@@ -137,28 +137,13 @@ class Energy_Alabama_KC_Meta_Boxes {
             EAKC_VERSION
         );
 
-        // Enqueue Phosphor Icons for icon picker (correct CDN path)
-        wp_enqueue_style(
+        // Enqueue Phosphor Icons using script tag method
+        wp_enqueue_script(
             'phosphor-icons',
-            'https://unpkg.com/@phosphor-icons/web/src/regular/style.css',
+            'https://unpkg.com/@phosphor-icons/web',
             array(),
-            '2.1.0'
-        );
-        
-        // Also enqueue the fill style for more icon options
-        wp_enqueue_style(
-            'phosphor-icons-fill',
-            'https://unpkg.com/@phosphor-icons/web/src/fill/style.css',
-            array(),
-            '2.1.0'
-        );
-        
-        // Add the base Phosphor font face
-        wp_enqueue_style(
-            'phosphor-icons-base',
-            'https://unpkg.com/@phosphor-icons/web/src/index.css',
-            array(),
-            '2.1.0'
+            '2.1.1',
+            true
         );
         
         // Enqueue WordPress color picker

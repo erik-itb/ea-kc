@@ -7,87 +7,87 @@
 const eakcIconData = {
     regular: [
         // Common UI & Navigation
-        'ph-house', 'ph-magnifying-glass', 'ph-user', 'ph-gear', 'ph-bell', 'ph-envelope',
-        'ph-calendar', 'ph-clock', 'ph-star', 'ph-heart', 'ph-thumbs-up', 'ph-chat-circle',
-        'ph-arrow-right', 'ph-arrow-left', 'ph-arrow-up', 'ph-arrow-down', 'ph-caret-right',
-        'ph-caret-left', 'ph-caret-up', 'ph-caret-down', 'ph-check', 'ph-x', 'ph-plus', 'ph-minus',
+        'ph ph-house', 'ph ph-magnifying-glass', 'ph ph-user', 'ph ph-gear', 'ph ph-bell', 'ph ph-envelope',
+        'ph ph-calendar', 'ph ph-clock', 'ph ph-star', 'ph ph-heart', 'ph ph-thumbs-up', 'ph ph-chat-circle',
+        'ph ph-arrow-right', 'ph ph-arrow-left', 'ph ph-arrow-up', 'ph ph-arrow-down', 'ph ph-caret-right',
+        'ph ph-caret-left', 'ph ph-caret-up', 'ph ph-caret-down', 'ph ph-check', 'ph ph-x', 'ph ph-plus', 'ph ph-minus',
         
         // Energy & Environment
-        'ph-lightning', 'ph-lightbulb', 'ph-sun', 'ph-moon', 'ph-cloud-sun', 'ph-wind',
-        'ph-drop', 'ph-fire', 'ph-leaf', 'ph-tree', 'ph-flower', 'ph-plant',
-        'ph-plug', 'ph-battery-full', 'ph-battery-charging', 'ph-solar-panel', 'ph-factory',
-        'ph-thermometer', 'ph-gauge', 'ph-lightning-slash', 'ph-power',
+        'ph ph-lightning', 'ph ph-lightbulb', 'ph ph-sun', 'ph ph-moon', 'ph ph-cloud-sun', 'ph ph-wind',
+        'ph ph-drop', 'ph ph-fire', 'ph ph-leaf', 'ph ph-tree', 'ph ph-flower', 'ph ph-plant',
+        'ph ph-plug', 'ph ph-battery-full', 'ph ph-battery-charging', 'ph ph-solar-panel', 'ph ph-factory',
+        'ph ph-thermometer', 'ph ph-gauge', 'ph ph-lightning-slash', 'ph ph-power',
         
         // Documents & Education
-        'ph-file', 'ph-file-text', 'ph-file-pdf', 'ph-book', 'ph-book-open', 'ph-notebook',
-        'ph-graduation-cap', 'ph-newspaper', 'ph-clipboard-text', 'ph-pen', 'ph-pencil',
-        'ph-folder', 'ph-folder-open', 'ph-archive', 'ph-file-doc', 'ph-certificate',
-        'ph-bookmark', 'ph-bookmark-simple', 'ph-note', 'ph-note-pencil', 'ph-article',
+        'ph ph-file', 'ph ph-file-text', 'ph ph-file-pdf', 'ph ph-book', 'ph ph-book-open', 'ph ph-notebook',
+        'ph ph-graduation-cap', 'ph ph-newspaper', 'ph ph-clipboard-text', 'ph ph-pen', 'ph ph-pencil',
+        'ph ph-folder', 'ph ph-folder-open', 'ph ph-archive', 'ph ph-file-doc', 'ph ph-certificate',
+        'ph ph-bookmark', 'ph ph-bookmark-simple', 'ph ph-note', 'ph ph-note-pencil', 'ph ph-article',
         
         // Business & Finance
-        'ph-chart-line', 'ph-chart-bar', 'ph-chart-pie-slice', 'ph-trend-up', 'ph-trend-down',
-        'ph-currency-dollar', 'ph-coins', 'ph-money', 'ph-briefcase', 'ph-buildings',
-        'ph-handshake', 'ph-scales', 'ph-gavel', 'ph-bank', 'ph-calculator',
-        'ph-receipt', 'ph-invoice', 'ph-wallet', 'ph-piggy-bank', 'ph-credit-card',
+        'ph ph-chart-line', 'ph ph-chart-bar', 'ph ph-chart-pie-slice', 'ph ph-trend-up', 'ph ph-trend-down',
+        'ph ph-currency-dollar', 'ph ph-coins', 'ph ph-money', 'ph ph-briefcase', 'ph ph-buildings',
+        'ph ph-handshake', 'ph ph-scales', 'ph ph-gavel', 'ph ph-bank', 'ph ph-calculator',
+        'ph ph-receipt', 'ph ph-invoice', 'ph ph-wallet', 'ph ph-piggy-bank', 'ph ph-credit-card',
         
         // Technology & Innovation
-        'ph-desktop', 'ph-laptop', 'ph-device-mobile', 'ph-tablet', 'ph-monitor',
-        'ph-wifi-high', 'ph-database', 'ph-cloud', 'ph-cloud-arrow-up', 'ph-cloud-arrow-down',
-        'ph-cpu', 'ph-robot', 'ph-code', 'ph-terminal-window', 'ph-globe',
-        'ph-broadcast', 'ph-rss', 'ph-link', 'ph-git-branch', 'ph-rocket',
+        'ph ph-desktop', 'ph ph-laptop', 'ph ph-device-mobile', 'ph ph-tablet', 'ph ph-monitor',
+        'ph ph-wifi-high', 'ph ph-database', 'ph ph-cloud', 'ph ph-cloud-arrow-up', 'ph ph-cloud-arrow-down',
+        'ph ph-cpu', 'ph ph-robot', 'ph ph-code', 'ph ph-terminal-window', 'ph ph-globe',
+        'ph ph-broadcast', 'ph ph-rss', 'ph ph-link', 'ph ph-git-branch', 'ph ph-rocket',
         
         // People & Teams
-        'ph-users', 'ph-users-three', 'ph-user-circle', 'ph-user-plus', 'ph-user-gear',
-        'ph-identification-card', 'ph-address-book', 'ph-hand-waving', 'ph-handshake',
-        'ph-hands-clapping', 'ph-person', 'ph-person-simple-walk', 'ph-hard-hat',
+        'ph ph-users', 'ph ph-users-three', 'ph ph-user-circle', 'ph ph-user-plus', 'ph ph-user-gear',
+        'ph ph-identification-card', 'ph ph-address-book', 'ph ph-hand-waving', 'ph ph-handshake',
+        'ph ph-hands-clapping', 'ph ph-person', 'ph ph-person-simple-walk', 'ph ph-hard-hat',
         
         // Transportation & Infrastructure
-        'ph-car', 'ph-truck', 'ph-bus', 'ph-train', 'ph-airplane', 'ph-boat',
-        'ph-bicycle', 'ph-charging-station', 'ph-gas-pump', 'ph-traffic-sign',
-        'ph-road-horizon', 'ph-bridge', 'ph-lighthouse', 'ph-factory',
+        'ph ph-car', 'ph ph-truck', 'ph ph-bus', 'ph ph-train', 'ph ph-airplane', 'ph ph-boat',
+        'ph ph-bicycle', 'ph ph-charging-station', 'ph ph-gas-pump', 'ph ph-traffic-sign',
+        'ph ph-road-horizon', 'ph ph-bridge', 'ph ph-lighthouse', 'ph ph-factory',
         
         // Communication
-        'ph-phone', 'ph-phone-call', 'ph-chat', 'ph-chats', 'ph-video-camera',
-        'ph-microphone', 'ph-megaphone', 'ph-broadcast', 'ph-antenna', 'ph-rss-simple',
-        'ph-envelope', 'ph-envelope-open', 'ph-paper-plane', 'ph-telegram-logo',
+        'ph ph-phone', 'ph ph-phone-call', 'ph ph-chat', 'ph ph-chats', 'ph ph-video-camera',
+        'ph ph-microphone', 'ph ph-megaphone', 'ph ph-broadcast', 'ph ph-antenna', 'ph ph-rss-simple',
+        'ph ph-envelope', 'ph ph-envelope-open', 'ph ph-paper-plane', 'ph ph-telegram-logo',
         
         // Tools & Settings
-        'ph-wrench', 'ph-screwdriver', 'ph-hammer', 'ph-toolbox', 'ph-gear-six',
-        'ph-sliders', 'ph-faders', 'ph-equalizer', 'ph-toggle-left', 'ph-toggle-right',
+        'ph ph-wrench', 'ph ph-screwdriver', 'ph ph-hammer', 'ph ph-toolbox', 'ph ph-gear-six',
+        'ph ph-sliders', 'ph ph-faders', 'ph ph-equalizer', 'ph ph-toggle-left', 'ph ph-toggle-right',
         
         // Info & Status
-        'ph-info', 'ph-question', 'ph-warning', 'ph-warning-circle', 'ph-check-circle',
-        'ph-x-circle', 'ph-shield', 'ph-shield-check', 'ph-lock', 'ph-lock-open',
-        'ph-key', 'ph-fingerprint', 'ph-eye', 'ph-eye-slash', 'ph-flag',
+        'ph ph-info', 'ph ph-question', 'ph ph-warning', 'ph ph-warning-circle', 'ph ph-check-circle',
+        'ph ph-x-circle', 'ph ph-shield', 'ph ph-shield-check', 'ph ph-lock', 'ph ph-lock-open',
+        'ph ph-key', 'ph ph-fingerprint', 'ph ph-eye', 'ph ph-eye-slash', 'ph ph-flag',
         
         // Maps & Location
-        'ph-map-pin', 'ph-map-trifold', 'ph-navigation-arrow', 'ph-compass', 'ph-globe-hemisphere-west',
-        'ph-signpost', 'ph-path', 'ph-target', 'ph-crosshair', 'ph-map-pin-line',
+        'ph ph-map-pin', 'ph ph-map-trifold', 'ph ph-navigation-arrow', 'ph ph-compass', 'ph ph-globe-hemisphere-west',
+        'ph ph-signpost', 'ph ph-path', 'ph ph-target', 'ph ph-crosshair', 'ph ph-map-pin-line',
         
         // Actions
-        'ph-download', 'ph-upload', 'ph-share', 'ph-share-network', 'ph-printer',
-        'ph-floppy-disk', 'ph-trash', 'ph-pencil-simple', 'ph-copy', 'ph-scissors',
-        'ph-paperclip', 'ph-link-simple', 'ph-play', 'ph-pause', 'ph-stop'
+        'ph ph-download', 'ph ph-upload', 'ph ph-share', 'ph ph-share-network', 'ph ph-printer',
+        'ph ph-floppy-disk', 'ph ph-trash', 'ph ph-pencil-simple', 'ph ph-copy', 'ph ph-scissors',
+        'ph ph-paperclip', 'ph ph-link-simple', 'ph ph-play', 'ph ph-pause', 'ph ph-stop'
     ],
     
     fill: [
         // Common filled versions
-        'ph-house-fill', 'ph-user-fill', 'ph-gear-fill', 'ph-bell-fill', 'ph-envelope-fill',
-        'ph-star-fill', 'ph-heart-fill', 'ph-thumbs-up-fill', 'ph-chat-circle-fill',
+        'ph ph-house-fill', 'ph ph-user-fill', 'ph ph-gear-fill', 'ph ph-bell-fill', 'ph ph-envelope-fill',
+        'ph ph-star-fill', 'ph ph-heart-fill', 'ph ph-thumbs-up-fill', 'ph ph-chat-circle-fill',
         
         // Energy filled
-        'ph-lightning-fill', 'ph-lightbulb-fill', 'ph-sun-fill', 'ph-moon-fill', 'ph-drop-fill',
-        'ph-fire-fill', 'ph-leaf-fill', 'ph-battery-full-fill', 'ph-plug-fill',
+        'ph ph-lightning-fill', 'ph ph-lightbulb-fill', 'ph ph-sun-fill', 'ph ph-moon-fill', 'ph ph-drop-fill',
+        'ph ph-fire-fill', 'ph ph-leaf-fill', 'ph ph-battery-full-fill', 'ph ph-plug-fill',
         
         // Documents filled
-        'ph-file-fill', 'ph-file-text-fill', 'ph-book-fill', 'ph-folder-fill', 'ph-bookmark-simple-fill',
+        'ph ph-file-fill', 'ph ph-file-text-fill', 'ph ph-book-fill', 'ph ph-folder-fill', 'ph ph-bookmark-simple-fill',
         
         // Business filled
-        'ph-chart-line-fill', 'ph-chart-bar-fill', 'ph-chart-pie-slice-fill', 'ph-briefcase-fill',
+        'ph ph-chart-line-fill', 'ph ph-chart-bar-fill', 'ph ph-chart-pie-slice-fill', 'ph ph-briefcase-fill',
         
         // Status filled
-        'ph-info-fill', 'ph-question-fill', 'ph-warning-fill', 'ph-check-circle-fill', 'ph-x-circle-fill',
-        'ph-shield-fill', 'ph-lock-fill', 'ph-flag-fill'
+        'ph ph-info-fill', 'ph ph-question-fill', 'ph ph-warning-fill', 'ph ph-check-circle-fill', 'ph ph-x-circle-fill',
+        'ph ph-shield-fill', 'ph ph-lock-fill', 'ph ph-flag-fill'
     ]
 };
 
