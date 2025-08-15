@@ -335,25 +335,20 @@
             var $button = $(this);
             var $input = $button.siblings('input[type="url"]');
             
-            // If frame already exists, remove previous event handlers
-            if (typeof window.eakcMediaFrame !== 'undefined') {
-                window.eakcMediaFrame.off('select');
-            }
-            
-            // Create WordPress media uploader
-            window.eakcMediaFrame = wp.media({
+            // Create WordPress media uploader with unique instance
+            var frame = wp.media({
                 title: 'Select or Upload File',
                 button: {
-                    text: 'Use this file'
+                    text: 'Select File'
                 },
-                multiple: false,
-                library: {
-                    type: ['image', 'video', 'audio', 'application']
-                }
+                multiple: false
             });
 
-            window.eakcMediaFrame.on('select', function() {
-                var attachment = window.eakcMediaFrame.state().get('selection').first().toJSON();
+            // Handle file selection
+            frame.on('select', function() {
+                var attachment = frame.state().get('selection').first().toJSON();
+                
+                // Set the URL in the input field
                 $input.val(attachment.url);
                 
                 // Try to auto-detect file type based on URL
@@ -385,15 +380,13 @@
                         $typeSelect.val(typeMapping[fileExtension]);
                     }
                 }
+                
+                // Trigger change event to update any UI
+                $input.trigger('change');
             });
 
-            // Add close event handler
-            window.eakcMediaFrame.on('close', function() {
-                // Clean up event handlers when modal closes
-                window.eakcMediaFrame.off('select');
-            });
-
-            window.eakcMediaFrame.open();
+            // Open the modal
+            frame.open();
         });
     }
 
