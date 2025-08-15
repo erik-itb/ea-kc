@@ -74,6 +74,14 @@ class Energy_Alabama_KC_Frontend {
             $this->version, 
             'all' 
         );
+        
+        // Enqueue Font Awesome for icons
+        wp_enqueue_style(
+            'font-awesome',
+            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
+            array(),
+            '6.5.1'
+        );
     }
 
     /**

@@ -134,7 +134,7 @@ $tag_slug = $current_tag->slug;
                                     </div>
                                 <?php elseif ($featured_icon): ?>
                                     <div class="eakc-card-icon">
-                                        <span class="eakc-icon-<?php echo esc_attr($featured_icon); ?>"></span>
+                                        <i class="<?php echo esc_attr($featured_icon); ?>" style="font-size: 40px;"></i>
                                     </div>
                                 <?php else: ?>
                                     <div class="eakc-card-icon">

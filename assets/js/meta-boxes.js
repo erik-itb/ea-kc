@@ -191,20 +191,117 @@
     }
 
     /**
-     * Initialize icon picker (placeholder for future implementation)
+     * Initialize icon picker
      */
     function initIconPicker() {
+        let allIcons = [];
+        let filteredIcons = [];
+        
+        // Load all icons
+        function loadAllIcons() {
+            allIcons = [];
+            if (typeof eakcIconData !== 'undefined') {
+                Object.keys(eakcIconData).forEach(category => {
+                    eakcIconData[category].forEach(icon => {
+                        allIcons.push({
+                            class: icon,
+                            category: category,
+                            name: icon.split(' ').pop().replace('fa-', '')
+                        });
+                    });
+                });
+            }
+            filteredIcons = [...allIcons];
+        }
+        
+        // Render icons in the grid
+        function renderIcons(icons) {
+            const grid = $('#eakc-icon-grid');
+            grid.empty();
+            
+            if (icons.length === 0) {
+                grid.html('<div class="eakc-no-icons">No icons found</div>');
+                return;
+            }
+            
+            icons.slice(0, 200).forEach(icon => { // Limit to 200 for performance
+                const iconEl = $('<div class="eakc-icon-item" data-icon="' + icon.class + '" title="' + icon.name + '">');
+                iconEl.html('<i class="' + icon.class + '"></i>');
+                grid.append(iconEl);
+            });
+        }
+        
+        // Filter icons based on search and category
+        function filterIcons() {
+            const searchTerm = $('#eakc-icon-search').val().toLowerCase();
+            const category = $('#eakc-icon-category').val();
+            
+            filteredIcons = allIcons.filter(icon => {
+                const matchesSearch = !searchTerm || icon.name.includes(searchTerm);
+                const matchesCategory = !category || icon.category === category;
+                return matchesSearch && matchesCategory;
+            });
+            
+            renderIcons(filteredIcons);
+        }
+        
+        // Open modal
         $(document).on('click', '.eakc-choose-icon', function(e) {
             e.preventDefault();
-            // TODO: Implement icon picker modal
-            alert('Icon picker will be implemented in the next phase');
+            loadAllIcons();
+            renderIcons(allIcons);
+            $('#eakc-icon-picker-modal').fadeIn(200);
+            $('#eakc-icon-search').focus();
         });
-
+        
+        // Close modal
+        $(document).on('click', '.eakc-modal-close, .eakc-modal', function(e) {
+            if (e.target === this) {
+                $('#eakc-icon-picker-modal').fadeOut(200);
+            }
+        });
+        
+        // Search functionality
+        $(document).on('input', '#eakc-icon-search', function() {
+            clearTimeout(window.iconSearchTimeout);
+            window.iconSearchTimeout = setTimeout(filterIcons, 300);
+        });
+        
+        // Category filter
+        $(document).on('change', '#eakc-icon-category', function() {
+            filterIcons();
+        });
+        
+        // Select icon
+        $(document).on('click', '.eakc-icon-item', function() {
+            const iconClass = $(this).data('icon');
+            
+            // Update hidden input
+            $('#eakc_featured_icon').val(iconClass);
+            
+            // Update preview
+            $('.eakc-icon-preview').html('<i class="' + iconClass + '" style="font-size: 32px;"></i>');
+            
+            // Show remove button
+            $('.eakc-remove-icon').show();
+            
+            // Close modal
+            $('#eakc-icon-picker-modal').fadeOut(200);
+        });
+        
+        // Remove icon
         $(document).on('click', '.eakc-remove-icon', function(e) {
             e.preventDefault();
             $('#eakc_featured_icon').val('');
-            $('.eakc-icon-preview').empty();
+            $('.eakc-icon-preview').html('<span class="eakc-no-icon">No icon selected</span>');
             $(this).hide();
+        });
+        
+        // Keyboard navigation
+        $(document).on('keydown', '#eakc-icon-picker-modal', function(e) {
+            if (e.key === 'Escape') {
+                $(this).fadeOut(200);
+            }
         });
     }
 
