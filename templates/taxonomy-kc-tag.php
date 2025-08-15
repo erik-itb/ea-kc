@@ -314,6 +314,11 @@ function eakc_sortArticles(sortBy) {
         container.appendChild(article);
     });
 }
+
+// Initialize with English-only filter on page load
+document.addEventListener('DOMContentLoaded', function() {
+    eakc_filterByLanguage('english');
+});
 </script>
 
 <style>
