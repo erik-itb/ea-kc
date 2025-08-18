@@ -252,7 +252,21 @@ class Energy_Alabama_KC_Template_Manager {
             'posts_per_page' => $limit,
             'post_status' => 'publish',
             'orderby' => 'date',
-            'order' => 'DESC'
+            'order' => 'DESC',
+            'meta_query' => array(
+                array(
+                    'relation' => 'OR',
+                    array(
+                        'key' => '_eakc_is_spanish_content',
+                        'value' => '1',
+                        'compare' => '!='
+                    ),
+                    array(
+                        'key' => '_eakc_is_spanish_content',
+                        'compare' => 'NOT EXISTS'
+                    )
+                )
+            )
         ));
 
         return $query->posts;
