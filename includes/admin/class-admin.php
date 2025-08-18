@@ -303,13 +303,6 @@ class Energy_Alabama_KC_Admin {
             'eakc_general_settings'
         );
 
-        add_settings_field(
-            'enable_spanish_content',
-            __( 'Enable Spanish Content', 'energy-alabama-kc' ),
-            array( $this, 'enable_spanish_content_callback' ),
-            'energy-alabama-kc-settings',
-            'eakc_general_settings'
-        );
 
         // Archive Settings Section
         add_settings_section(
@@ -361,14 +354,14 @@ class Energy_Alabama_KC_Admin {
         <div class="wrap">
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
             
-            <!-- Tabbed Navigation -->
-            <h2 class="nav-tab-wrapper">
-                <a href="#overview" class="nav-tab nav-tab-active" data-tab="overview"><?php _e( 'Overview', 'energy-alabama-kc' ); ?></a>
-                <a href="#import" class="nav-tab" data-tab="import"><?php _e( 'Import', 'energy-alabama-kc' ); ?></a>
-                <a href="#settings" class="nav-tab" data-tab="settings"><?php _e( 'Settings', 'energy-alabama-kc' ); ?></a>
-            </h2>
+            <!-- View Knowledge Center Button -->
+            <div style="margin: 20px 0;">
+                <a href="<?php echo home_url( '/knowledge-center' ); ?>" class="button button-primary button-large" target="_blank">
+                    <span class="dashicons dashicons-external" style="vertical-align: middle; margin-right: 5px;"></span>
+                    <?php _e( 'View Knowledge Center', 'energy-alabama-kc' ); ?>
+                </a>
+            </div>
             
-            <!-- Overview Tab Content (default visible) -->
             <div class="eakc-dashboard">
                 <div class="eakc-dashboard-widgets">
                     
@@ -426,81 +419,30 @@ class Energy_Alabama_KC_Admin {
                         </div>
                     </div>
 
-                    <!-- Quick Actions -->
+                    <!-- Settings -->
                     <div class="postbox">
-                        <h2 class="hndle"><span><?php _e( 'Quick Actions', 'energy-alabama-kc' ); ?></span></h2>
+                        <h2 class="hndle"><span><?php _e( 'Knowledge Center Settings', 'energy-alabama-kc' ); ?></span></h2>
                         <div class="inside">
-                            <div class="eakc-quick-actions">
-                                <a href="#settings" class="button button-large nav-tab-link" data-tab="settings">
-                                    <span class="dashicons dashicons-admin-settings"></span>
-                                    <?php _e( 'Plugin Settings', 'energy-alabama-kc' ); ?>
-                                </a>
-                                
-                                <a href="#import" class="button button-large nav-tab-link" data-tab="import">
-                                    <span class="dashicons dashicons-upload"></span>
-                                    <?php _e( 'Import Content', 'energy-alabama-kc' ); ?>
-                                </a>
-                                
-                                <a href="<?php echo home_url( '/knowledge-center' ); ?>" class="button button-large" target="_blank">
-                                    <span class="dashicons dashicons-external"></span>
-                                    <?php _e( 'View Knowledge Center', 'energy-alabama-kc' ); ?>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recent Activity -->
-                    <div class="postbox">
-                        <h2 class="hndle"><span><?php _e( 'Recent Activity', 'energy-alabama-kc' ); ?></span></h2>
-                        <div class="inside">
-                            <?php
-                            $recent_articles = get_posts( array(
-                                'post_type' => 'kc_article',
-                                'posts_per_page' => 5,
-                                'post_status' => 'publish',
-                                'orderby' => 'date',
-                                'order' => 'DESC'
-                            ) );
-
-                            if ( $recent_articles ) : ?>
-                                <ul class="eakc-recent-list">
-                                    <?php foreach ( $recent_articles as $article ) : ?>
-                                        <li>
-                                            <a href="<?php echo get_edit_post_link( $article->ID ); ?>">
-                                                <?php echo esc_html( $article->post_title ); ?>
-                                            </a>
-                                            <span class="eakc-recent-date">
-                                                <?php echo human_time_diff( strtotime( $article->post_date ), current_time( 'timestamp' ) ); ?>
-                                                <?php _e( 'ago', 'energy-alabama-kc' ); ?>
-                                            </span>
-                                        </li>
-                                    <?php endforeach; ?>
-                                </ul>
-                            <?php else : ?>
-                                <p><?php _e( 'No recent articles found.', 'energy-alabama-kc' ); ?></p>
-                            <?php endif; ?>
+                            <form method="post" action="options.php">
+                                <?php
+                                settings_fields( 'energy_alabama_kc_settings' );
+                                do_settings_sections( 'energy-alabama-kc-settings' );
+                                submit_button();
+                                ?>
+                            </form>
                         </div>
                     </div>
 
                 </div>
             </div>
 
-            <!-- Import Tab Content -->
-            <div id="import-tab" class="tab-content" style="display: none;">
-                <?php $this->display_import_tab_content(); ?>
-            </div>
-            
-            <!-- Settings Tab Content -->
-            <div id="settings-tab" class="tab-content" style="display: none;">
-                <?php $this->display_settings_tab_content(); ?>
-            </div>
-
             <style>
                 .eakc-dashboard-widgets {
                     display: grid;
-                    grid-template-columns: 1fr 1fr;
+                    grid-template-columns: 1fr;
                     gap: 20px;
                     margin-top: 20px;
+                    max-width: 1200px;
                 }
                 
                 .eakc-stats-grid {
@@ -533,145 +475,16 @@ class Energy_Alabama_KC_Admin {
                     margin: 0 5px;
                 }
                 
-                .eakc-quick-actions {
-                    display: flex;
-                    gap: 15px;
-                    flex-wrap: wrap;
-                }
-                
-                .eakc-quick-actions .button {
-                    display: flex;
-                    align-items: center;
-                    gap: 8px;
-                }
-                
-                .eakc-recent-list {
-                    margin: 0;
-                    padding: 0;
-                }
-                
-                .eakc-recent-list li {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    padding: 8px 0;
-                    border-bottom: 1px solid #eee;
-                }
-                
-                .eakc-recent-list li:last-child {
-                    border-bottom: none;
-                }
-                
-                .eakc-recent-date {
-                    font-size: 12px;
-                    color: #999;
-                }
-                
-                .tab-content {
-                    margin-top: 20px;
-                }
-                
                 @media (max-width: 782px) {
-                    .eakc-dashboard-widgets {
-                        grid-template-columns: 1fr;
-                    }
-                    
                     .eakc-stats-grid {
                         grid-template-columns: 1fr;
                     }
-                    
-                    .eakc-quick-actions {
-                        flex-direction: column;
-                    }
                 }
             </style>
-            
-            <script>
-            jQuery(document).ready(function($) {
-                // Tab switching
-                $('.nav-tab, .nav-tab-link').on('click', function(e) {
-                    e.preventDefault();
-                    var tab = $(this).data('tab');
-                    
-                    // Update active tab
-                    $('.nav-tab').removeClass('nav-tab-active');
-                    $('.nav-tab[data-tab="' + tab + '"]').addClass('nav-tab-active');
-                    
-                    // Show/hide content
-                    if (tab === 'overview') {
-                        $('.eakc-dashboard').show();
-                        $('.tab-content').hide();
-                    } else {
-                        $('.eakc-dashboard').hide();
-                        $('.tab-content').hide();
-                        $('#' + tab + '-tab').show();
-                    }
-                    
-                    // Update URL hash
-                    window.location.hash = tab;
-                });
-                
-                // Handle initial hash
-                var hash = window.location.hash.substring(1);
-                if (hash && ['import', 'settings'].includes(hash)) {
-                    $('.nav-tab[data-tab="' + hash + '"]').trigger('click');
-                }
-            });
-            </script>
         </div>
         <?php
     }
 
-    /**
-     * Display the import tab content.
-     *
-     * @since    1.0.0
-     */
-    private function display_import_tab_content() {
-        ?>
-            <div class="eakc-import-tools">
-                <div class="postbox">
-                    <h2 class="hndle"><span><?php _e( 'Bulk Import Tools', 'energy-alabama-kc' ); ?></span></h2>
-                    <div class="inside">
-                        <p><?php _e( 'Import tools will be implemented in a future version. For now, you can:', 'energy-alabama-kc' ); ?></p>
-                        <ul>
-                            <li><?php _e( 'Create articles and dockets manually using the WordPress admin', 'energy-alabama-kc' ); ?></li>
-                            <li><?php _e( 'Use WordPress import/export tools for standard content migration', 'energy-alabama-kc' ); ?></li>
-                            <li><?php _e( 'Contact support for custom import assistance', 'energy-alabama-kc' ); ?></li>
-                        </ul>
-                        
-                        <h4><?php _e( 'Planned Import Features:', 'energy-alabama-kc' ); ?></h4>
-                        <ul>
-                            <li><?php _e( 'CSV import for articles and dockets', 'energy-alabama-kc' ); ?></li>
-                            <li><?php _e( 'Bulk resource attachment', 'energy-alabama-kc' ); ?></li>
-                            <li><?php _e( 'Spanish content linking', 'energy-alabama-kc' ); ?></li>
-                            <li><?php _e( 'Category and tag auto-assignment', 'energy-alabama-kc' ); ?></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        <?php
-    }
-    
-    /**
-     * Display the settings tab content.
-     *
-     * @since    1.0.0
-     */
-    private function display_settings_tab_content() {
-        ?>
-            <h2><?php _e( 'Knowledge Center Settings', 'energy-alabama-kc' ); ?></h2>
-            
-            <form method="post" action="options.php">
-                <?php
-                settings_fields( 'energy_alabama_kc_settings' );
-                do_settings_sections( 'energy-alabama-kc-settings' );
-                submit_button();
-                ?>
-            </form>
-            
-        <?php
-    }
     
     /**
      * Display the main Knowledge Center page.
@@ -736,8 +549,6 @@ class Energy_Alabama_KC_Admin {
             $output['dockets_per_page'] = ( $dockets_per_page > 0 && $dockets_per_page <= 100 ) ? $dockets_per_page : 20;
         }
 
-        // Validate boolean settings
-        $output['enable_spanish_content'] = isset( $input['enable_spanish_content'] ) ? 1 : 0;
 
         return $output;
     }
@@ -772,17 +583,6 @@ class Energy_Alabama_KC_Admin {
         echo '<p class="description">' . __( 'Number of results to show per page in search results.', 'energy-alabama-kc' ) . '</p>';
     }
 
-    /**
-     * Enable Spanish content field callback.
-     *
-     * @since    1.0.0
-     */
-    public function enable_spanish_content_callback() {
-        $options = get_option( 'energy_alabama_kc_options' );
-        $value = isset( $options['enable_spanish_content'] ) ? $options['enable_spanish_content'] : 0;
-        echo '<input type="checkbox" name="energy_alabama_kc_options[enable_spanish_content]" value="1" ' . checked( 1, $value, false ) . ' />';
-        echo '<p class="description">' . __( 'Enable Spanish language content support and toggle functionality.', 'energy-alabama-kc' ) . '</p>';
-    }
 
     /**
      * Articles per page field callback.
