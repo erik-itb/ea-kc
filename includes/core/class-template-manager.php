@@ -20,9 +20,6 @@ class Energy_Alabama_KC_Template_Manager {
      * Initialize the class
      */
     public function __construct() {
-        // Direct debug - write to a custom log file to bypass WordPress logging issues
-        file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - Template Manager initialized\n", FILE_APPEND);
-        
         add_filter('template_include', array($this, 'load_custom_templates'));
         add_action('wp_head', array($this, 'add_structured_data'));
         add_action('wp_enqueue_scripts', array($this, 'enqueue_template_assets'));
@@ -45,21 +42,6 @@ class Energy_Alabama_KC_Template_Manager {
     public function load_custom_templates($template) {
         global $post, $wp_query;
 
-        // Direct debug - write to our custom log file
-        file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - Template filter triggered\n", FILE_APPEND);
-        file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - is_page(): " . (is_page() ? 'true' : 'false') . "\n", FILE_APPEND);
-        file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - is_404(): " . (is_404() ? 'true' : 'false') . "\n", FILE_APPEND);
-        file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - Request URI: " . $_SERVER['REQUEST_URI'] . "\n", FILE_APPEND);
-        
-        if ($post) {
-            file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - Post exists: " . $post->post_name . " (ID: " . $post->ID . ")\n", FILE_APPEND);
-        } else {
-            file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - No post object found\n", FILE_APPEND);
-        }
-        
-        if (is_page() && $post) {
-            file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - Page detected: " . $post->post_name . "\n", FILE_APPEND);
-        }
 
         // Handle knowledge center landing page
         if (is_page() && $post && $post->post_name === 'knowledge-center') {
@@ -103,15 +85,9 @@ class Energy_Alabama_KC_Template_Manager {
 
         // Handle specific taxonomy pages
         if (is_tax('kc_category')) {
-            // Debug logging for taxonomy
-            file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - KC Category taxonomy detected\n", FILE_APPEND);
-            
             $custom_template = $this->get_template('taxonomy-kc-category.php');
             if ($custom_template) {
-                file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - Found taxonomy-kc-category.php template\n", FILE_APPEND);
                 return $custom_template;
-            } else {
-                file_put_contents(ABSPATH . 'template-debug.txt', date('Y-m-d H:i:s') . " - taxonomy-kc-category.php template NOT found\n", FILE_APPEND);
             }
         }
 
