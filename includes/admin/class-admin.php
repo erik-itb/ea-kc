@@ -359,14 +359,6 @@ class Energy_Alabama_KC_Admin {
         <div class="wrap">
             <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
             
-            <!-- View Knowledge Center Button -->
-            <div style="margin: 20px 0;">
-                <a href="<?php echo home_url( '/knowledge-center' ); ?>" class="button button-primary button-large" target="_blank">
-                    <span class="dashicons dashicons-external" style="vertical-align: middle; margin-right: 5px;"></span>
-                    <?php _e( 'View Knowledge Center', 'energy-alabama-kc' ); ?>
-                </a>
-            </div>
-            
             <div class="eakc-dashboard">
                 <div class="eakc-dashboard-widgets">
                     
@@ -422,6 +414,14 @@ class Energy_Alabama_KC_Admin {
                                             </a>
                                         </div>
                                     </div>
+                                </div>
+                                
+                                <!-- View Knowledge Center Button -->
+                                <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                                    <a href="<?php echo home_url( '/knowledge-center' ); ?>" class="button button-primary button-large" target="_blank">
+                                        <span class="dashicons dashicons-external" style="vertical-align: middle; margin-right: 5px;"></span>
+                                        <?php _e( 'View Knowledge Center', 'energy-alabama-kc' ); ?>
+                                    </a>
                                 </div>
                             </div>
                         </div>
