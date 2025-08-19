@@ -228,7 +228,6 @@ class Energy_Alabama_KC_Frontend {
                     'url' => get_permalink(),
                     'date' => get_the_date(),
                     'categories' => $this->get_post_categories( get_the_ID() ),
-                    'difficulty' => get_post_meta( get_the_ID(), '_eakc_difficulty_level', true ),
                     'type' => get_post_type()
                 );
             }
@@ -319,7 +318,6 @@ class Energy_Alabama_KC_Frontend {
 
         $category = isset( $_POST['category'] ) ? intval( $_POST['category'] ) : 0;
         $tag = isset( $_POST['tag'] ) ? intval( $_POST['tag'] ) : 0;
-        $difficulty = isset( $_POST['difficulty'] ) ? sanitize_text_field( $_POST['difficulty'] ) : '';
         $sort = isset( $_POST['sort'] ) ? sanitize_text_field( $_POST['sort'] ) : 'date';
         $paged = isset( $_POST['paged'] ) ? intval( $_POST['paged'] ) : 1;
 
@@ -369,16 +367,6 @@ class Energy_Alabama_KC_Frontend {
             $args['tax_query'] = $tax_query;
         }
 
-        // Add difficulty meta query
-        if ( ! empty( $difficulty ) ) {
-            $args['meta_query'] = array(
-                array(
-                    'key' => '_eakc_difficulty_level',
-                    'value' => $difficulty,
-                    'compare' => '='
-                )
-            );
-        }
 
         // Perform the query
         $query = new WP_Query( $args );
@@ -588,10 +576,6 @@ class Energy_Alabama_KC_Frontend {
 
         // Add specific fields for KC articles
         if ( get_post_type() === 'kc_article' ) {
-            $difficulty = get_post_meta( $post->ID, '_eakc_difficulty_level', true );
-            if ( $difficulty ) {
-                $schema['educationalLevel'] = ucfirst( $difficulty );
-            }
             
             $schema['articleSection'] = 'Clean Energy Knowledge Center';
         }
@@ -659,11 +643,6 @@ class Energy_Alabama_KC_Frontend {
         if ( is_singular( 'kc_article' ) ) {
             $classes[] = 'eakc-single-article';
             
-            // Add difficulty level class
-            $difficulty = get_post_meta( get_the_ID(), '_eakc_difficulty_level', true );
-            if ( $difficulty ) {
-                $classes[] = 'eakc-difficulty-' . sanitize_html_class( $difficulty );
-            }
         }
 
         if ( is_singular( 'docket' ) ) {

@@ -15,7 +15,6 @@ get_header();
 
 // Get meta fields instance
 $meta_fields = Energy_Alabama_KC_Meta_Fields::get_instance();
-$difficulty = get_post_meta(get_the_ID(), '_eakc_difficulty_level', true);
 $read_time = get_post_meta(get_the_ID(), '_eakc_read_time', true);
 $resources = $meta_fields->get_article_resources(get_the_ID());
 $spanish_available = get_post_meta(get_the_ID(), '_eakc_spanish_available', true);
@@ -68,6 +67,16 @@ function eakc_get_resource_icon($type) {
         <section class="eakc-hero">
             <div class="eakc-container">
                 <div class="eakc-hero-content">
+                    <!-- Back to Knowledge Center Button -->
+                    <div class="eakc-back-navigation">
+                        <a href="<?php echo esc_url(home_url('/knowledge-center/')); ?>" class="eakc-back-button">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="15,18 9,12 15,6"/>
+                            </svg>
+                            <?php _e('Back to Knowledge Center', 'energy-alabama-kc'); ?>
+                        </a>
+                    </div>
+                    
                     <h1 class="eakc-hero-title">Energy Alabama<br>Knowledge Center</h1>
                     
                     <!-- Search Form -->
@@ -112,11 +121,6 @@ function eakc_get_resource_icon($type) {
                         </span>
                     <?php endif; ?>
                     
-                    <?php if ($difficulty): ?>
-                        <span class="eakc-article-difficulty eakc-difficulty-<?php echo esc_attr($difficulty); ?>">
-                            <?php echo esc_html(ucfirst($difficulty)); ?>
-                        </span>
-                    <?php endif; ?>
                     
                     <?php if ($read_time): ?>
                         <span class="eakc-article-read-time">

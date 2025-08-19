@@ -19,7 +19,7 @@ if (!class_exists('EAKC_Landing_Template_Helpers')) {
 
 		public function get_category_icon( $slug ) {
 			$icons = array(
-				'clean-energy-101'     => 'energy',
+				'clean-energy-and-energy-efficiency'     => 'energy',
 				'educator-resources'   => 'education',
 				'legal-regulatory'     => 'legal',
 				'presentation-library' => 'presentation',
@@ -147,12 +147,11 @@ $helpers          = new EAKC_Landing_Template_Helpers();
 						$article_link = get_permalink($article->ID);
 						$excerpt = wp_trim_words($article->post_excerpt ?: $article->post_content, 20, '...');
 						$categories = get_the_terms($article->ID, 'kc_category');
-						$difficulty = get_post_meta($article->ID, '_eakc_difficulty_level', true);
 						$read_time = get_post_meta($article->ID, '_eakc_read_time', true);
 						$featured_icon = get_post_meta($article->ID, '_eakc_featured_icon', true);
 						$icon_color = get_post_meta($article->ID, '_eakc_icon_color', true) ?: '#ffffff';
 					?>
-						<article class="eakc-article-card" data-difficulty="<?php echo esc_attr($difficulty); ?>">
+						<article class="eakc-article-card">
 							<div class="eakc-card-header">
 								<?php if (has_post_thumbnail($article->ID)): ?>
 									<div class="eakc-card-image">
@@ -174,11 +173,6 @@ $helpers          = new EAKC_Landing_Template_Helpers();
 								<?php endif; ?>
 								
 								<div class="eakc-card-meta">
-									<?php if ($difficulty): ?>
-										<span class="eakc-difficulty-badge eakc-difficulty-<?php echo esc_attr($difficulty); ?>">
-											<?php echo esc_html(ucfirst($difficulty)); ?>
-										</span>
-									<?php endif; ?>
 									
 									<?php if ($read_time): ?>
 										<span class="eakc-read-time">

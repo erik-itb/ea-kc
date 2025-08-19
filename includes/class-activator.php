@@ -100,8 +100,8 @@ class Energy_Alabama_KC_Activator {
 		// Default KC Categories
 		$default_categories = array(
 			array(
-				'name' => 'Clean Energy 101',
-				'slug' => 'clean-energy-101',
+				'name' => 'Clean Energy and Energy Efficiency',
+				'slug' => 'clean-energy-and-energy-efficiency',
 				'description' => 'Fundamental information about clean energy technologies and concepts.',
 			),
 			array(

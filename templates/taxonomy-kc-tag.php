@@ -26,6 +26,16 @@ $tag_slug = $current_tag->slug;
     <section class="eakc-hero">
         <div class="eakc-container">
             <div class="eakc-hero-content">
+                <!-- Back to Knowledge Center Button -->
+                <div class="eakc-back-navigation">
+                    <a href="<?php echo esc_url(home_url('/knowledge-center/')); ?>" class="eakc-back-button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15,18 9,12 15,6"/>
+                        </svg>
+                        <?php _e('Back to Knowledge Center', 'energy-alabama-kc'); ?>
+                    </a>
+                </div>
+                
                 <h1 class="eakc-hero-title">
                     <?php printf(__('Tagged: %s', 'energy-alabama-kc'), esc_html($tag_name)); ?>
                 </h1>
@@ -90,17 +100,10 @@ $tag_slug = $current_tag->slug;
                         <option value="spanish"><?php _e('Spanish Only', 'energy-alabama-kc'); ?></option>
                     </select>
                     
-                    <select class="eakc-difficulty-filter" onchange="eakc_filterByDifficulty(this.value)">
-                        <option value=""><?php _e('All Difficulty Levels', 'energy-alabama-kc'); ?></option>
-                        <option value="beginner"><?php _e('Beginner', 'energy-alabama-kc'); ?></option>
-                        <option value="intermediate"><?php _e('Intermediate', 'energy-alabama-kc'); ?></option>
-                        <option value="advanced"><?php _e('Advanced', 'energy-alabama-kc'); ?></option>
-                    </select>
                     
                     <select class="eakc-sort-filter" onchange="eakc_sortArticles(this.value)">
                         <option value="date"><?php _e('Sort by Date', 'energy-alabama-kc'); ?></option>
                         <option value="title"><?php _e('Sort by Title', 'energy-alabama-kc'); ?></option>
-                        <option value="difficulty"><?php _e('Sort by Difficulty', 'energy-alabama-kc'); ?></option>
                     </select>
                 </div>
             </div>
@@ -112,7 +115,6 @@ $tag_slug = $current_tag->slug;
                     <?php while (have_posts()) : the_post(); ?>
                         <?php
                         // Get article meta
-                        $difficulty = get_post_meta(get_the_ID(), '_eakc_difficulty_level', true);
                         $read_time = get_post_meta(get_the_ID(), '_eakc_read_time', true);
                         $featured_icon = get_post_meta(get_the_ID(), '_eakc_featured_icon', true);
                         $icon_color = get_post_meta(get_the_ID(), '_eakc_icon_color', true) ?: '#ffffff';
@@ -125,7 +127,7 @@ $tag_slug = $current_tag->slug;
                         $language = $is_spanish_content ? 'spanish' : 'english';
                         ?>
                         
-                        <article class="eakc-article-card" data-difficulty="<?php echo esc_attr($difficulty); ?>" data-language="<?php echo esc_attr($language); ?>">
+                        <article class="eakc-article-card" data-language="<?php echo esc_attr($language); ?>">
                             <div class="eakc-card-header">
                                 <?php if (has_post_thumbnail()): ?>
                                     <div class="eakc-card-image">
@@ -147,11 +149,6 @@ $tag_slug = $current_tag->slug;
                                 <?php endif; ?>
                                 
                                 <div class="eakc-card-meta">
-                                    <?php if ($difficulty): ?>
-                                        <span class="eakc-difficulty-badge eakc-difficulty-<?php echo esc_attr($difficulty); ?>">
-                                            <?php echo esc_html(ucfirst($difficulty)); ?>
-                                        </span>
-                                    <?php endif; ?>
                                     
                                     <?php if ($read_time): ?>
                                         <span class="eakc-read-time">
@@ -279,17 +276,6 @@ function eakc_filterByLanguage(language) {
     });
 }
 
-function eakc_filterByDifficulty(difficulty) {
-    const articles = document.querySelectorAll('.eakc-article-card');
-    
-    articles.forEach(function(article) {
-        if (difficulty === '' || article.getAttribute('data-difficulty') === difficulty) {
-            article.style.display = 'block';
-        } else {
-            article.style.display = 'none';
-        }
-    });
-}
 
 function eakc_sortArticles(sortBy) {
     const container = document.getElementById('eakc-articles-container');
@@ -300,11 +286,6 @@ function eakc_sortArticles(sortBy) {
             const titleA = a.querySelector('.eakc-card-title a').textContent.toLowerCase();
             const titleB = b.querySelector('.eakc-card-title a').textContent.toLowerCase();
             return titleA.localeCompare(titleB);
-        } else if (sortBy === 'difficulty') {
-            const difficultyOrder = { 'beginner': 1, 'intermediate': 2, 'advanced': 3 };
-            const diffA = difficultyOrder[a.getAttribute('data-difficulty')] || 0;
-            const diffB = difficultyOrder[b.getAttribute('data-difficulty')] || 0;
-            return diffA - diffB;
         }
         // Default: sort by date (newest first)
         return 0; // Keep original order for date sorting

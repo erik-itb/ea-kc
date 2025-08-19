@@ -168,25 +168,11 @@ class Energy_Alabama_KC_Meta_Boxes {
     public function render_article_details_meta_box($post) {
         wp_nonce_field('eakc_article_details_nonce', 'eakc_article_details_nonce');
 
-        $difficulty = get_post_meta($post->ID, '_eakc_difficulty_level', true) ?: 'beginner';
         $featured_icon = get_post_meta($post->ID, '_eakc_featured_icon', true);
         $icon_color = get_post_meta($post->ID, '_eakc_icon_color', true) ?: '#ffffff';
         $read_time = get_post_meta($post->ID, '_eakc_read_time', true);
         ?>
         <table class="form-table eakc-meta-table">
-            <tr>
-                <th scope="row">
-                    <label for="eakc_difficulty_level"><?php _e('Difficulty Level', 'energy-alabama-kc'); ?></label>
-                </th>
-                <td>
-                    <select name="eakc_difficulty_level" id="eakc_difficulty_level" class="regular-text">
-                        <option value="beginner" <?php selected($difficulty, 'beginner'); ?>><?php _e('Beginner', 'energy-alabama-kc'); ?></option>
-                        <option value="intermediate" <?php selected($difficulty, 'intermediate'); ?>><?php _e('Intermediate', 'energy-alabama-kc'); ?></option>
-                        <option value="advanced" <?php selected($difficulty, 'advanced'); ?>><?php _e('Advanced', 'energy-alabama-kc'); ?></option>
-                    </select>
-                    <p class="description"><?php _e('Select the appropriate difficulty level for this article.', 'energy-alabama-kc'); ?></p>
-                </td>
-            </tr>
             <tr>
                 <th scope="row">
                     <label for="eakc_featured_icon"><?php _e('Featured Icon', 'energy-alabama-kc'); ?></label>
@@ -735,9 +721,6 @@ class Energy_Alabama_KC_Meta_Boxes {
         }
 
         // Save article details
-        if (isset($_POST['eakc_difficulty_level'])) {
-            update_post_meta($post_id, '_eakc_difficulty_level', sanitize_text_field($_POST['eakc_difficulty_level']));
-        }
 
         if (isset($_POST['eakc_featured_icon'])) {
             update_post_meta($post_id, '_eakc_featured_icon', sanitize_text_field($_POST['eakc_featured_icon']));

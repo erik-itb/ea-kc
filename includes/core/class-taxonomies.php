@@ -227,11 +227,11 @@ class Energy_Alabama_KC_Taxonomies {
      */
     private function create_default_terms() {
         // Only create terms if they don't exist
-        if (!term_exists('clean-energy-101', 'kc_category')) {
+        if (!term_exists('clean-energy-and-energy-efficiency', 'kc_category')) {
             // KC Categories based on the client's document
             $categories = array(
-                'clean-energy-101' => array(
-                    'name' => 'Clean Energy 101',
+                'clean-energy-and-energy-efficiency' => array(
+                    'name' => 'Clean Energy and Energy Efficiency',
                     'description' => 'Basic information about clean energy technologies and concepts'
                 ),
                 'educator-resources' => array(

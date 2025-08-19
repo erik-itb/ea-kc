@@ -20,6 +20,16 @@ get_header();
     <section class="eakc-hero">
         <div class="eakc-container">
             <div class="eakc-hero-content">
+                <!-- Back to Knowledge Center Button -->
+                <div class="eakc-back-navigation">
+                    <a href="<?php echo esc_url(home_url('/knowledge-center/')); ?>" class="eakc-back-button">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15,18 9,12 15,6"/>
+                        </svg>
+                        <?php _e('Back to Knowledge Center', 'energy-alabama-kc'); ?>
+                    </a>
+                </div>
+                
                 <h1 class="eakc-hero-title">Energy Alabama<br>Knowledge Center</h1>
                 <p class="eakc-hero-description">
                     <?php _e('Explore our comprehensive collection of articles about clean energy, regulations, and educational resources for Alabama communities.', 'energy-alabama-kc'); ?>
@@ -76,17 +86,10 @@ get_header();
                         <option value="spanish"><?php _e('Spanish Only', 'energy-alabama-kc'); ?></option>
                     </select>
                     
-                    <select class="eakc-difficulty-filter" onchange="eakc_filterByDifficulty(this.value)">
-                        <option value=""><?php _e('All Difficulty Levels', 'energy-alabama-kc'); ?></option>
-                        <option value="beginner"><?php _e('Beginner', 'energy-alabama-kc'); ?></option>
-                        <option value="intermediate"><?php _e('Intermediate', 'energy-alabama-kc'); ?></option>
-                        <option value="advanced"><?php _e('Advanced', 'energy-alabama-kc'); ?></option>
-                    </select>
                     
                     <select class="eakc-sort-filter" onchange="eakc_sortArticles(this.value)">
                         <option value="date"><?php _e('Sort by Date', 'energy-alabama-kc'); ?></option>
                         <option value="title"><?php _e('Sort by Title', 'energy-alabama-kc'); ?></option>
-                        <option value="difficulty"><?php _e('Sort by Difficulty', 'energy-alabama-kc'); ?></option>
                     </select>
                 </div>
             </div>
@@ -98,7 +101,6 @@ get_header();
                     <?php while (have_posts()) : the_post(); ?>
                         <?php
                         // Get article meta
-                        $difficulty = get_post_meta(get_the_ID(), '_eakc_difficulty_level', true);
                         $read_time = get_post_meta(get_the_ID(), '_eakc_read_time', true);
                         $featured_icon = get_post_meta(get_the_ID(), '_eakc_featured_icon', true);
                         $icon_color = get_post_meta(get_the_ID(), '_eakc_icon_color', true) ?: '#ffffff';
@@ -111,7 +113,7 @@ get_header();
                         $language = $is_spanish_content ? 'spanish' : 'english';
                         ?>
                         
-                        <article class="eakc-article-card" data-difficulty="<?php echo esc_attr($difficulty); ?>" data-language="<?php echo esc_attr($language); ?>">
+                        <article class="eakc-article-card" data-language="<?php echo esc_attr($language); ?>">
                             <div class="eakc-card-header">
                                 <?php if (has_post_thumbnail()): ?>
                                     <div class="eakc-card-image">
@@ -133,11 +135,6 @@ get_header();
                                 <?php endif; ?>
                                 
                                 <div class="eakc-card-meta">
-                                    <?php if ($difficulty): ?>
-                                        <span class="eakc-difficulty-badge eakc-difficulty-<?php echo esc_attr($difficulty); ?>">
-                                            <?php echo esc_html(ucfirst($difficulty)); ?>
-                                        </span>
-                                    <?php endif; ?>
                                     
                                     <?php if ($read_time): ?>
                                         <span class="eakc-read-time">
@@ -228,7 +225,7 @@ get_header();
                 // Get category icon and color functions
                 function eakc_get_archive_category_icon($slug) {
                     $icons = array(
-                        'clean-energy-101' => '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
+                        'clean-energy-and-energy-efficiency' => '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
                         'educator-resources' => '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
                         'legal-regulatory' => '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg>',
                         'presentation-library' => '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
@@ -240,7 +237,7 @@ get_header();
 
                 function eakc_get_archive_category_color($slug) {
                     $colors = array(
-                        'clean-energy-101' => '#3b82f6',
+                        'clean-energy-and-energy-efficiency' => '#3b82f6',
                         'educator-resources' => '#10b981', 
                         'legal-regulatory' => '#6366f1',
                         'presentation-library' => '#8b5cf6',
@@ -296,17 +293,6 @@ function eakc_filterByLanguage(language) {
     });
 }
 
-function eakc_filterByDifficulty(difficulty) {
-    const articles = document.querySelectorAll('.eakc-article-card');
-    
-    articles.forEach(function(article) {
-        if (difficulty === '' || article.getAttribute('data-difficulty') === difficulty) {
-            article.style.display = 'block';
-        } else {
-            article.style.display = 'none';
-        }
-    });
-}
 
 function eakc_sortArticles(sortBy) {
     const container = document.getElementById('eakc-articles-container');
@@ -317,11 +303,6 @@ function eakc_sortArticles(sortBy) {
             const titleA = a.querySelector('.eakc-card-title a').textContent.toLowerCase();
             const titleB = b.querySelector('.eakc-card-title a').textContent.toLowerCase();
             return titleA.localeCompare(titleB);
-        } else if (sortBy === 'difficulty') {
-            const difficultyOrder = { 'beginner': 1, 'intermediate': 2, 'advanced': 3 };
-            const diffA = difficultyOrder[a.getAttribute('data-difficulty')] || 0;
-            const diffB = difficultyOrder[b.getAttribute('data-difficulty')] || 0;
-            return diffA - diffB;
         }
         // Default: sort by date (newest first)
         return 0; // Keep original order for date sorting

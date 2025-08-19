@@ -51,15 +51,6 @@ class Energy_Alabama_KC_Meta_Fields {
      * Register KC Article meta fields
      */
     private function register_kc_article_meta() {
-        // Difficulty level
-        register_meta('post', '_eakc_difficulty_level', array(
-            'type' => 'string',
-            'description' => 'Article difficulty level',
-            'single' => true,
-            'show_in_rest' => true,
-            'object_subtype' => 'kc_article',
-            'sanitize_callback' => array($this, 'sanitize_difficulty_level')
-        ));
 
         // Spanish content availability
         register_meta('post', '_eakc_spanish_available', array(
@@ -191,13 +182,6 @@ class Energy_Alabama_KC_Meta_Fields {
      * Sanitization callbacks
      */
 
-    /**
-     * Sanitize difficulty level
-     */
-    public function sanitize_difficulty_level($value) {
-        $allowed_values = array('beginner', 'intermediate', 'advanced');
-        return in_array($value, $allowed_values) ? $value : 'beginner';
-    }
 
     /**
      * Sanitize docket status
@@ -383,18 +367,6 @@ class Energy_Alabama_KC_Meta_Fields {
         return max(1, $read_time); // Minimum 1 minute
     }
 
-    /**
-     * Get difficulty level display name
-     */
-    public function get_difficulty_display_name($level) {
-        $names = array(
-            'beginner' => __('Beginner', 'energy-alabama-kc'),
-            'intermediate' => __('Intermediate', 'energy-alabama-kc'),
-            'advanced' => __('Advanced', 'energy-alabama-kc')
-        );
-
-        return isset($names[$level]) ? $names[$level] : $names['beginner'];
-    }
 
     /**
      * Get resource type display name

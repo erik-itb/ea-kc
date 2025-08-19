@@ -81,6 +81,11 @@ class Energy_Alabama_KC_Admin {
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-meta-boxes.php';
         
         $this->meta_boxes = new Energy_Alabama_KC_Meta_Boxes();
+        
+        /**
+         * The class responsible for import/export functionality
+         */
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-import-export.php';
     }
 
     /**
@@ -430,6 +435,93 @@ class Energy_Alabama_KC_Admin {
                                 submit_button();
                                 ?>
                             </form>
+                        </div>
+                    </div>
+
+                    <!-- Import/Export Tools -->
+                    <div class="postbox">
+                        <h2 class="hndle"><span><?php _e( 'Import/Export Tools', 'energy-alabama-kc' ); ?></span></h2>
+                        <div class="inside">
+                            
+                            <!-- Export Section -->
+                            <div style="margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid #e5e7eb;">
+                                <h3><?php _e( 'Export Content', 'energy-alabama-kc' ); ?></h3>
+                                <p><?php _e( 'Export your Knowledge Center content to CSV format for backup or migration.', 'energy-alabama-kc' ); ?></p>
+                                
+                                <form method="post" action="">
+                                    <?php wp_nonce_field( 'eakc_export_action', 'eakc_export_nonce' ); ?>
+                                    
+                                    <div style="margin-bottom: 15px;">
+                                        <label for="export_type" style="display: block; margin-bottom: 5px;">
+                                            <strong><?php _e( 'Export Type:', 'energy-alabama-kc' ); ?></strong>
+                                        </label>
+                                        <select name="export_type" id="export_type" style="min-width: 200px;">
+                                            <option value="articles"><?php _e( 'Articles Only', 'energy-alabama-kc' ); ?></option>
+                                            <option value="dockets"><?php _e( 'Dockets Only', 'energy-alabama-kc' ); ?></option>
+                                            <option value="all"><?php _e( 'All Content (ZIP)', 'energy-alabama-kc' ); ?></option>
+                                        </select>
+                                    </div>
+                                    
+                                    <input type="submit" name="eakc_export" value="<?php esc_attr_e( 'Export Content', 'energy-alabama-kc' ); ?>" class="button button-primary">
+                                </form>
+                            </div>
+                            
+                            <!-- Import Section -->
+                            <div>
+                                <h3><?php _e( 'Import Content', 'energy-alabama-kc' ); ?></h3>
+                                <p><?php _e( 'Import articles or dockets from a CSV file. Existing content with the same title will be skipped.', 'energy-alabama-kc' ); ?></p>
+                                
+                                <form method="post" action="" enctype="multipart/form-data">
+                                    <?php wp_nonce_field( 'eakc_import_action', 'eakc_import_nonce' ); ?>
+                                    
+                                    <div style="margin-bottom: 15px;">
+                                        <label for="import_type" style="display: block; margin-bottom: 5px;">
+                                            <strong><?php _e( 'Import Type:', 'energy-alabama-kc' ); ?></strong>
+                                        </label>
+                                        <select name="import_type" id="import_type" style="min-width: 200px;">
+                                            <option value="articles"><?php _e( 'Articles', 'energy-alabama-kc' ); ?></option>
+                                            <option value="dockets"><?php _e( 'Dockets', 'energy-alabama-kc' ); ?></option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 15px;">
+                                        <label for="import_file" style="display: block; margin-bottom: 5px;">
+                                            <strong><?php _e( 'CSV File:', 'energy-alabama-kc' ); ?></strong>
+                                        </label>
+                                        <input type="file" name="import_file" id="import_file" accept=".csv" required>
+                                    </div>
+                                    
+                                    <input type="submit" name="eakc_import" value="<?php esc_attr_e( 'Import Content', 'energy-alabama-kc' ); ?>" class="button button-primary">
+                                </form>
+                                
+                                <div style="margin-top: 20px; padding: 15px; background: #f0f8ff; border-left: 4px solid #2271b1; border-radius: 4px;">
+                                    <h4 style="margin-top: 0;"><?php _e( 'Import Format Guide', 'energy-alabama-kc' ); ?></h4>
+                                    <p style="margin-bottom: 10px;"><?php _e( 'Your CSV file should include the following columns:', 'energy-alabama-kc' ); ?></p>
+                                    
+                                    <strong><?php _e( 'For Articles:', 'energy-alabama-kc' ); ?></strong>
+                                    <ul style="margin-top: 5px;">
+                                        <li>Title, Content, Excerpt, Status, Author, Date</li>
+                                        <li>Categories (pipe-separated: Cat1|Cat2)</li>
+                                        <li>Tags (pipe-separated: Tag1|Tag2)</li>
+                                        <li>Featured Icon, Icon Color, Read Time</li>
+                                        <li>Is Spanish (1 or 0), Spanish Link ID</li>
+                                        <li>Resources JSON, Featured Image URL</li>
+                                    </ul>
+                                    
+                                    <strong><?php _e( 'For Dockets:', 'energy-alabama-kc' ); ?></strong>
+                                    <ul style="margin-top: 5px;">
+                                        <li>Title, Content, Status, Author, Date</li>
+                                        <li>Docket Number, Docket Status</li>
+                                        <li>Jurisdictions (pipe-separated)</li>
+                                        <li>Documents JSON</li>
+                                    </ul>
+                                    
+                                    <p style="margin-bottom: 0; margin-top: 10px;">
+                                        <em><?php _e( 'Tip: Export existing content first to see the exact format required.', 'energy-alabama-kc' ); ?></em>
+                                    </p>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
 
