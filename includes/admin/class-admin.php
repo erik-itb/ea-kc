@@ -86,6 +86,11 @@ class Energy_Alabama_KC_Admin {
          * The class responsible for import/export functionality
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-import-export.php';
+        
+        /**
+         * The class responsible for category ordering functionality
+         */
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-category-ordering.php';
     }
 
     /**

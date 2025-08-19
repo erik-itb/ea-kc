@@ -227,7 +227,8 @@ class Energy_Alabama_KC_Template_Manager {
         $categories = get_terms(array(
             'taxonomy' => 'kc_category',
             'hide_empty' => false,
-            'orderby' => 'term_order',
+            'meta_key' => 'eakc_category_order',
+            'orderby' => 'meta_value_num name',
             'order' => 'ASC'
         ));
 
