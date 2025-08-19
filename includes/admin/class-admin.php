@@ -370,158 +370,188 @@ class Energy_Alabama_KC_Admin {
             <div class="eakc-dashboard">
                 <div class="eakc-dashboard-widgets">
                     
-                    <!-- Content Overview -->
-                    <div class="postbox">
-                        <h2 class="hndle"><span><?php _e( 'Content Overview', 'energy-alabama-kc' ); ?></span></h2>
-                        <div class="inside">
-                            <div class="eakc-stats-grid">
-                                <div class="eakc-stat-item">
-                                    <div class="eakc-stat-number"><?php echo esc_html( $kc_articles->publish ); ?></div>
-                                    <div class="eakc-stat-label"><?php _e( 'Published Articles', 'energy-alabama-kc' ); ?></div>
-                                    <div class="eakc-stat-actions">
-                                        <a href="<?php echo admin_url( 'edit.php?post_type=kc_article' ); ?>" class="button">
-                                            <?php _e( 'Manage Articles', 'energy-alabama-kc' ); ?>
-                                        </a>
-                                        <a href="<?php echo admin_url( 'post-new.php?post_type=kc_article' ); ?>" class="button button-primary">
-                                            <?php _e( 'Add New', 'energy-alabama-kc' ); ?>
-                                        </a>
+                    <!-- First Row: Content Overview and Settings -->
+                    <div class="eakc-dashboard-row">
+                        <!-- Content Overview -->
+                        <div class="postbox">
+                            <h2 class="hndle"><span><?php _e( 'Content Overview', 'energy-alabama-kc' ); ?></span></h2>
+                            <div class="inside">
+                                <div class="eakc-stats-grid">
+                                    <div class="eakc-stat-item">
+                                        <div class="eakc-stat-number"><?php echo esc_html( $kc_articles->publish ); ?></div>
+                                        <div class="eakc-stat-label"><?php _e( 'Published Articles', 'energy-alabama-kc' ); ?></div>
+                                        <div class="eakc-stat-actions">
+                                            <a href="<?php echo admin_url( 'edit.php?post_type=kc_article' ); ?>" class="button">
+                                                <?php _e( 'Manage Articles', 'energy-alabama-kc' ); ?>
+                                            </a>
+                                            <a href="<?php echo admin_url( 'post-new.php?post_type=kc_article' ); ?>" class="button button-primary">
+                                                <?php _e( 'Add New', 'energy-alabama-kc' ); ?>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="eakc-stat-item">
-                                    <div class="eakc-stat-number"><?php echo esc_html( $dockets->publish ); ?></div>
-                                    <div class="eakc-stat-label"><?php _e( 'Published Dockets', 'energy-alabama-kc' ); ?></div>
-                                    <div class="eakc-stat-actions">
-                                        <a href="<?php echo admin_url( 'edit.php?post_type=docket' ); ?>" class="button">
-                                            <?php _e( 'Manage Dockets', 'energy-alabama-kc' ); ?>
-                                        </a>
-                                        <a href="<?php echo admin_url( 'post-new.php?post_type=docket' ); ?>" class="button button-primary">
-                                            <?php _e( 'Add New', 'energy-alabama-kc' ); ?>
-                                        </a>
+                                    <div class="eakc-stat-item">
+                                        <div class="eakc-stat-number"><?php echo esc_html( $dockets->publish ); ?></div>
+                                        <div class="eakc-stat-label"><?php _e( 'Published Dockets', 'energy-alabama-kc' ); ?></div>
+                                        <div class="eakc-stat-actions">
+                                            <a href="<?php echo admin_url( 'edit.php?post_type=docket' ); ?>" class="button">
+                                                <?php _e( 'Manage Dockets', 'energy-alabama-kc' ); ?>
+                                            </a>
+                                            <a href="<?php echo admin_url( 'post-new.php?post_type=docket' ); ?>" class="button button-primary">
+                                                <?php _e( 'Add New', 'energy-alabama-kc' ); ?>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="eakc-stat-item">
-                                    <div class="eakc-stat-number"><?php echo esc_html( $categories ); ?></div>
-                                    <div class="eakc-stat-label"><?php _e( 'Categories', 'energy-alabama-kc' ); ?></div>
-                                    <div class="eakc-stat-actions">
-                                        <a href="<?php echo admin_url( 'edit-tags.php?taxonomy=kc_category&post_type=kc_article' ); ?>" class="button">
-                                            <?php _e( 'Manage Categories', 'energy-alabama-kc' ); ?>
-                                        </a>
+                                    <div class="eakc-stat-item">
+                                        <div class="eakc-stat-number"><?php echo esc_html( $categories ); ?></div>
+                                        <div class="eakc-stat-label"><?php _e( 'Categories', 'energy-alabama-kc' ); ?></div>
+                                        <div class="eakc-stat-actions">
+                                            <a href="<?php echo admin_url( 'edit-tags.php?taxonomy=kc_category&post_type=kc_article' ); ?>" class="button">
+                                                <?php _e( 'Manage Categories', 'energy-alabama-kc' ); ?>
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="eakc-stat-item">
-                                    <div class="eakc-stat-number"><?php echo esc_html( $docket_types ); ?></div>
-                                    <div class="eakc-stat-label"><?php _e( 'Docket Types', 'energy-alabama-kc' ); ?></div>
-                                    <div class="eakc-stat-actions">
-                                        <a href="<?php echo admin_url( 'edit-tags.php?taxonomy=docket_type&post_type=docket' ); ?>" class="button">
-                                            <?php _e( 'Manage Types', 'energy-alabama-kc' ); ?>
-                                        </a>
+                                    <div class="eakc-stat-item">
+                                        <div class="eakc-stat-number"><?php echo esc_html( $docket_types ); ?></div>
+                                        <div class="eakc-stat-label"><?php _e( 'Docket Types', 'energy-alabama-kc' ); ?></div>
+                                        <div class="eakc-stat-actions">
+                                            <a href="<?php echo admin_url( 'edit-tags.php?taxonomy=docket_type&post_type=docket' ); ?>" class="button">
+                                                <?php _e( 'Manage Types', 'energy-alabama-kc' ); ?>
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Settings -->
-                    <div class="postbox">
-                        <h2 class="hndle"><span><?php _e( 'Knowledge Center Settings', 'energy-alabama-kc' ); ?></span></h2>
-                        <div class="inside">
-                            <form method="post" action="options.php">
-                                <?php
-                                settings_fields( 'energy_alabama_kc_settings' );
-                                do_settings_sections( 'energy-alabama-kc-settings' );
-                                submit_button();
-                                ?>
-                            </form>
+                        <!-- Settings -->
+                        <div class="postbox">
+                            <h2 class="hndle"><span><?php _e( 'Knowledge Center Settings', 'energy-alabama-kc' ); ?></span></h2>
+                            <div class="inside">
+                                <form method="post" action="options.php">
+                                    <?php
+                                    settings_fields( 'energy_alabama_kc_settings' );
+                                    do_settings_sections( 'energy-alabama-kc-settings' );
+                                    submit_button();
+                                    ?>
+                                </form>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Import/Export Tools -->
-                    <div class="postbox">
-                        <h2 class="hndle"><span><?php _e( 'Import/Export Tools', 'energy-alabama-kc' ); ?></span></h2>
-                        <div class="inside">
-                            
-                            <!-- Export Section -->
-                            <div style="margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid #e5e7eb;">
-                                <h3><?php _e( 'Export Content', 'energy-alabama-kc' ); ?></h3>
-                                <p><?php _e( 'Export your Knowledge Center content to CSV format for backup or migration.', 'energy-alabama-kc' ); ?></p>
+                    <!-- Second Row: Import/Export Tools and Format Guide -->
+                    <div class="eakc-dashboard-row">
+                        <!-- Import/Export Tools -->
+                        <div class="postbox">
+                            <h2 class="hndle"><span><?php _e( 'Import/Export Tools', 'energy-alabama-kc' ); ?></span></h2>
+                            <div class="inside">
                                 
-                                <form method="post" action="">
-                                    <?php wp_nonce_field( 'eakc_export_action', 'eakc_export_nonce' ); ?>
+                                <!-- Export Section -->
+                                <div style="margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid #e5e7eb;">
+                                    <h3><?php _e( 'Export Content', 'energy-alabama-kc' ); ?></h3>
+                                    <p><?php _e( 'Export your Knowledge Center content to CSV format for backup or migration.', 'energy-alabama-kc' ); ?></p>
                                     
-                                    <div style="margin-bottom: 15px;">
-                                        <label for="export_type" style="display: block; margin-bottom: 5px;">
-                                            <strong><?php _e( 'Export Type:', 'energy-alabama-kc' ); ?></strong>
-                                        </label>
-                                        <select name="export_type" id="export_type" style="min-width: 200px;">
-                                            <option value="articles"><?php _e( 'Articles Only', 'energy-alabama-kc' ); ?></option>
-                                            <option value="dockets"><?php _e( 'Dockets Only', 'energy-alabama-kc' ); ?></option>
-                                            <option value="all"><?php _e( 'All Content (ZIP)', 'energy-alabama-kc' ); ?></option>
-                                        </select>
-                                    </div>
+                                    <form method="post" action="">
+                                        <?php wp_nonce_field( 'eakc_export_action', 'eakc_export_nonce' ); ?>
+                                        
+                                        <div style="margin-bottom: 15px;">
+                                            <label for="export_type" style="display: block; margin-bottom: 5px;">
+                                                <strong><?php _e( 'Export Type:', 'energy-alabama-kc' ); ?></strong>
+                                            </label>
+                                            <select name="export_type" id="export_type" style="min-width: 200px;">
+                                                <option value="articles"><?php _e( 'Articles Only', 'energy-alabama-kc' ); ?></option>
+                                                <option value="dockets"><?php _e( 'Dockets Only', 'energy-alabama-kc' ); ?></option>
+                                                <option value="all"><?php _e( 'All Content (ZIP)', 'energy-alabama-kc' ); ?></option>
+                                            </select>
+                                        </div>
+                                        
+                                        <input type="submit" name="eakc_export" value="<?php esc_attr_e( 'Export Content', 'energy-alabama-kc' ); ?>" class="button button-primary">
+                                    </form>
+                                </div>
+                                
+                                <!-- Import Section -->
+                                <div>
+                                    <h3><?php _e( 'Import Content', 'energy-alabama-kc' ); ?></h3>
+                                    <p><?php _e( 'Import articles or dockets from a CSV file. Existing content with the same title will be skipped.', 'energy-alabama-kc' ); ?></p>
                                     
-                                    <input type="submit" name="eakc_export" value="<?php esc_attr_e( 'Export Content', 'energy-alabama-kc' ); ?>" class="button button-primary">
-                                </form>
+                                    <form method="post" action="" enctype="multipart/form-data">
+                                        <?php wp_nonce_field( 'eakc_import_action', 'eakc_import_nonce' ); ?>
+                                        
+                                        <div style="margin-bottom: 15px;">
+                                            <label for="import_type" style="display: block; margin-bottom: 5px;">
+                                                <strong><?php _e( 'Import Type:', 'energy-alabama-kc' ); ?></strong>
+                                            </label>
+                                            <select name="import_type" id="import_type" style="min-width: 200px;">
+                                                <option value="articles"><?php _e( 'Articles', 'energy-alabama-kc' ); ?></option>
+                                                <option value="dockets"><?php _e( 'Dockets', 'energy-alabama-kc' ); ?></option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div style="margin-bottom: 15px;">
+                                            <label for="import_file" style="display: block; margin-bottom: 5px;">
+                                                <strong><?php _e( 'CSV File:', 'energy-alabama-kc' ); ?></strong>
+                                            </label>
+                                            <input type="file" name="import_file" id="import_file" accept=".csv" required>
+                                        </div>
+                                        
+                                        <input type="submit" name="eakc_import" value="<?php esc_attr_e( 'Import Content', 'energy-alabama-kc' ); ?>" class="button button-primary">
+                                    </form>
+                                </div>
+                                
                             </div>
-                            
-                            <!-- Import Section -->
-                            <div>
-                                <h3><?php _e( 'Import Content', 'energy-alabama-kc' ); ?></h3>
-                                <p><?php _e( 'Import articles or dockets from a CSV file. Existing content with the same title will be skipped.', 'energy-alabama-kc' ); ?></p>
+                        </div>
+
+                        <!-- Import Format Guide -->
+                        <div class="postbox">
+                            <h2 class="hndle"><span><?php _e( 'Import Format Guide', 'energy-alabama-kc' ); ?></span></h2>
+                            <div class="inside">
+                                <p><?php _e( 'Your CSV file should include the following columns:', 'energy-alabama-kc' ); ?></p>
                                 
-                                <form method="post" action="" enctype="multipart/form-data">
-                                    <?php wp_nonce_field( 'eakc_import_action', 'eakc_import_nonce' ); ?>
-                                    
-                                    <div style="margin-bottom: 15px;">
-                                        <label for="import_type" style="display: block; margin-bottom: 5px;">
-                                            <strong><?php _e( 'Import Type:', 'energy-alabama-kc' ); ?></strong>
-                                        </label>
-                                        <select name="import_type" id="import_type" style="min-width: 200px;">
-                                            <option value="articles"><?php _e( 'Articles', 'energy-alabama-kc' ); ?></option>
-                                            <option value="dockets"><?php _e( 'Dockets', 'energy-alabama-kc' ); ?></option>
-                                        </select>
-                                    </div>
-                                    
-                                    <div style="margin-bottom: 15px;">
-                                        <label for="import_file" style="display: block; margin-bottom: 5px;">
-                                            <strong><?php _e( 'CSV File:', 'energy-alabama-kc' ); ?></strong>
-                                        </label>
-                                        <input type="file" name="import_file" id="import_file" accept=".csv" required>
-                                    </div>
-                                    
-                                    <input type="submit" name="eakc_import" value="<?php esc_attr_e( 'Import Content', 'energy-alabama-kc' ); ?>" class="button button-primary">
-                                </form>
+                                <div style="margin-bottom: 20px;">
+                                    <h4><?php _e( 'For Articles:', 'energy-alabama-kc' ); ?></h4>
+                                    <ul style="margin-top: 10px;">
+                                        <li><strong>Title:</strong> Article title (required)</li>
+                                        <li><strong>Content:</strong> Full article content</li>
+                                        <li><strong>Excerpt:</strong> Short description</li>
+                                        <li><strong>Status:</strong> publish, draft, pending, or private</li>
+                                        <li><strong>Author:</strong> Username of the author</li>
+                                        <li><strong>Date:</strong> Publication date (YYYY-MM-DD HH:MM:SS)</li>
+                                        <li><strong>Categories:</strong> Pipe-separated (Cat1|Cat2)</li>
+                                        <li><strong>Tags:</strong> Pipe-separated (Tag1|Tag2)</li>
+                                        <li><strong>Featured Icon:</strong> Icon class name</li>
+                                        <li><strong>Icon Color:</strong> Hex color code</li>
+                                        <li><strong>Read Time:</strong> Estimated read time</li>
+                                        <li><strong>Is Spanish:</strong> 1 for Spanish, 0 for English</li>
+                                        <li><strong>Spanish Link ID:</strong> ID of linked translation</li>
+                                        <li><strong>Resources JSON:</strong> JSON array of resources</li>
+                                        <li><strong>Featured Image URL:</strong> Full URL to image</li>
+                                    </ul>
+                                </div>
                                 
-                                <div style="margin-top: 20px; padding: 15px; background: #f0f8ff; border-left: 4px solid #2271b1; border-radius: 4px;">
-                                    <h4 style="margin-top: 0;"><?php _e( 'Import Format Guide', 'energy-alabama-kc' ); ?></h4>
-                                    <p style="margin-bottom: 10px;"><?php _e( 'Your CSV file should include the following columns:', 'energy-alabama-kc' ); ?></p>
-                                    
-                                    <strong><?php _e( 'For Articles:', 'energy-alabama-kc' ); ?></strong>
-                                    <ul style="margin-top: 5px;">
-                                        <li>Title, Content, Excerpt, Status, Author, Date</li>
-                                        <li>Categories (pipe-separated: Cat1|Cat2)</li>
-                                        <li>Tags (pipe-separated: Tag1|Tag2)</li>
-                                        <li>Featured Icon, Icon Color, Read Time</li>
-                                        <li>Is Spanish (1 or 0), Spanish Link ID</li>
-                                        <li>Resources JSON, Featured Image URL</li>
+                                <div style="margin-bottom: 20px;">
+                                    <h4><?php _e( 'For Dockets:', 'energy-alabama-kc' ); ?></h4>
+                                    <ul style="margin-top: 10px;">
+                                        <li><strong>Title:</strong> Docket title (required)</li>
+                                        <li><strong>Content:</strong> Full docket description</li>
+                                        <li><strong>Status:</strong> publish, draft, pending, or private</li>
+                                        <li><strong>Author:</strong> Username of the author</li>
+                                        <li><strong>Date:</strong> Publication date</li>
+                                        <li><strong>Docket Number:</strong> Official docket number</li>
+                                        <li><strong>Docket Status:</strong> Current status</li>
+                                        <li><strong>Jurisdictions:</strong> Pipe-separated list</li>
+                                        <li><strong>Documents JSON:</strong> JSON array of documents</li>
                                     </ul>
-                                    
-                                    <strong><?php _e( 'For Dockets:', 'energy-alabama-kc' ); ?></strong>
-                                    <ul style="margin-top: 5px;">
-                                        <li>Title, Content, Status, Author, Date</li>
-                                        <li>Docket Number, Docket Status</li>
-                                        <li>Jurisdictions (pipe-separated)</li>
-                                        <li>Documents JSON</li>
-                                    </ul>
-                                    
-                                    <p style="margin-bottom: 0; margin-top: 10px;">
-                                        <em><?php _e( 'Tip: Export existing content first to see the exact format required.', 'energy-alabama-kc' ); ?></em>
+                                </div>
+                                
+                                <div style="padding: 15px; background: #f0f8ff; border-left: 4px solid #2271b1; border-radius: 4px;">
+                                    <p style="margin: 0;">
+                                        <strong><?php _e( 'Tip:', 'energy-alabama-kc' ); ?></strong>
+                                        <?php _e( 'Export existing content first to see the exact format required. The export will create a properly formatted CSV file that can be used as a template for your imports.', 'energy-alabama-kc' ); ?>
                                     </p>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
 
@@ -530,11 +560,14 @@ class Energy_Alabama_KC_Admin {
 
             <style>
                 .eakc-dashboard-widgets {
-                    display: grid;
-                    grid-template-columns: 1fr;
-                    gap: 20px;
                     margin-top: 20px;
-                    max-width: 1200px;
+                }
+                
+                .eakc-dashboard-row {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 20px;
+                    margin-bottom: 20px;
                 }
                 
                 .eakc-stats-grid {
@@ -565,6 +598,12 @@ class Energy_Alabama_KC_Admin {
                 
                 .eakc-stat-actions .button {
                     margin: 0 5px;
+                }
+                
+                @media (max-width: 1200px) {
+                    .eakc-dashboard-row {
+                        grid-template-columns: 1fr;
+                    }
                 }
                 
                 @media (max-width: 782px) {
