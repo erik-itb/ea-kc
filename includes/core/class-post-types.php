@@ -170,6 +170,7 @@ class Energy_Alabama_KC_Post_Types {
                 'title',
                 'editor',
                 'excerpt',
+                'thumbnail',
                 'revisions',
                 'custom-fields'
             ),

@@ -145,7 +145,7 @@ function eakc_get_docket_icon($proceeding_type) {
             </div>
 
             <!-- Dockets Grid -->
-            <div class="eakc-dockets-grid" id="eakc-dockets-container">
+            <div class="eakc-articles-grid" id="eakc-dockets-container">
                 <?php if (have_posts()) : ?>
                     
                     <?php while (have_posts()) : the_post(); ?>
@@ -155,6 +155,8 @@ function eakc_get_docket_icon($proceeding_type) {
                         $docket_status = get_post_meta(get_the_ID(), '_eakc_docket_status', true);
                         $filing_date = get_post_meta(get_the_ID(), '_eakc_filing_date', true);
                         $proceeding_type = get_post_meta(get_the_ID(), '_eakc_proceeding_type', true);
+                        $featured_icon = get_post_meta(get_the_ID(), '_eakc_featured_icon', true);
+                        $icon_color = get_post_meta(get_the_ID(), '_eakc_icon_color', true) ?: '#ffffff';
                         
                         // Get jurisdictions
                         $jurisdictions = get_the_terms(get_the_ID(), 'docket_jurisdiction');
@@ -166,17 +168,29 @@ function eakc_get_docket_icon($proceeding_type) {
                         }
                         ?>
                         
-                        <article class="eakc-docket-card" 
+                        <article class="eakc-article-card" 
                                  data-status="<?php echo esc_attr($docket_status); ?>"
                                  data-jurisdiction="<?php echo esc_attr($jurisdictions && !is_wp_error($jurisdictions) ? $jurisdictions[0]->slug : ''); ?>"
                                  data-docket-number="<?php echo esc_attr($docket_number); ?>">
                             
-                            <div class="eakc-docket-card-header">
-                                <div class="eakc-docket-icon">
-                                    <?php echo eakc_get_docket_icon($proceeding_type); ?>
-                                </div>
+                            <div class="eakc-card-header">
+                                <?php if (has_post_thumbnail()): ?>
+                                    <div class="eakc-card-image">
+                                        <a href="<?php the_permalink(); ?>">
+                                            <?php the_post_thumbnail('medium', array('loading' => 'lazy')); ?>
+                                        </a>
+                                    </div>
+                                <?php elseif ($featured_icon): ?>
+                                    <a href="<?php the_permalink(); ?>" class="eakc-card-icon">
+                                        <i class="<?php echo esc_attr($featured_icon); ?>" style="color: <?php echo esc_attr($icon_color); ?>;"></i>
+                                    </a>
+                                <?php else: ?>
+                                    <a href="<?php the_permalink(); ?>" class="eakc-card-icon">
+                                        <?php echo eakc_get_docket_icon($proceeding_type); ?>
+                                    </a>
+                                <?php endif; ?>
                                 
-                                <div class="eakc-docket-meta">
+                                <div class="eakc-card-meta">
                                     <?php if ($docket_number): ?>
                                         <span class="eakc-docket-number">
                                             <?php printf(__('Docket #%s', 'energy-alabama-kc'), esc_html($docket_number)); ?>
@@ -191,45 +205,27 @@ function eakc_get_docket_icon($proceeding_type) {
                                 </div>
                             </div>
                             
-                            <div class="eakc-docket-card-content">
-                                <h3 class="eakc-docket-card-title">
+                            <div class="eakc-card-content">
+                                <h3 class="eakc-card-title">
                                     <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
                                 </h3>
                                 
-                                <div class="eakc-docket-card-excerpt">
+                                <div class="eakc-card-excerpt">
                                     <?php echo wp_trim_words(get_the_excerpt(), 20, '...'); ?>
                                 </div>
                                 
-                                <div class="eakc-docket-card-details">
-                                    <?php if ($proceeding_type): ?>
-                                        <span class="eakc-proceeding-type">
-                                            <strong><?php _e('Type:', 'energy-alabama-kc'); ?></strong>
-                                            <?php echo esc_html(ucfirst(str_replace('-', ' ', $proceeding_type))); ?>
-                                        </span>
-                                    <?php endif; ?>
-                                    
-                                    <?php if (!empty($jurisdiction_names)): ?>
-                                        <span class="eakc-jurisdictions">
-                                            <strong><?php _e('Jurisdiction:', 'energy-alabama-kc'); ?></strong>
-                                            <?php echo esc_html(implode(', ', $jurisdiction_names)); ?>
-                                        </span>
-                                    <?php endif; ?>
-                                </div>
-                                
-                                <div class="eakc-docket-card-footer">
+                                <div class="eakc-card-footer">
                                     <?php if ($filing_date): ?>
                                         <time class="eakc-filing-date" datetime="<?php echo esc_attr($filing_date); ?>">
-                                            <strong><?php _e('Filed:', 'energy-alabama-kc'); ?></strong>
                                             <?php echo esc_html(date('M j, Y', strtotime($filing_date))); ?>
+                                        </time>
+                                    <?php else: ?>
+                                        <time class="eakc-card-date" datetime="<?php echo esc_attr(get_the_date('c')); ?>">
+                                            <?php echo get_the_date('M j, Y'); ?>
                                         </time>
                                     <?php endif; ?>
                                     
-                                    <time class="eakc-updated-date" datetime="<?php echo esc_attr(get_the_modified_date('c')); ?>">
-                                        <strong><?php _e('Updated:', 'energy-alabama-kc'); ?></strong>
-                                        <?php echo get_the_modified_date('M j, Y'); ?>
-                                    </time>
-                                    
-                                    <a href="<?php the_permalink(); ?>" class="eakc-view-docket">
+                                    <a href="<?php the_permalink(); ?>" class="eakc-read-more">
                                         <?php _e('View Docket', 'energy-alabama-kc'); ?>
                                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <line x1="7" y1="17" x2="17" y2="7"/>
@@ -278,42 +274,57 @@ function eakc_get_docket_icon($proceeding_type) {
         </div>
     </section>
 
-    <!-- Quick Actions -->
-    <section class="eakc-docket-quick-actions">
+    <!-- Related Categories -->
+    <section class="eakc-related-categories">
         <div class="eakc-container">
-            <h3><?php _e('Quick Access', 'energy-alabama-kc'); ?></h3>
+            <h3><?php _e('Related Resources', 'energy-alabama-kc'); ?></h3>
             
-            <div class="eakc-quick-actions-grid">
-                <a href="<?php echo esc_url(get_term_link(get_term_by('slug', 'legal-regulatory', 'kc_category'))); ?>" class="eakc-quick-action">
-                    <div class="eakc-quick-action-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14,2 14,8 20,8"></polyline>
-                        </svg>
-                    </div>
-                    <span><?php _e('Legal & Regulatory Articles', 'energy-alabama-kc'); ?></span>
-                </a>
+            <div class="eakc-categories-grid">
+                <?php
+                $legal_category = get_term_by('slug', 'legal-regulatory', 'kc_category');
+                $faqs_category = get_term_by('slug', 'faqs', 'kc_category');
                 
-                <a href="<?php echo esc_url(home_url('/knowledge-center/')); ?>" class="eakc-quick-action">
-                    <div class="eakc-quick-action-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-                        </svg>
-                    </div>
-                    <span><?php _e('Knowledge Center Home', 'energy-alabama-kc'); ?></span>
-                </a>
+                $related_resources = array(
+                    array(
+                        'name' => 'Legal & Regulatory Articles',
+                        'url' => $legal_category ? get_term_link($legal_category) : '#',
+                        'description' => 'Browse our collection of legal and regulatory information.',
+                        'icon' => '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>',
+                        'count' => $legal_category ? $legal_category->count : 0
+                    ),
+                    array(
+                        'name' => 'Knowledge Center Home',
+                        'url' => home_url('/knowledge-center/'),
+                        'description' => 'Return to the main knowledge center to explore all resources.',
+                        'icon' => '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>',
+                        'count' => ''
+                    ),
+                    array(
+                        'name' => 'Frequently Asked Questions',
+                        'url' => $faqs_category ? get_term_link($faqs_category) : '#',
+                        'description' => 'Find answers to common questions about energy in Alabama.',
+                        'icon' => '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+                        'count' => $faqs_category ? $faqs_category->count : 0
+                    )
+                );
                 
-                <a href="<?php echo esc_url(get_term_link(get_term_by('slug', 'faqs', 'kc_category'))); ?>" class="eakc-quick-action">
-                    <div class="eakc-quick-action-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                        </svg>
+                foreach ($related_resources as $resource) :
+                ?>
+                    <div class="eakc-category-card" style="--category-color: #6366f1;">
+                        <a href="<?php echo esc_url($resource['url']); ?>">
+                            <div class="eakc-category-card-icon">
+                                <?php echo $resource['icon']; ?>
+                            </div>
+                            <h4><?php echo esc_html($resource['name']); ?></h4>
+                            <p><?php echo esc_html($resource['description']); ?></p>
+                            <?php if ($resource['count']): ?>
+                                <span class="eakc-category-count">
+                                    <?php printf(_n('%d article', '%d articles', $resource['count'], 'energy-alabama-kc'), $resource['count']); ?>
+                                </span>
+                            <?php endif; ?>
+                        </a>
                     </div>
-                    <span><?php _e('Frequently Asked Questions', 'energy-alabama-kc'); ?></span>
-                </a>
+                <?php endforeach; ?>
             </div>
         </div>
     </section>
