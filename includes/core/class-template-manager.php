@@ -51,6 +51,14 @@ class Energy_Alabama_KC_Template_Manager {
             }
         }
 
+        // Handle glossary page
+        if (is_page() && $post && $post->post_name === 'glossary') {
+            $custom_template = $this->get_template('page-glossary.php');
+            if ($custom_template) {
+                return $custom_template;
+            }
+        }
+
         // Handle single KC article
         if (is_singular('kc_article')) {
             $custom_template = $this->get_template('single-kc-article.php');
@@ -150,7 +158,7 @@ class Energy_Alabama_KC_Template_Manager {
         global $post;
 
         // Enqueue unified frontend CSS on ALL Knowledge Center related pages
-        if (is_page() && $post && $post->post_name === 'knowledge-center' ||
+        if (is_page() && $post && in_array($post->post_name, array('knowledge-center', 'glossary')) ||
             is_singular(array('kc_article', 'docket')) || 
             is_post_type_archive(array('kc_article', 'docket')) || 
             is_tax(array('kc_category', 'kc_tag', 'docket_jurisdiction'))) {

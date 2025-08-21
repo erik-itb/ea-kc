@@ -47,6 +47,7 @@ class Energy_Alabama_KC_Post_Types {
     public function register_post_types() {
         $this->register_kc_article();
         $this->register_docket();
+        $this->register_glossary();
     }
 
     /**
@@ -188,6 +189,65 @@ class Energy_Alabama_KC_Post_Types {
         register_post_type('docket', $args);
     }
 
+    /**
+     * Register Glossary post type
+     */
+    private function register_glossary() {
+        $labels = array(
+            'name'                  => _x('Glossary', 'Post type general name', 'energy-alabama-kc'),
+            'singular_name'         => _x('Definition', 'Post type singular name', 'energy-alabama-kc'),
+            'menu_name'             => _x('Glossary', 'Admin Menu text', 'energy-alabama-kc'),
+            'name_admin_bar'        => _x('Definition', 'Add New on Toolbar', 'energy-alabama-kc'),
+            'add_new'               => __('Add New', 'energy-alabama-kc'),
+            'add_new_item'          => __('Add New Definition', 'energy-alabama-kc'),
+            'new_item'              => __('New Definition', 'energy-alabama-kc'),
+            'edit_item'             => __('Edit Definition', 'energy-alabama-kc'),
+            'view_item'             => __('View Definition', 'energy-alabama-kc'),
+            'all_items'             => __('All Definitions', 'energy-alabama-kc'),
+            'search_items'          => __('Search Definitions', 'energy-alabama-kc'),
+            'parent_item_colon'     => __('Parent Definitions:', 'energy-alabama-kc'),
+            'not_found'             => __('No definitions found.', 'energy-alabama-kc'),
+            'not_found_in_trash'    => __('No definitions found in Trash.', 'energy-alabama-kc'),
+            'archives'              => _x('Definition archives', 'The post type archive label', 'energy-alabama-kc'),
+            'insert_into_item'      => _x('Insert into definition', 'Overrides the "Insert into post" phrase', 'energy-alabama-kc'),
+            'uploaded_to_this_item' => _x('Uploaded to this definition', 'Overrides the "Uploaded to this post" phrase', 'energy-alabama-kc'),
+            'filter_items_list'     => _x('Filter definitions list', 'Screen reader text for the filter links', 'energy-alabama-kc'),
+            'items_list_navigation' => _x('Definitions list navigation', 'Screen reader text for the pagination', 'energy-alabama-kc'),
+            'items_list'            => _x('Definitions list', 'Screen reader text for the items list', 'energy-alabama-kc'),
+        );
+
+        $args = array(
+            'labels'             => $labels,
+            'public'             => false,
+            'publicly_queryable' => false,
+            'show_ui'            => true,
+            'show_in_menu'       => 'edit.php?post_type=kc_article',
+            'show_in_admin_bar'  => true,
+            'show_in_nav_menus'  => false,
+            'can_export'         => true,
+            'query_var'          => false,
+            'rewrite'            => false,
+            'capability_type'    => 'post',
+            'has_archive'        => false,
+            'hierarchical'       => false,
+            'supports'           => array(
+                'title',
+                'editor',
+                'revisions',
+                'custom-fields'
+            ),
+            'show_in_rest'       => true,
+            'rest_base'          => 'glossary',
+            'rest_controller_class' => 'WP_REST_Posts_Controller',
+            'template'           => array(
+                array('core/paragraph', array(
+                    'placeholder' => __('Enter the definition for this term...', 'energy-alabama-kc')
+                ))
+            )
+        );
+
+        register_post_type('glossary', $args);
+    }
 
     /**
      * Maybe flush rewrite rules if needed
@@ -252,6 +312,23 @@ class Energy_Alabama_KC_Post_Types {
                 date_i18n(__('M j, Y @ G:i', 'energy-alabama-kc'), strtotime($post->post_date))
             ),
             10 => __('Docket draft updated.', 'energy-alabama-kc')
+        );
+
+        $messages['glossary'] = array(
+            0  => '', // Unused. Messages start at index 1.
+            1  => __('Definition updated.', 'energy-alabama-kc'),
+            2  => __('Custom field updated.', 'energy-alabama-kc'),
+            3  => __('Custom field deleted.', 'energy-alabama-kc'),
+            4  => __('Definition updated.', 'energy-alabama-kc'),
+            5  => isset($_GET['revision']) ? sprintf(__('Definition restored to revision from %s', 'energy-alabama-kc'), wp_post_revision_title((int) $_GET['revision'], false)) : false,
+            6  => __('Definition published.', 'energy-alabama-kc'),
+            7  => __('Definition saved.', 'energy-alabama-kc'),
+            8  => __('Definition submitted.', 'energy-alabama-kc'),
+            9  => sprintf(
+                __('Definition scheduled for: <strong>%1$s</strong>.', 'energy-alabama-kc'),
+                date_i18n(__('M j, Y @ G:i', 'energy-alabama-kc'), strtotime($post->post_date))
+            ),
+            10 => __('Definition draft updated.', 'energy-alabama-kc')
         );
 
         return $messages;

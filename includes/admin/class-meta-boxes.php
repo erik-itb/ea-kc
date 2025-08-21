@@ -98,6 +98,16 @@ class Energy_Alabama_KC_Meta_Boxes {
             'normal',
             'high'
         );
+
+        // Glossary meta boxes
+        add_meta_box(
+            'eakc_glossary_source',
+            __('Source Information', 'energy-alabama-kc'),
+            array($this, 'render_glossary_source_meta_box'),
+            'glossary',
+            'normal',
+            'high'
+        );
     }
 
     /**
@@ -109,7 +119,7 @@ class Energy_Alabama_KC_Meta_Boxes {
         }
 
         global $post_type;
-        if (!in_array($post_type, array('kc_article', 'docket'))) {
+        if (!in_array($post_type, array('kc_article', 'docket', 'glossary'))) {
             return;
         }
 
@@ -692,6 +702,48 @@ class Energy_Alabama_KC_Meta_Boxes {
     }
 
     /**
+     * Render Glossary Source meta box
+     */
+    public function render_glossary_source_meta_box($post) {
+        wp_nonce_field('eakc_glossary_source_nonce', 'eakc_glossary_source_nonce');
+
+        $source_link = get_post_meta($post->ID, '_eakc_source_link', true);
+        $button_text = get_post_meta($post->ID, '_eakc_button_text', true);
+        ?>
+        <table class="form-table eakc-meta-table">
+            <tr>
+                <th scope="row">
+                    <label for="eakc_source_link"><?php _e('Source/Link', 'energy-alabama-kc'); ?></label>
+                </th>
+                <td>
+                    <input type="url" 
+                           name="eakc_source_link" 
+                           id="eakc_source_link" 
+                           value="<?php echo esc_attr($source_link); ?>" 
+                           class="regular-text" 
+                           placeholder="<?php esc_attr_e('https://example.com', 'energy-alabama-kc'); ?>">
+                    <p class="description"><?php _e('Optional URL to additional information or source for this definition.', 'energy-alabama-kc'); ?></p>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">
+                    <label for="eakc_button_text"><?php _e('Button Text', 'energy-alabama-kc'); ?></label>
+                </th>
+                <td>
+                    <input type="text" 
+                           name="eakc_button_text" 
+                           id="eakc_button_text" 
+                           value="<?php echo esc_attr($button_text); ?>" 
+                           class="regular-text" 
+                           placeholder="<?php esc_attr_e('Learn More', 'energy-alabama-kc'); ?>">
+                    <p class="description"><?php _e('Text for the source link button. Defaults to "Learn More" if left blank and source URL is provided.', 'energy-alabama-kc'); ?></p>
+                </td>
+            </tr>
+        </table>
+        <?php
+    }
+
+    /**
      * Render individual document item
      */
     private function render_document_item($document, $category_index, $doc_index) {
@@ -744,7 +796,7 @@ class Energy_Alabama_KC_Meta_Boxes {
         }
 
         // Check post type
-        if (!in_array($post->post_type, array('kc_article', 'docket'))) {
+        if (!in_array($post->post_type, array('kc_article', 'docket', 'glossary'))) {
             return;
         }
 
@@ -757,6 +809,8 @@ class Energy_Alabama_KC_Meta_Boxes {
             $this->save_article_meta($post_id);
         } elseif ($post->post_type === 'docket') {
             $this->save_docket_meta($post_id);
+        } elseif ($post->post_type === 'glossary') {
+            $this->save_glossary_meta($post_id);
         }
     }
 
@@ -900,6 +954,25 @@ class Energy_Alabama_KC_Meta_Boxes {
                 }
             }
             update_post_meta($post_id, '_eakc_document_categories', wp_json_encode($categories));
+        }
+    }
+
+    /**
+     * Save Glossary meta data
+     */
+    private function save_glossary_meta($post_id) {
+        // Verify nonce
+        if (!isset($_POST['eakc_glossary_source_nonce']) || !wp_verify_nonce($_POST['eakc_glossary_source_nonce'], 'eakc_glossary_source_nonce')) {
+            return;
+        }
+
+        // Save source information
+        if (isset($_POST['eakc_source_link'])) {
+            update_post_meta($post_id, '_eakc_source_link', esc_url_raw($_POST['eakc_source_link']));
+        }
+
+        if (isset($_POST['eakc_button_text'])) {
+            update_post_meta($post_id, '_eakc_button_text', sanitize_text_field($_POST['eakc_button_text']));
         }
     }
 

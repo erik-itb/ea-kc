@@ -112,7 +112,7 @@ class Energy_Alabama_KC_Admin {
 
         // Enqueue additional styles on KC post edit screens
         $screen = get_current_screen();
-        if ( $screen && in_array( $screen->post_type, array( 'kc_article', 'docket' ) ) ) {
+        if ( $screen && in_array( $screen->post_type, array( 'kc_article', 'docket', 'glossary' ) ) ) {
             wp_enqueue_style( 'wp-color-picker' );
         }
     }
@@ -127,7 +127,7 @@ class Energy_Alabama_KC_Admin {
         $screen = get_current_screen();
         
         // Only enqueue on KC post edit screens where meta boxes are shown
-        if ( $screen && in_array( $screen->post_type, array( 'kc_article', 'docket' ) ) ) {
+        if ( $screen && in_array( $screen->post_type, array( 'kc_article', 'docket', 'glossary' ) ) ) {
             // Enqueue jQuery UI sortable for the repeater fields
             wp_enqueue_script( 'jquery-ui-sortable' );
         }
@@ -188,6 +188,32 @@ class Energy_Alabama_KC_Admin {
             __( 'Jurisdictions', 'energy-alabama-kc' ),
             'manage_categories',
             'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket'
+        );
+
+        // Add glossary submenu items
+        add_submenu_page(
+            'edit.php?post_type=kc_article',
+            __( 'All Definitions', 'energy-alabama-kc' ),
+            __( 'All Definitions', 'energy-alabama-kc' ),
+            'edit_posts',
+            'edit.php?post_type=glossary'
+        );
+
+        add_submenu_page(
+            'edit.php?post_type=kc_article',
+            __( 'Add New Definition', 'energy-alabama-kc' ),
+            __( 'Add New Definition', 'energy-alabama-kc' ),
+            'edit_posts',
+            'post-new.php?post_type=glossary'
+        );
+
+        add_submenu_page(
+            'edit.php?post_type=kc_article',
+            __( 'Import Definitions', 'energy-alabama-kc' ),
+            __( 'Import Definitions', 'energy-alabama-kc' ),
+            'manage_options',
+            'energy-alabama-kc-glossary-import',
+            array( $this, 'display_glossary_import_page' )
         );
     }
 
@@ -1060,5 +1086,195 @@ class Energy_Alabama_KC_Admin {
                 esc_html( $message )
             );
         }
+    }
+
+    /**
+     * Display glossary import page
+     */
+    public function display_glossary_import_page() {
+        // Handle import processing
+        if (isset($_POST['eakc_import_glossary']) && !empty($_FILES['glossary_file']['tmp_name'])) {
+            if (!wp_verify_nonce($_POST['eakc_glossary_import_nonce'], 'eakc_glossary_import_action')) {
+                wp_die('Security check failed');
+            }
+
+            if (!current_user_can('manage_options')) {
+                wp_die('You do not have permission to import glossary data');
+            }
+
+            $result = $this->process_glossary_import();
+            if ($result['success']) {
+                echo '<div class="notice notice-success is-dismissible"><p>' . esc_html($result['message']) . '</p></div>';
+            } else {
+                echo '<div class="notice notice-error is-dismissible"><p>' . esc_html($result['message']) . '</p></div>';
+            }
+        }
+        ?>
+        <div class="wrap">
+            <h1><?php _e('Import Glossary Definitions', 'energy-alabama-kc'); ?></h1>
+            
+            <div class="card" style="max-width: 800px;">
+                <h2><?php _e('CSV Import Instructions', 'energy-alabama-kc'); ?></h2>
+                <p><?php _e('Upload a CSV file with glossary definitions. The CSV should have the following columns:', 'energy-alabama-kc'); ?></p>
+                <ul style="margin-left: 20px;">
+                    <li><strong>Term:</strong> <?php _e('The glossary term or word', 'energy-alabama-kc'); ?></li>
+                    <li><strong>Definition:</strong> <?php _e('The definition or explanation', 'energy-alabama-kc'); ?></li>
+                    <li><strong>Source/Link:</strong> <?php _e('Optional URL to additional information', 'energy-alabama-kc'); ?></li>
+                    <li><strong>Link Button:</strong> <?php _e('Optional button text (defaults to "Learn More")', 'energy-alabama-kc'); ?></li>
+                </ul>
+                <p><strong><?php _e('Note:', 'energy-alabama-kc'); ?></strong> <?php _e('Letter divider rows (A, B, C...) with empty definitions will be skipped automatically.', 'energy-alabama-kc'); ?></p>
+            </div>
+
+            <form method="post" enctype="multipart/form-data" style="margin-top: 20px;">
+                <?php wp_nonce_field('eakc_glossary_import_action', 'eakc_glossary_import_nonce'); ?>
+                
+                <table class="form-table">
+                    <tr>
+                        <th scope="row">
+                            <label for="glossary_file"><?php _e('CSV File', 'energy-alabama-kc'); ?></label>
+                        </th>
+                        <td>
+                            <input type="file" name="glossary_file" id="glossary_file" accept=".csv" required>
+                            <p class="description"><?php _e('Select a CSV file to import glossary definitions.', 'energy-alabama-kc'); ?></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            <label for="import_mode"><?php _e('Import Mode', 'energy-alabama-kc'); ?></label>
+                        </th>
+                        <td>
+                            <select name="import_mode" id="import_mode">
+                                <option value="skip"><?php _e('Skip existing terms', 'energy-alabama-kc'); ?></option>
+                                <option value="update"><?php _e('Update existing terms', 'energy-alabama-kc'); ?></option>
+                            </select>
+                            <p class="description"><?php _e('Choose how to handle terms that already exist.', 'energy-alabama-kc'); ?></p>
+                        </td>
+                    </tr>
+                </table>
+
+                <?php submit_button(__('Import Glossary', 'energy-alabama-kc'), 'primary', 'eakc_import_glossary'); ?>
+            </form>
+        </div>
+        <?php
+    }
+
+    /**
+     * Process glossary CSV import
+     */
+    private function process_glossary_import() {
+        if (empty($_FILES['glossary_file']['tmp_name'])) {
+            return array('success' => false, 'message' => 'No file uploaded.');
+        }
+
+        $file = $_FILES['glossary_file']['tmp_name'];
+        $import_mode = sanitize_text_field($_POST['import_mode'] ?? 'skip');
+        
+        // Read CSV file
+        $handle = fopen($file, 'r');
+        if (!$handle) {
+            return array('success' => false, 'message' => 'Could not read the uploaded file.');
+        }
+
+        $imported = 0;
+        $updated = 0;
+        $skipped = 0;
+        $errors = 0;
+        $line = 0;
+
+        while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+            $line++;
+            
+            // Skip header row
+            if ($line === 1) {
+                continue;
+            }
+
+            // Ensure we have at least 2 columns (Term, Definition)
+            if (count($data) < 2) {
+                continue;
+            }
+
+            $term = trim($data[0] ?? '');
+            $definition = trim($data[1] ?? '');
+            $source_link = trim($data[2] ?? '');
+            $button_text = trim($data[3] ?? '');
+
+            // Skip if term or definition is empty
+            if (empty($term) || empty($definition)) {
+                $skipped++;
+                continue;
+            }
+
+            // Skip letter divider rows (single letters with empty definitions)
+            if (strlen($term) === 1 && ctype_alpha($term)) {
+                $skipped++;
+                continue;
+            }
+
+            // Check if term already exists
+            $existing_post = get_page_by_title($term, OBJECT, 'glossary');
+            
+            if ($existing_post) {
+                if ($import_mode === 'skip') {
+                    $skipped++;
+                    continue;
+                } else {
+                    // Update existing post
+                    $post_data = array(
+                        'ID' => $existing_post->ID,
+                        'post_content' => $definition,
+                        'post_status' => 'publish'
+                    );
+                    
+                    $post_id = wp_update_post($post_data);
+                    if ($post_id) {
+                        // Update meta fields
+                        if ($source_link) {
+                            update_post_meta($post_id, '_eakc_source_link', esc_url_raw($source_link));
+                        }
+                        if ($button_text) {
+                            update_post_meta($post_id, '_eakc_button_text', sanitize_text_field($button_text));
+                        }
+                        $updated++;
+                    } else {
+                        $errors++;
+                    }
+                }
+            } else {
+                // Create new post
+                $post_data = array(
+                    'post_title' => $term,
+                    'post_content' => $definition,
+                    'post_type' => 'glossary',
+                    'post_status' => 'publish'
+                );
+                
+                $post_id = wp_insert_post($post_data);
+                if ($post_id) {
+                    // Add meta fields
+                    if ($source_link) {
+                        update_post_meta($post_id, '_eakc_source_link', esc_url_raw($source_link));
+                    }
+                    if ($button_text) {
+                        update_post_meta($post_id, '_eakc_button_text', sanitize_text_field($button_text));
+                    }
+                    $imported++;
+                } else {
+                    $errors++;
+                }
+            }
+        }
+
+        fclose($handle);
+
+        $message = sprintf(
+            'Import complete: %d imported, %d updated, %d skipped, %d errors',
+            $imported,
+            $updated, 
+            $skipped,
+            $errors
+        );
+
+        return array('success' => true, 'message' => $message);
     }
 }
