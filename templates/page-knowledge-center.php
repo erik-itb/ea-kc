@@ -124,6 +124,34 @@ $helpers          = new EAKC_Landing_Template_Helpers();
 							</a>
 						</div>
 					<?php endforeach; ?>
+
+					<?php
+					// Add Glossary card as the last item
+					$glossary_count = wp_count_posts('glossary');
+					$total_definitions = $glossary_count->publish;
+					?>
+					<div class="eakc-category-card">
+						<a href="<?php echo esc_url(home_url('/knowledge-center/glossary/')); ?>" class="eakc-category-link">
+							<div class="eakc-category-icon">
+								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+									<path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+									<circle cx="10" cy="8" r="2"></circle>
+									<path d="M8 14s1.5-2 2-2 2 2 2 2"></path>
+								</svg>
+							</div>
+							<h3 class="eakc-category-title"><?php _e('Glossary', 'energy-alabama-kc'); ?></h3>
+							<p class="eakc-category-description"><?php _e('Find definitions for clean energy terms, policy concepts, and technical terminology.', 'energy-alabama-kc'); ?></p>
+							<span class="eakc-category-count">
+								<?php
+								printf(
+									_n('%s definition', '%s definitions', $total_definitions, 'energy-alabama-kc'),
+									number_format_i18n($total_definitions)
+								);
+								?>
+							</span>
+						</a>
+					</div>
 				</div>
 			<?php else : ?>
 				<p class="eakc-no-categories">
