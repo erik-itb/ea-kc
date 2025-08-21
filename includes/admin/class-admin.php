@@ -1212,7 +1212,17 @@ class Energy_Alabama_KC_Admin {
             }
 
             // Check if term already exists
-            $existing_post = get_page_by_title($term, OBJECT, 'glossary');
+            $existing_query = new WP_Query(array(
+                'post_type' => 'glossary',
+                'title' => $term,
+                'post_status' => array('publish', 'draft', 'private'),
+                'posts_per_page' => 1,
+                'no_found_rows' => true,
+                'update_post_meta_cache' => false,
+                'update_post_term_cache' => false
+            ));
+            $existing_post = $existing_query->have_posts() ? $existing_query->posts[0] : null;
+            wp_reset_postdata();
             
             if ($existing_post) {
                 if ($import_mode === 'skip') {
