@@ -25,6 +25,7 @@ class Energy_Alabama_KC_FAQ_Ordering {
         add_filter('manage_faq_posts_columns', array($this, 'add_order_column'));
         add_action('manage_faq_posts_custom_column', array($this, 'populate_order_column'), 10, 2);
         add_action('admin_footer', array($this, 'add_ordering_interface'));
+        add_filter('edit_faq_per_page', array($this, 'set_faq_per_page'));
     }
 
     /**
@@ -181,6 +182,15 @@ class Energy_Alabama_KC_FAQ_Ordering {
         }
 
         wp_send_json_success('FAQ order updated');
+    }
+
+    /**
+     * Set FAQ posts per page to show all items (no pagination)
+     */
+    public function set_faq_per_page($per_page) {
+        // Set to a very high number to effectively show all FAQs
+        // This ensures drag and drop works across all items
+        return 999;
     }
 }
 
