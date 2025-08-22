@@ -1962,13 +1962,14 @@
 
 .eakc-letter-nav-wrapper {
     display: flex;
-    gap: 8px;
+    gap: 4px;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     overflow-x: auto;
     padding: 0 20px;
     scrollbar-width: thin;
     scrollbar-color: #6b7280 #f1f3f4;
+    width: 100%;
 }
 
 .eakc-letter-nav-wrapper::-webkit-scrollbar {
@@ -1989,15 +1990,17 @@
     background: #fff;
     border: 2px solid #e5e7eb;
     color: #6b7280;
-    padding: 8px 12px;
-    border-radius: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    min-width: 40px;
+    min-width: 32px;
     text-align: center;
     flex-shrink: 0;
+    flex: 1;
+    max-width: 44px;
 }
 
 .eakc-letter-btn.has-definitions:hover {
