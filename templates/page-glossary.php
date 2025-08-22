@@ -129,7 +129,11 @@ $definitions_by_letter = eakc_organize_definitions_by_letter();
                                     $default_button_text = $button_text ?: 'Learn More';
                                     ?>
                                     
-                                    <div class="eakc-definition-item" data-term="<?php echo esc_attr(strtolower($definition->post_title)); ?>" data-content="<?php echo esc_attr(strtolower(wp_strip_all_tags($definition->post_content))); ?>">
+                                    <?php
+                                    $clean_content = preg_replace('/\s+/', ' ', wp_strip_all_tags($definition->post_content));
+                                    $clean_content = trim(strtolower($clean_content));
+                                    ?>
+                                    <div class="eakc-definition-item" data-term="<?php echo esc_attr(strtolower($definition->post_title)); ?>" data-content="<?php echo esc_attr($clean_content); ?>">
                                         <div class="eakc-definition-header" role="button" tabindex="0" aria-expanded="false">
                                             <h3 class="eakc-definition-term"><?php echo esc_html($definition->post_title); ?></h3>
                                             <span class="eakc-accordion-icon">
@@ -233,20 +237,31 @@ document.addEventListener('DOMContentLoaded', function() {
         let termMatches = [];
         let contentMatches = [];
         
+        console.log('Searching for:', term); // Debug log
+        
         // Separate term matches from content matches
         definitionItems.forEach(function(item) {
-            const itemTerm = item.getAttribute('data-term');
-            const itemContent = item.getAttribute('data-content');
+            const itemTerm = item.getAttribute('data-term') || '';
+            const itemContent = item.getAttribute('data-content') || '';
             
-            if (itemTerm.includes(term)) {
+            console.log('Checking item:', itemTerm, 'content preview:', itemContent.substring(0, 50)); // Debug log
+            
+            // Reset item styles first
+            item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+            
+            const termMatch = itemTerm.includes(term);
+            const contentMatch = itemContent.includes(term);
+            
+            if (termMatch) {
+                console.log('Term match found:', itemTerm); // Debug log
                 termMatches.push(item);
                 hasResults = true;
-            } else if (itemContent.includes(term)) {
+            } else if (contentMatch) {
+                console.log('Content match found:', itemTerm); // Debug log
                 contentMatches.push(item);
                 hasResults = true;
             } else {
                 // Fade out non-matching items
-                item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
                 item.style.opacity = '0';
                 item.style.transform = 'translateY(-10px)';
                 setTimeout(() => {
@@ -254,6 +269,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 300);
             }
         });
+        
+        console.log('Total matches found:', termMatches.length + contentMatches.length); // Debug log
         
         // Hide letter sections
         document.querySelectorAll('.eakc-letter-section').forEach(function(section) {
@@ -264,7 +281,8 @@ document.addEventListener('DOMContentLoaded', function() {
             noResults.style.display = 'none';
             
             // Show results in order: term matches first, then content matches
-            [...termMatches, ...contentMatches].forEach(function(item, index) {
+            const allMatches = [...termMatches, ...contentMatches];
+            allMatches.forEach(function(item, index) {
                 setTimeout(() => {
                     item.style.display = 'block';
                     item.style.opacity = '1';
