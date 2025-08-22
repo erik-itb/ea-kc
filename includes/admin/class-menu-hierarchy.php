@@ -14,6 +14,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
     public function __construct() {
         add_action('admin_menu', array($this, 'customize_menu_hierarchy'), 999);
         add_action('admin_head', array($this, 'cleanup_automatic_menus'));
+        add_action('admin_head', array($this, 'force_correct_menu_order'), 999);
         add_action('admin_enqueue_scripts', array($this, 'enqueue_hierarchy_styles'));
         add_action('admin_footer', array($this, 'add_hierarchy_script'));
     }
@@ -200,6 +201,41 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         
         foreach ($items_to_remove as $key) {
             unset($submenu['edit.php?post_type=kc_article'][$key]);
+        }
+    }
+
+    /**
+     * Force correct menu order as final override
+     */
+    public function force_correct_menu_order() {
+        global $submenu;
+        
+        if (!isset($submenu['edit.php?post_type=kc_article'])) {
+            return;
+        }
+        
+        // Store the exact order we want
+        $desired_order = array(
+            array('Dashboard', 'manage_options', 'energy-alabama-kc-dashboard'),
+            array('All KC Articles', 'edit_posts', 'edit.php?post_type=kc_article'),
+            array('<span class="eakc-submenu-item">Add New KC Article</span>', 'edit_posts', 'post-new.php?post_type=kc_article'),
+            array('<span class="eakc-submenu-item">Categories</span>', 'manage_categories', 'edit-tags.php?taxonomy=kc_category&post_type=kc_article'),
+            array('<span class="eakc-submenu-item">Tags</span>', 'manage_categories', 'edit-tags.php?taxonomy=kc_tag&post_type=kc_article'),
+            array('All Dockets', 'edit_posts', 'edit.php?post_type=docket'),
+            array('<span class="eakc-submenu-item">Add New Docket</span>', 'edit_posts', 'post-new.php?post_type=docket'),
+            array('<span class="eakc-submenu-item">Jurisdictions</span>', 'manage_categories', 'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket'),
+            array('All Definitions', 'edit_posts', 'edit.php?post_type=glossary'),
+            array('<span class="eakc-submenu-item">Add New Definition</span>', 'edit_posts', 'post-new.php?post_type=glossary'),
+            array('<span class="eakc-submenu-item">Import Definitions</span>', 'manage_options', 'energy-alabama-kc-glossary-import'),
+            array('All FAQs', 'edit_posts', 'edit.php?post_type=faq'),
+            array('<span class="eakc-submenu-item">Add New FAQ</span>', 'edit_posts', 'post-new.php?post_type=faq'),
+        );
+        
+        // Completely replace the submenu with our desired order
+        $submenu['edit.php?post_type=kc_article'] = array();
+        
+        foreach ($desired_order as $index => $item) {
+            $submenu['edit.php?post_type=kc_article'][$index] = $item;
         }
     }
 
