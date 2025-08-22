@@ -2022,8 +2022,11 @@
 .eakc-letter-navigation.sticky {
     position: fixed;
     top: 0;
-    left: 0;
-    right: 0;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    width: 100vw;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     background: #fff;
     padding: 15px 0;
