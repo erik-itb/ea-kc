@@ -270,36 +270,26 @@ class Energy_Alabama_KC_Menu_Hierarchy {
      * Dashboard page callback
      */
     public function dashboard_callback() {
-        // Access admin through the global plugin instance
-        global $energy_alabama_kc;
-        if (isset($energy_alabama_kc) && method_exists($energy_alabama_kc, 'get_admin')) {
-            $admin = $energy_alabama_kc->get_admin();
-            if (method_exists($admin, 'display_dashboard_page')) {
-                $admin->display_dashboard_page();
-                return;
-            }
+        // Call the admin class method directly
+        $admin_class = new Energy_Alabama_KC_Admin('energy-alabama-kc', '1.0.0');
+        if (method_exists($admin_class, 'display_dashboard_page')) {
+            $admin_class->display_dashboard_page();
+        } else {
+            echo '<div class="wrap"><h1>' . __('Knowledge Center Dashboard', 'energy-alabama-kc') . '</h1><p>' . __('Dashboard functionality is loading...', 'energy-alabama-kc') . '</p></div>';
         }
-        
-        // Fallback: simple message
-        echo '<div class="wrap"><h1>' . __('Knowledge Center Dashboard', 'energy-alabama-kc') . '</h1><p>' . __('Dashboard functionality coming soon.', 'energy-alabama-kc') . '</p></div>';
     }
 
     /**
      * Import page callback
      */
     public function import_callback() {
-        // Access admin through the global plugin instance
-        global $energy_alabama_kc;
-        if (isset($energy_alabama_kc) && method_exists($energy_alabama_kc, 'get_admin')) {
-            $admin = $energy_alabama_kc->get_admin();
-            if (method_exists($admin, 'display_glossary_import_page')) {
-                $admin->display_glossary_import_page();
-                return;
-            }
+        // Call the admin class method directly
+        $admin_class = new Energy_Alabama_KC_Admin('energy-alabama-kc', '1.0.0');
+        if (method_exists($admin_class, 'display_glossary_import_page')) {
+            $admin_class->display_glossary_import_page();
+        } else {
+            echo '<div class="wrap"><h1>' . __('Import Definitions', 'energy-alabama-kc') . '</h1><p>' . __('Import functionality is loading...', 'energy-alabama-kc') . '</p></div>';
         }
-        
-        // Fallback: simple message
-        echo '<div class="wrap"><h1>' . __('Import Definitions', 'energy-alabama-kc') . '</h1><p>' . __('Import functionality coming soon.', 'energy-alabama-kc') . '</p></div>';
     }
 }
 
