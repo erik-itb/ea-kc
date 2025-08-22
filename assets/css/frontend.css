@@ -2004,12 +2004,18 @@
 
 /* Letter Navigation in Hero */
 .eakc-hero .eakc-letter-navigation {
-    margin-top: 30px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     background: transparent;
     border: none;
     padding: 0;
     position: relative;
     z-index: 100;
+    width: 100vw;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
 }
 
 /* Letter Navigation when sticky */
@@ -2126,6 +2132,7 @@
     right: 0;
     height: 3px;
     width: 100%;
+    background-color: #4fa6e4;
 }
 
 /* Alternating colors for letter sections */
@@ -2257,6 +2264,7 @@
 
 /* Glossary Filter Container */
 .eakc-glossary-filter-container {
+    margin-top: 1rem;
     margin-bottom: 40px;
 }
 

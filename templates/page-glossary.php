@@ -86,20 +86,22 @@ $definitions_by_letter = eakc_organize_definitions_by_letter();
                         <div class="eakc-search-results" style="display: none;"></div>
                     </form>
                 </div>
-
-                <!-- Letter Navigation -->
-                <div class="eakc-letter-navigation" id="eakc-letter-nav">
-                    <div class="eakc-letter-nav-wrapper">
-                        <?php foreach (array_merge(range('A', 'Z'), array('#')) as $letter): ?>
-                            <?php $has_definitions = !empty($definitions_by_letter[$letter]); ?>
-                            <button type="button" 
-                                    class="eakc-letter-btn <?php echo $has_definitions ? 'has-definitions' : 'no-definitions'; ?>" 
-                                    data-letter="<?php echo esc_attr($letter); ?>"
-                                    <?php echo $has_definitions ? '' : 'disabled'; ?>>
-                                <?php echo esc_html($letter); ?>
-                            </button>
-                        <?php endforeach; ?>
-                    </div>
+            </div>
+        </div>
+        
+        <!-- Letter Navigation - Full Width -->
+        <div class="eakc-letter-navigation" id="eakc-letter-nav">
+            <div class="eakc-container">
+                <div class="eakc-letter-nav-wrapper">
+                    <?php foreach (array_merge(range('A', 'Z'), array('#')) as $letter): ?>
+                        <?php $has_definitions = !empty($definitions_by_letter[$letter]); ?>
+                        <button type="button" 
+                                class="eakc-letter-btn <?php echo $has_definitions ? 'has-definitions' : 'no-definitions'; ?>" 
+                                data-letter="<?php echo esc_attr($letter); ?>"
+                                <?php echo $has_definitions ? '' : 'disabled'; ?>>
+                            <?php echo esc_html($letter); ?>
+                        </button>
+                    <?php endforeach; ?>
                 </div>
             </div>
         </div>
