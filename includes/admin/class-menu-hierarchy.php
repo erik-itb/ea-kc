@@ -36,7 +36,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         $submenu['edit.php?post_type=kc_article'] = array();
         
         // Remove automatic menu items that WordPress adds
-        remove_submenu_page('edit.php?post_type=kc_article', 'edit-tags.php?taxonomy=kc_tag&amp;post_type=kc_article');
+        remove_submenu_page('edit.php?post_type=kc_article', 'edit-tags.php?taxonomy=kc_tags&amp;post_type=kc_article');
         remove_submenu_page('edit.php?post_type=kc_article', 'edit-tags.php?taxonomy=kc_category&amp;post_type=kc_article');
         remove_submenu_page('edit.php?post_type=kc_article', 'edit.php?post_type=docket');
         remove_submenu_page('edit.php?post_type=kc_article', 'edit.php?post_type=glossary');
@@ -88,7 +88,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
             __('Tags', 'energy-alabama-kc'),
             '<span class="eakc-submenu-item">' . __('Tags', 'energy-alabama-kc') . '</span>',
             'manage_categories',
-            'edit-tags.php?taxonomy=kc_tag&post_type=kc_article',
+            'edit-tags.php?taxonomy=kc_tags&post_type=kc_article',
             ''
         );
 
@@ -188,7 +188,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         
         foreach ($submenu['edit.php?post_type=kc_article'] as $key => $item) {
             // Remove Tags if it appears without our custom styling (meaning it was auto-added)
-            if (isset($item[2]) && strpos($item[2], 'taxonomy=kc_tag') !== false && 
+            if (isset($item[2]) && strpos($item[2], 'taxonomy=kc_tags') !== false && 
                 isset($item[0]) && strpos($item[0], 'eakc-submenu-item') === false) {
                 $items_to_remove[] = $key;
             }
@@ -220,7 +220,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
             array('All KC Articles', 'edit_posts', 'edit.php?post_type=kc_article'),
             array('<span class="eakc-submenu-item">Add New KC Article</span>', 'edit_posts', 'post-new.php?post_type=kc_article'),
             array('<span class="eakc-submenu-item">Categories</span>', 'manage_categories', 'edit-tags.php?taxonomy=kc_category&post_type=kc_article'),
-            array('<span class="eakc-submenu-item">Tags</span>', 'manage_categories', 'edit-tags.php?taxonomy=kc_tag&post_type=kc_article'),
+            array('<span class="eakc-submenu-item">Tags</span>', 'manage_categories', 'edit-tags.php?taxonomy=kc_tags&post_type=kc_article'),
             array('All Dockets', 'edit_posts', 'edit.php?post_type=docket'),
             array('<span class="eakc-submenu-item">Add New Docket</span>', 'edit_posts', 'post-new.php?post_type=docket'),
             array('<span class="eakc-submenu-item">Jurisdictions</span>', 'manage_categories', 'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket'),
