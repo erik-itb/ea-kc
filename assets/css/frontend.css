@@ -2150,6 +2150,16 @@
     background: #4b5563;
 }
 
+/* Search Results Container */
+.eakc-search-results-container {
+    display: none;
+    margin-top: 20px;
+}
+
+.eakc-search-results-container .eakc-definition-item {
+    margin-bottom: 16px;
+}
+
 /* No Results */
 .eakc-no-results {
     text-align: center;

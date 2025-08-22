@@ -237,14 +237,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let termMatches = [];
         let contentMatches = [];
         
-        console.log('Searching for:', term); // Debug log
-        
         // Separate term matches from content matches
         definitionItems.forEach(function(item) {
             const itemTerm = item.getAttribute('data-term') || '';
             const itemContent = item.getAttribute('data-content') || '';
-            
-            console.log('Checking item:', itemTerm, 'content preview:', itemContent.substring(0, 50)); // Debug log
             
             // Reset item styles first
             item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
@@ -253,11 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const contentMatch = itemContent.includes(term);
             
             if (termMatch) {
-                console.log('Term match found:', itemTerm); // Debug log
                 termMatches.push(item);
                 hasResults = true;
             } else if (contentMatch) {
-                console.log('Content match found:', itemTerm); // Debug log
                 contentMatches.push(item);
                 hasResults = true;
             } else {
@@ -270,8 +264,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
         
-        console.log('Total matches found:', termMatches.length + contentMatches.length); // Debug log
-        
         // Hide letter sections
         document.querySelectorAll('.eakc-letter-section').forEach(function(section) {
             section.style.display = 'none';
@@ -282,11 +274,50 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Show results in order: term matches first, then content matches
             const allMatches = [...termMatches, ...contentMatches];
+            
+            // Create a container for search results if it doesn't exist
+            let searchResultsContainer = document.getElementById('eakc-search-results');
+            if (!searchResultsContainer) {
+                searchResultsContainer = document.createElement('div');
+                searchResultsContainer.id = 'eakc-search-results';
+                searchResultsContainer.className = 'eakc-search-results-container';
+                definitionsContainer.appendChild(searchResultsContainer);
+            }
+            
+            // Clear and populate search results container
+            searchResultsContainer.innerHTML = '';
+            searchResultsContainer.style.display = 'block';
+            
             allMatches.forEach(function(item, index) {
+                // Clone the item to avoid moving it from its original location
+                const clonedItem = item.cloneNode(true);
+                clonedItem.style.display = 'block';
+                clonedItem.style.opacity = '1';
+                clonedItem.style.transform = 'translateY(0)';
+                clonedItem.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                
+                // Re-attach accordion functionality to cloned item
+                const clonedHeader = clonedItem.querySelector('.eakc-definition-header');
+                if (clonedHeader) {
+                    clonedHeader.addEventListener('click', function() {
+                        const content = this.nextElementSibling;
+                        const icon = this.querySelector('.eakc-accordion-icon svg');
+                        const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                        
+                        if (isExpanded) {
+                            content.style.display = 'none';
+                            this.setAttribute('aria-expanded', 'false');
+                            icon.style.transform = 'rotate(0deg)';
+                        } else {
+                            content.style.display = 'block';
+                            this.setAttribute('aria-expanded', 'true');
+                            icon.style.transform = 'rotate(180deg)';
+                        }
+                    });
+                }
+                
                 setTimeout(() => {
-                    item.style.display = 'block';
-                    item.style.opacity = '1';
-                    item.style.transform = 'translateY(0)';
+                    searchResultsContainer.appendChild(clonedItem);
                 }, index * 50);
             });
         } else {
@@ -301,12 +332,18 @@ document.addEventListener('DOMContentLoaded', function() {
         letterNav.style.display = 'block';
         noResults.style.display = 'none';
         
+        // Hide search results container
+        const searchResultsContainer = document.getElementById('eakc-search-results');
+        if (searchResultsContainer) {
+            searchResultsContainer.style.display = 'none';
+        }
+        
         // Show letter sections
         document.querySelectorAll('.eakc-letter-section').forEach(function(section) {
             section.style.display = 'block';
         });
         
-        // Show all definition items
+        // Show all definition items in their original locations
         definitionItems.forEach(function(item, index) {
             setTimeout(() => {
                 item.style.display = 'block';

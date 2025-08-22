@@ -1,0 +1,64 @@
+Checking item: r&d content preview: research and development. glossary:5732:21
+Checking item: radiation content preview: process by which heat energy is transferred via el glossary:5732:21
+Checking item: rate design content preview: the framework utilities regulators use to set pric glossary:5732:21
+Checking item: rate of return content preview: the percentage of profit an electric utility is al glossary:5732:21
+Checking item: reactive power content preview: the type of electricity that helps keep the electr glossary:5732:21
+Checking item: real-time pricing content preview: price each customer pays for a unit of electricity glossary:5732:21
+Checking item: recovered energy (or waste heat energy) content preview: reused energy or heat (usually as a byproduct of g glossary:5732:21
+Checking item: regional transmission organization (rto) / independent system operator (iso) content preview: an organization responsible for moving electricity glossary:5732:21
+Checking item: renewable energy content preview: energy derived from natural processes that are reg glossary:5732:21
+Content match found: renewable energy glossary:5745:25
+Checking item: renewable portfolio standards (rps) / renewable electricity standards (res) content preview: policies that require or encourage electricity sup glossary:5732:21
+Checking item: reserve (or reserve margin) content preview: the electric generating capacity in excess of peak glossary:5732:21
+Checking item: resiliency content preview: an electrical system’s ability to maintain critica glossary:5732:21
+Checking item: resource shuffling content preview: when an electric utility changes where its cleaner glossary:5732:21
+Checking item: retail electricity rate content preview: the per kwh rate that a customer is charged for th glossary:5732:21
+Checking item: retrofit content preview: modifications to existing residential, commercial, glossary:5732:21
+Checking item: return on equity (roe) content preview: the return that must be offered to investors in or glossary:5732:21
+Checking item: rooftop solar content preview: electricity-generating panels mounted on the rooft glossary:5732:21
+Term match found: rooftop solar glossary:5741:25
+Checking item: seasonal energy efficiency ratio (seer) / rating content preview: the ratio of the cooling output of an air conditio glossary:5732:21
+Checking item: secondary energy sources content preview: energy sources generated or converted from primary glossary:5732:21
+Checking item: securitization content preview: when a bond is issued to recover the costs of an u glossary:5732:21
+Checking item: service area (or territory) content preview: the geographic region, set by state law, where a s glossary:5732:21
+Checking item: small modular reactor (smr) content preview: a compact nuclear power reactor, typically produci glossary:5732:21
+Checking item: smart grid technologies content preview: technologies (power meters, voltage sensors, fault glossary:5732:21
+Checking item: solar content preview: technologies and products that harness sunlight to glossary:5732:21
+Term match found: solar glossary:5741:25
+Checking item: solar panel/module content preview: a device that captures energy from sunlight and tu glossary:5732:21
+Term match found: solar panel/module glossary:5741:25
+Checking item: southeast energy exchange market (seem) content preview: a platform that allows utilities across the southe glossary:5732:21
+Checking item: southeast regional transmission planning (sertp) content preview: a regional collaborative of utilities in the south glossary:5732:21
+Checking item: standard contract ppa content preview: a uniform power purchase agreement (ppa) approved glossary:5732:21
+Checking item: structurally insulated panel (sip) content preview: factory-built insulated wall assemblies that ensur glossary:5732:21
+Checking item: supplementary/standby service content preview: electricity rider for large customers that require glossary:5732:21
+Checking item: surplus content preview: electric production from a utility that exceeds th glossary:5732:21
+Checking item: sustainable energy content preview: energy sources that meet the energy demands of tod glossary:5732:21
+Checking item: tariff content preview: a service and billing option offered by a utility. glossary:5732:21
+Checking item: tax credit content preview: a dollar-for-dollar reduction in the amount of inc glossary:5732:21
+Checking item: tennessee valley authority (tva) content preview: a federally-owned corporation that generates and s glossary:5732:21
+Checking item: third party sales content preview: electricity sales from an independent power produc glossary:5732:21
+Checking item: time varying rates (tvr) / time variant pricing content preview: electricity rates that vary over time based on fac glossary:5732:21
+Checking item: time-of-use (tou) rates content preview: utility pricing that changes according to time of glossary:5732:21
+Checking item: transmission content preview: generated electric power is delivered to customers glossary:5732:21
+Checking item: transportation control measures (tcm) content preview: strategies that reduce transportation-related air glossary:5732:21
+Checking item: u-value content preview: measures the rate at which heat flows through a bu glossary:5732:21
+Checking item: used and useful assets content preview: a fundamental principle of utility regulation that glossary:5732:21
+Checking item: utility content preview: a utility is a company or organization that provid glossary:5732:21
+Checking item: utility-scale solar content preview: solar facilities with a total generating capacity glossary:5732:21
+Term match found: utility-scale solar glossary:5741:25
+Checking item: vertically integrated monopoly content preview: an arrangement of the energy market where a utilit glossary:5732:21
+Checking item: virtual power plant (vpp) content preview: a network of decentralized energy resources—such a glossary:5732:21
+Content match found: virtual power plant (vpp) glossary:5745:25
+Checking item: volt (v) content preview: a unit of electrical pressure or potential calcula glossary:5732:21
+Checking item: volt/var optimization (vvo) content preview: a system that helps electric utilities manage volt glossary:5732:21
+Checking item: watt (w) content preview: a unit of electrical power calculated in joules pe glossary:5732:21
+Checking item: watt-hour (wh) content preview: a unit of energy equivalent to 1 watt of power gen glossary:5732:21
+Checking item: weatherization content preview: the process of making a building more resistant to glossary:5732:21
+Checking item: weatherization assistance program (wap) content preview: program that reduces energy costs for low-income h glossary:5732:21
+Checking item: wholesale energy competition content preview: giving an energy distributor the option to buy pow glossary:5732:21
+Checking item: wind content preview: technologies and products related to the harnessin glossary:5732:21
+Checking item: wind energy area (wea) content preview: areas that appear most suitable for commercial win glossary:5732:21
+Checking item: wind turbine content preview: a machine with large blades that spin when the win glossary:5732:21
+Checking item: zero emission vehicle (zev) content preview: a fully electric plug-in or plug-in-hybrid electri glossary:5732:21
+Total matches found: 11
