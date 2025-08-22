@@ -2427,12 +2427,13 @@
 
 .eakc-faq-content {
     padding: 60px 0;
-    background: #f9fafb;
+    background: #fff;
 }
 
 .eakc-faq-list {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
+    padding: 0 20px;
 }
 
 .eakc-faq-group {
@@ -2481,7 +2482,17 @@
 }
 
 .eakc-faq-header:focus {
-    outline: 2px solid #3b82f6;
+    outline: none;
+}
+
+/* Focus styles that match the left border color */
+.eakc-faq-item:nth-child(odd) .eakc-faq-header:focus {
+    outline: 2px solid #4fa6e4;
+    outline-offset: -2px;
+}
+
+.eakc-faq-item:nth-child(even) .eakc-faq-header:focus {
+    outline: 2px solid #97c34e;
     outline-offset: -2px;
 }
 
