@@ -59,6 +59,14 @@ class Energy_Alabama_KC_Template_Manager {
             }
         }
 
+        // Handle FAQ page
+        if (get_query_var('eakc_faq')) {
+            $custom_template = $this->get_template('page-faq.php');
+            if ($custom_template) {
+                return $custom_template;
+            }
+        }
+
         // Handle single KC article
         if (is_singular('kc_article')) {
             $custom_template = $this->get_template('single-kc-article.php');
@@ -160,6 +168,7 @@ class Energy_Alabama_KC_Template_Manager {
         // Enqueue unified frontend CSS on ALL Knowledge Center related pages
         if (is_page() && $post && $post->post_name === 'knowledge-center' ||
             get_query_var('eakc_glossary') ||
+            get_query_var('eakc_faq') ||
             is_singular(array('kc_article', 'docket')) || 
             is_post_type_archive(array('kc_article', 'docket')) || 
             is_tax(array('kc_category', 'kc_tag', 'docket_jurisdiction'))) {
@@ -299,6 +308,15 @@ class Energy_Alabama_KC_Template_Manager {
         
         // Glossary page
         if (get_query_var('eakc_glossary')) {
+            $breadcrumbs[] = array(
+                'title' => 'Knowledge Center',
+                'url' => home_url('/knowledge-center/')
+            );
+            return $breadcrumbs;
+        }
+
+        // FAQ page
+        if (get_query_var('eakc_faq')) {
             $breadcrumbs[] = array(
                 'title' => 'Knowledge Center',
                 'url' => home_url('/knowledge-center/')

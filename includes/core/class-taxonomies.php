@@ -245,10 +245,6 @@ class Energy_Alabama_KC_Taxonomies {
                 'presentation-library' => array(
                     'name' => 'Presentation Library',
                     'description' => 'Downloadable presentations and slides'
-                ),
-                'faqs' => array(
-                    'name' => 'FAQs',
-                    'description' => 'Frequently asked questions about clean energy'
                 )
             );
 

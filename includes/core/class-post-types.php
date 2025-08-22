@@ -29,9 +29,11 @@ class Energy_Alabama_KC_Post_Types {
         // Set flag to flush rewrite rules after enabling docket archives
         add_action('init', array($this, 'check_docket_archive_change'), 11);
         
-        // Add custom rewrite rules for glossary
+        // Add custom rewrite rules for glossary and FAQ
         add_action('init', array($this, 'add_glossary_rewrite_rules'));
         add_filter('query_vars', array($this, 'add_glossary_query_vars'));
+        add_action('init', array($this, 'add_faq_rewrite_rules'));
+        add_filter('query_vars', array($this, 'add_faq_query_vars'));
     }
 
     /**
@@ -52,6 +54,7 @@ class Energy_Alabama_KC_Post_Types {
         $this->register_kc_article();
         $this->register_docket();
         $this->register_glossary();
+        $this->register_faq();
     }
 
     /**
@@ -254,6 +257,66 @@ class Energy_Alabama_KC_Post_Types {
     }
 
     /**
+     * Register FAQ post type
+     */
+    private function register_faq() {
+        $labels = array(
+            'name'                  => _x('FAQs', 'Post type general name', 'energy-alabama-kc'),
+            'singular_name'         => _x('FAQ', 'Post type singular name', 'energy-alabama-kc'),
+            'menu_name'             => _x('FAQs', 'Admin Menu text', 'energy-alabama-kc'),
+            'name_admin_bar'        => _x('FAQ', 'Add New on Toolbar', 'energy-alabama-kc'),
+            'add_new'               => __('Add New', 'energy-alabama-kc'),
+            'add_new_item'          => __('Add New FAQ', 'energy-alabama-kc'),
+            'new_item'              => __('New FAQ', 'energy-alabama-kc'),
+            'edit_item'             => __('Edit FAQ', 'energy-alabama-kc'),
+            'view_item'             => __('View FAQ', 'energy-alabama-kc'),
+            'all_items'             => __('All FAQs', 'energy-alabama-kc'),
+            'search_items'          => __('Search FAQs', 'energy-alabama-kc'),
+            'parent_item_colon'     => __('Parent FAQs:', 'energy-alabama-kc'),
+            'not_found'             => __('No FAQs found.', 'energy-alabama-kc'),
+            'not_found_in_trash'    => __('No FAQs found in Trash.', 'energy-alabama-kc'),
+            'archives'              => _x('FAQ archives', 'The post type archive label', 'energy-alabama-kc'),
+            'insert_into_item'      => _x('Insert into FAQ', 'Overrides the "Insert into post" phrase', 'energy-alabama-kc'),
+            'uploaded_to_this_item' => _x('Uploaded to this FAQ', 'Overrides the "Uploaded to this post" phrase', 'energy-alabama-kc'),
+            'filter_items_list'     => _x('Filter FAQs list', 'Screen reader text for the filter links', 'energy-alabama-kc'),
+            'items_list_navigation' => _x('FAQs list navigation', 'Screen reader text for the pagination', 'energy-alabama-kc'),
+            'items_list'            => _x('FAQs list', 'Screen reader text for the items list', 'energy-alabama-kc'),
+        );
+
+        $args = array(
+            'labels'             => $labels,
+            'public'             => false,
+            'publicly_queryable' => false,
+            'show_ui'            => true,
+            'show_in_menu'       => 'edit.php?post_type=kc_article',
+            'show_in_admin_bar'  => true,
+            'show_in_nav_menus'  => false,
+            'can_export'         => true,
+            'query_var'          => false,
+            'rewrite'            => false,
+            'capability_type'    => 'post',
+            'has_archive'        => false,
+            'hierarchical'       => false,
+            'supports'           => array(
+                'title',
+                'editor',
+                'revisions',
+                'page-attributes' // This enables menu_order for drag-and-drop
+            ),
+            'show_in_rest'       => true,
+            'rest_base'          => 'faqs',
+            'rest_controller_class' => 'WP_REST_Posts_Controller',
+            'template'           => array(
+                array('core/paragraph', array(
+                    'placeholder' => __('Enter the answer to this frequently asked question...', 'energy-alabama-kc')
+                ))
+            )
+        );
+
+        register_post_type('faq', $args);
+    }
+
+    /**
      * Maybe flush rewrite rules if needed
      */
     public function maybe_flush_rewrite_rules() {
@@ -360,6 +423,31 @@ class Energy_Alabama_KC_Post_Types {
      */
     public function add_glossary_query_vars($vars) {
         $vars[] = 'eakc_glossary';
+        return $vars;
+    }
+
+    /**
+     * Add FAQ rewrite rules
+     */
+    public function add_faq_rewrite_rules() {
+        add_rewrite_rule(
+            '^knowledge-center/faqs/?$',
+            'index.php?eakc_faq=1',
+            'top'
+        );
+        
+        // Check if we need to flush rewrite rules for FAQ
+        if (!get_option('eakc_faq_rewrite_rules_flushed')) {
+            flush_rewrite_rules();
+            update_option('eakc_faq_rewrite_rules_flushed', true);
+        }
+    }
+
+    /**
+     * Add custom query vars for FAQ
+     */
+    public function add_faq_query_vars($vars) {
+        $vars[] = 'eakc_faq';
         return $vars;
     }
 }

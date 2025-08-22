@@ -91,6 +91,11 @@ class Energy_Alabama_KC_Admin {
          * The class responsible for category ordering functionality
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-category-ordering.php';
+
+        /**
+         * The class responsible for FAQ ordering functionality
+         */
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-faq-ordering.php';
     }
 
     /**

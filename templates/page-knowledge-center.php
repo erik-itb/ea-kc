@@ -23,7 +23,6 @@ if (!class_exists('EAKC_Landing_Template_Helpers')) {
 				'educator-resources'   => 'education',
 				'legal-regulatory'     => 'legal',
 				'presentation-library' => 'presentation',
-				'faqs'                 => 'help',
 			);
 
 			return isset($icons[$slug]) ? $icons[$slug] : 'default';
@@ -124,6 +123,33 @@ $helpers          = new EAKC_Landing_Template_Helpers();
 							</a>
 						</div>
 					<?php endforeach; ?>
+
+					<?php
+					// Add FAQ card before glossary
+					$faq_count = wp_count_posts('faq');
+					$total_faqs = $faq_count->publish;
+					?>
+					<div class="eakc-category-card">
+						<a href="<?php echo esc_url(home_url('/knowledge-center/faqs/')); ?>" class="eakc-category-link">
+							<div class="eakc-category-icon">
+								<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+									<circle cx="12" cy="12" r="10"></circle>
+									<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+									<line x1="12" y1="17" x2="12.01" y2="17"></line>
+								</svg>
+							</div>
+							<h3 class="eakc-category-title"><?php _e('FAQs', 'energy-alabama-kc'); ?></h3>
+							<p class="eakc-category-description"><?php _e('Get answers to frequently asked questions about clean energy and energy efficiency.', 'energy-alabama-kc'); ?></p>
+							<span class="eakc-category-count">
+								<?php
+								printf(
+									_n('%s question', '%s questions', $total_faqs, 'energy-alabama-kc'),
+									number_format_i18n($total_faqs)
+								);
+								?>
+							</span>
+						</a>
+					</div>
 
 					<?php
 					// Add Glossary card as the last item
@@ -293,17 +319,6 @@ $helpers          = new EAKC_Landing_Template_Helpers();
 						</svg>
 					</div>
 					<span><?php _e('Educator Resources', 'energy-alabama-kc'); ?></span>
-				</a>
-				
-				<a href="<?php echo esc_url(get_term_link(get_term_by('slug', 'faqs', 'kc_category'))); ?>" class="eakc-quick-link">
-					<div class="eakc-quick-link-icon">
-						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-							<circle cx="12" cy="12" r="10"></circle>
-							<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
-							<line x1="12" y1="17" x2="12.01" y2="17"></line>
-						</svg>
-					</div>
-					<span><?php _e('Frequently Asked Questions', 'energy-alabama-kc'); ?></span>
 				</a>
 			</div>
 		</div>
