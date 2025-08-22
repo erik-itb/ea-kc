@@ -96,6 +96,11 @@ class Energy_Alabama_KC_Admin {
          * The class responsible for FAQ ordering functionality
          */
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-faq-ordering.php';
+
+        /**
+         * The class responsible for admin menu hierarchy styling
+         */
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/class-menu-hierarchy.php';
     }
 
     /**
@@ -167,59 +172,11 @@ class Energy_Alabama_KC_Admin {
      * @since    1.0.0
      */
     public function add_admin_menu() {
-        // Add dashboard submenu page that combines Dashboard, Import, and Settings
-        add_submenu_page(
-            'edit.php?post_type=kc_article',                      // Parent slug (existing KC menu)
-            __( 'Knowledge Center Dashboard', 'energy-alabama-kc' ), // Page title
-            __( 'Dashboard', 'energy-alabama-kc' ),               // Menu title
-            'manage_options',                                       // Capability
-            'energy-alabama-kc-dashboard',                         // Menu slug
-            array( $this, 'display_dashboard_page' )              // Callback function
-        );
+        // Menu structure is now handled by class-menu-hierarchy.php
+        // This method only handles the callback functions for custom pages
         
-        // Add the "Add New Docket" submenu item
-        add_submenu_page(
-            'edit.php?post_type=kc_article',
-            __( 'Add New Docket', 'energy-alabama-kc' ),
-            __( 'Add New Docket', 'energy-alabama-kc' ),
-            'edit_posts',
-            'post-new.php?post_type=docket'
-        );
-        
-        // Add jurisdictions submenu
-        add_submenu_page(
-            'edit.php?post_type=kc_article',
-            __( 'Jurisdictions', 'energy-alabama-kc' ),
-            __( 'Jurisdictions', 'energy-alabama-kc' ),
-            'manage_categories',
-            'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket'
-        );
-
-        // Add glossary submenu items
-        add_submenu_page(
-            'edit.php?post_type=kc_article',
-            __( 'All Definitions', 'energy-alabama-kc' ),
-            __( 'All Definitions', 'energy-alabama-kc' ),
-            'edit_posts',
-            'edit.php?post_type=glossary'
-        );
-
-        add_submenu_page(
-            'edit.php?post_type=kc_article',
-            __( 'Add New Definition', 'energy-alabama-kc' ),
-            __( 'Add New Definition', 'energy-alabama-kc' ),
-            'edit_posts',
-            'post-new.php?post_type=glossary'
-        );
-
-        add_submenu_page(
-            'edit.php?post_type=kc_article',
-            __( 'Import Definitions', 'energy-alabama-kc' ),
-            __( 'Import Definitions', 'energy-alabama-kc' ),
-            'manage_options',
-            'energy-alabama-kc-glossary-import',
-            array( $this, 'display_glossary_import_page' )
-        );
+        // Dashboard callback is registered through the hierarchy class
+        // Import Definitions callback is registered through the hierarchy class
     }
 
     /**

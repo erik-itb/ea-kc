@@ -1,0 +1,13 @@
+Dashboard
+All KC Articles
+	Add New KC Article
+	Categories
+	Tags
+All Dockets
+	Add New Docket
+	Jurisdictions
+All Definitions
+	Add New Definition
+	Import Definitions
+All FAQs
+	Add New FAQ
