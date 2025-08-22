@@ -82,6 +82,11 @@ class Energy_Alabama_KC_FAQ_Ordering {
                             helper: "clone",
                             opacity: 0.65,
                             update: function(event, ui) {
+                                // Update order column values immediately after drop
+                                $("#the-list tr").each(function(index) {
+                                    $(this).find(".column-eakc_order").text(index);
+                                });
+                                
                                 var order = [];
                                 $("#the-list tr").each(function(index) {
                                     var postId = $(this).find(".check-column input").val();
@@ -103,11 +108,13 @@ class Energy_Alabama_KC_FAQ_Ordering {
                                     },
                                     success: function(response) {
                                         if (response.success) {
-                                            // Update order column values
-                                            $("#the-list tr").each(function(index) {
-                                                $(this).find(".column-eakc_order").text(index);
-                                            });
+                                            // Order numbers already updated above, but we could add a success indicator here
+                                            console.log("FAQ order saved successfully");
                                         }
+                                    },
+                                    error: function() {
+                                        // If save fails, we might want to revert the visual changes
+                                        alert("Failed to save FAQ order. Please try again.");
                                     }
                                 });
                             }
