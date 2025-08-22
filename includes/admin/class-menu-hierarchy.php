@@ -13,6 +13,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
      */
     public function __construct() {
         add_action('admin_menu', array($this, 'customize_menu_hierarchy'), 999);
+        add_action('admin_head', array($this, 'cleanup_automatic_menus'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_hierarchy_styles'));
         add_action('admin_footer', array($this, 'add_hierarchy_script'));
     }
@@ -28,8 +29,17 @@ class Energy_Alabama_KC_Menu_Hierarchy {
             return;
         }
 
-        // Remove existing items and rebuild in hierarchical order
+        // Store reference to the original submenu and completely clear it
+        $original_submenu = $submenu['edit.php?post_type=kc_article'];
+        unset($submenu['edit.php?post_type=kc_article']);
         $submenu['edit.php?post_type=kc_article'] = array();
+        
+        // Remove automatic menu items that WordPress adds
+        remove_submenu_page('edit.php?post_type=kc_article', 'edit-tags.php?taxonomy=kc_tag&amp;post_type=kc_article');
+        remove_submenu_page('edit.php?post_type=kc_article', 'edit-tags.php?taxonomy=kc_category&amp;post_type=kc_article');
+        remove_submenu_page('edit.php?post_type=kc_article', 'edit.php?post_type=docket');
+        remove_submenu_page('edit.php?post_type=kc_article', 'edit.php?post_type=glossary');
+        remove_submenu_page('edit.php?post_type=kc_article', 'edit.php?post_type=faq');
         
         // Dashboard (top level)
         add_submenu_page(
@@ -160,6 +170,37 @@ class Energy_Alabama_KC_Menu_Hierarchy {
             'post-new.php?post_type=faq',
             ''
         );
+    }
+
+    /**
+     * Clean up automatic menu items that WordPress adds
+     */
+    public function cleanup_automatic_menus() {
+        global $submenu;
+        
+        if (!isset($submenu['edit.php?post_type=kc_article'])) {
+            return;
+        }
+        
+        // Remove any unwanted items that may have been auto-added
+        $items_to_remove = array();
+        
+        foreach ($submenu['edit.php?post_type=kc_article'] as $key => $item) {
+            // Remove Tags if it appears without our custom styling (meaning it was auto-added)
+            if (isset($item[2]) && strpos($item[2], 'taxonomy=kc_tag') !== false && 
+                isset($item[0]) && strpos($item[0], 'eakc-submenu-item') === false) {
+                $items_to_remove[] = $key;
+            }
+            // Also remove Categories if auto-added
+            if (isset($item[2]) && strpos($item[2], 'taxonomy=kc_category') !== false && 
+                isset($item[0]) && strpos($item[0], 'eakc-submenu-item') === false) {
+                $items_to_remove[] = $key;
+            }
+        }
+        
+        foreach ($items_to_remove as $key) {
+            unset($submenu['edit.php?post_type=kc_article'][$key]);
+        }
     }
 
     /**
