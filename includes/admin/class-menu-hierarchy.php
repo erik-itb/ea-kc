@@ -55,7 +55,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         add_submenu_page(
             'edit.php?post_type=kc_article',
             __('Add New KC Article', 'energy-alabama-kc'),
-            '<span class="eakc-submenu-item">→ ' . __('Add New KC Article', 'energy-alabama-kc') . '</span>',
+            '<span class="eakc-submenu-item">' . __('Add New KC Article', 'energy-alabama-kc') . '</span>',
             'edit_posts',
             'post-new.php?post_type=kc_article',
             ''
@@ -65,7 +65,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         add_submenu_page(
             'edit.php?post_type=kc_article',
             __('Categories', 'energy-alabama-kc'),
-            '<span class="eakc-submenu-item">→ ' . __('Categories', 'energy-alabama-kc') . '</span>',
+            '<span class="eakc-submenu-item">' . __('Categories', 'energy-alabama-kc') . '</span>',
             'manage_categories',
             'edit-tags.php?taxonomy=kc_category&post_type=kc_article',
             ''
@@ -75,7 +75,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         add_submenu_page(
             'edit.php?post_type=kc_article',
             __('Tags', 'energy-alabama-kc'),
-            '<span class="eakc-submenu-item">→ ' . __('Tags', 'energy-alabama-kc') . '</span>',
+            '<span class="eakc-submenu-item">' . __('Tags', 'energy-alabama-kc') . '</span>',
             'manage_categories',
             'edit-tags.php?taxonomy=kc_tag&post_type=kc_article',
             ''
@@ -95,7 +95,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         add_submenu_page(
             'edit.php?post_type=kc_article',
             __('Add New Docket', 'energy-alabama-kc'),
-            '<span class="eakc-submenu-item">→ ' . __('Add New Docket', 'energy-alabama-kc') . '</span>',
+            '<span class="eakc-submenu-item">' . __('Add New Docket', 'energy-alabama-kc') . '</span>',
             'edit_posts',
             'post-new.php?post_type=docket',
             ''
@@ -105,7 +105,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         add_submenu_page(
             'edit.php?post_type=kc_article',
             __('Jurisdictions', 'energy-alabama-kc'),
-            '<span class="eakc-submenu-item">→ ' . __('Jurisdictions', 'energy-alabama-kc') . '</span>',
+            '<span class="eakc-submenu-item">' . __('Jurisdictions', 'energy-alabama-kc') . '</span>',
             'manage_categories',
             'edit-tags.php?taxonomy=docket_jurisdiction&post_type=docket',
             ''
@@ -125,7 +125,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         add_submenu_page(
             'edit.php?post_type=kc_article',
             __('Add New Definition', 'energy-alabama-kc'),
-            '<span class="eakc-submenu-item">→ ' . __('Add New Definition', 'energy-alabama-kc') . '</span>',
+            '<span class="eakc-submenu-item">' . __('Add New Definition', 'energy-alabama-kc') . '</span>',
             'edit_posts',
             'post-new.php?post_type=glossary',
             ''
@@ -135,7 +135,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         add_submenu_page(
             'edit.php?post_type=kc_article',
             __('Import Definitions', 'energy-alabama-kc'),
-            '<span class="eakc-submenu-item">→ ' . __('Import Definitions', 'energy-alabama-kc') . '</span>',
+            '<span class="eakc-submenu-item">' . __('Import Definitions', 'energy-alabama-kc') . '</span>',
             'manage_options',
             'energy-alabama-kc-glossary-import',
             array($this, 'import_callback')
@@ -155,7 +155,7 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         add_submenu_page(
             'edit.php?post_type=kc_article',
             __('Add New FAQ', 'energy-alabama-kc'),
-            '<span class="eakc-submenu-item">→ ' . __('Add New FAQ', 'energy-alabama-kc') . '</span>',
+            '<span class="eakc-submenu-item">' . __('Add New FAQ', 'energy-alabama-kc') . '</span>',
             'edit_posts',
             'post-new.php?post_type=faq',
             ''
@@ -193,19 +193,13 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         
         #adminmenu .wp-submenu li.eakc-sub-item a {
             padding-left: 20px !important;
-            background: rgba(240, 245, 249, 0.05) !important;
-            border-left: 3px solid #0073aa !important;
-            margin-left: 8px !important;
-            border-radius: 0 3px 3px 0 !important;
         }
         
         #adminmenu .wp-submenu li.eakc-sub-item a:hover {
-            background: rgba(240, 245, 249, 0.1) !important;
             color: #0073aa !important;
         }
         
         #adminmenu .wp-submenu li.eakc-sub-item a:focus {
-            background: rgba(240, 245, 249, 0.1) !important;
             color: #0073aa !important;
             box-shadow: none !important;
         }
@@ -234,7 +228,6 @@ class Energy_Alabama_KC_Menu_Hierarchy {
         @media (max-width: 960px) {
             #adminmenu .wp-submenu li.eakc-sub-item a {
                 padding-left: 16px !important;
-                margin-left: 4px !important;
             }
         }
         ';
