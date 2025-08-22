@@ -28,6 +28,10 @@ class Energy_Alabama_KC_Post_Types {
         
         // Set flag to flush rewrite rules after enabling docket archives
         add_action('init', array($this, 'check_docket_archive_change'), 11);
+        
+        // Add custom rewrite rules for glossary
+        add_action('init', array($this, 'add_glossary_rewrite_rules'));
+        add_filter('query_vars', array($this, 'add_glossary_query_vars'));
     }
 
     /**
@@ -332,5 +336,30 @@ class Energy_Alabama_KC_Post_Types {
         );
 
         return $messages;
+    }
+
+    /**
+     * Add glossary rewrite rules
+     */
+    public function add_glossary_rewrite_rules() {
+        add_rewrite_rule(
+            '^knowledge-center/glossary/?$',
+            'index.php?eakc_glossary=1',
+            'top'
+        );
+        
+        // Check if we need to flush rewrite rules for glossary
+        if (!get_option('eakc_glossary_rewrite_rules_flushed')) {
+            flush_rewrite_rules();
+            update_option('eakc_glossary_rewrite_rules_flushed', true);
+        }
+    }
+
+    /**
+     * Add custom query vars for glossary
+     */
+    public function add_glossary_query_vars($vars) {
+        $vars[] = 'eakc_glossary';
+        return $vars;
     }
 }
