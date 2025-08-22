@@ -2391,3 +2391,28 @@
         padding: 16px;
     }
 }
+
+/* Inline Tags in Metadata Section */
+.eakc-article-tags-inline {
+    display: inline-flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.eakc-tag-inline {
+    padding: 4px 8px;
+    background: #e5e7eb;
+    color: #374151;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.eakc-tag-inline:hover {
+    background: #d1d5db;
+    color: #111827;
+}

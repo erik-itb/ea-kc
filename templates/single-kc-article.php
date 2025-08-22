@@ -104,27 +104,7 @@ function eakc_get_resource_icon($type) {
         <!-- Article Meta Information (below hero) -->
         <section class="eakc-article-meta-section">
             <div class="eakc-container">
-                <!-- Pills Section -->
-                <div class="eakc-article-meta">
-                    <?php
-                    $categories = get_the_terms(get_the_ID(), 'kc_category');
-                    if ($categories && !is_wp_error($categories)):
-                    ?>
-                        <span class="eakc-article-category">
-                            <a href="<?php echo esc_url(get_term_link($categories[0])); ?>">
-                                <?php echo esc_html($categories[0]->name); ?>
-                            </a>
-                        </span>
-                    <?php endif; ?>
-                    
-                    
-                    <?php if ($read_time): ?>
-                        <span class="eakc-article-read-time">
-                            <?php printf(__('%d min read', 'energy-alabama-kc'), $read_time); ?>
-                        </span>
-                    <?php endif; ?>
-                </div>
-                
+                <!-- Row 1: Author, Date, Spanish Link -->
                 <div class="eakc-article-details">
                     <?php
                     // Get author information
@@ -152,6 +132,39 @@ function eakc_get_resource_icon($type) {
                         <a href="<?php echo esc_url(get_permalink($english_version->ID)); ?>" class="eakc-english-link">
                             <?php _e('View in English', 'energy-alabama-kc'); ?>
                         </a>
+                    <?php endif; ?>
+                </div>
+                
+                <!-- Row 2: Category, Read Time, Tags -->
+                <div class="eakc-article-meta">
+                    <?php
+                    $categories = get_the_terms(get_the_ID(), 'kc_category');
+                    if ($categories && !is_wp_error($categories)):
+                    ?>
+                        <span class="eakc-article-category">
+                            <a href="<?php echo esc_url(get_term_link($categories[0])); ?>">
+                                <?php echo esc_html($categories[0]->name); ?>
+                            </a>
+                        </span>
+                    <?php endif; ?>
+                    
+                    <?php if ($read_time): ?>
+                        <span class="eakc-article-read-time">
+                            <?php printf(__('%d min read', 'energy-alabama-kc'), $read_time); ?>
+                        </span>
+                    <?php endif; ?>
+                    
+                    <?php 
+                    $tags = get_the_terms(get_the_ID(), 'kc_tag');
+                    if ($tags && !is_wp_error($tags)): 
+                    ?>
+                        <div class="eakc-article-tags-inline">
+                            <?php foreach ($tags as $tag): ?>
+                                <a href="<?php echo esc_url(get_term_link($tag)); ?>" class="eakc-tag-inline">
+                                    <?php echo esc_html($tag->name); ?>
+                                </a>
+                            <?php endforeach; ?>
+                        </div>
                     <?php endif; ?>
                 </div>
             </div>
@@ -207,28 +220,6 @@ function eakc_get_resource_icon($type) {
             </div>
         </section>
 
-        <!-- Tags -->
-        <?php if (has_term('', 'kc_tag')): ?>
-            <section class="eakc-article-tags">
-                <div class="eakc-container">
-                    <h3><?php _e('Tags', 'energy-alabama-kc'); ?></h3>
-                    <div class="eakc-tags-list">
-                        <?php
-                        $tags = get_the_terms(get_the_ID(), 'kc_tag');
-                        if ($tags && !is_wp_error($tags)):
-                            foreach ($tags as $tag):
-                        ?>
-                            <a href="<?php echo esc_url(get_term_link($tag)); ?>" class="eakc-tag">
-                                <?php echo esc_html($tag->name); ?>
-                            </a>
-                        <?php 
-                            endforeach;
-                        endif; 
-                        ?>
-                    </div>
-                </div>
-            </section>
-        <?php endif; ?>
 
     <?php endwhile; ?>
     
