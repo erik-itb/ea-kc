@@ -2125,26 +2125,16 @@
     display: block;
     position: relative;
     width: 100%;
-}
-
-.eakc-letter-heading::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    width: 100%;
-    background-color: #4fa6e4;
+    border-bottom: 3px solid #4fa6e4;
 }
 
 /* Alternating colors for letter sections */
-.eakc-letter-section:nth-child(odd) .eakc-letter-heading::after {
-    background-color: #4fa6e4;
+.eakc-letter-section:nth-child(odd) .eakc-letter-heading {
+    border-bottom-color: #4fa6e4;
 }
 
-.eakc-letter-section:nth-child(even) .eakc-letter-heading::after {
-    background-color: #97c34e;
+.eakc-letter-section:nth-child(even) .eakc-letter-heading {
+    border-bottom-color: #97c34e;
 }
 
 .eakc-definitions-group {
