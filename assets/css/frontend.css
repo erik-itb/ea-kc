@@ -2281,6 +2281,7 @@
 }
 
 .eakc-glossary-filter-container .eakc-search-button {
+    position: absolute;
     background: #6b7280;
     border: none;
     border-radius: 8px;
