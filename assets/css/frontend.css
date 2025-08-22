@@ -1932,6 +1932,68 @@
 }
 
 /* =================================================================
+   BREADCRUMBS
+   ================================================================= */
+
+.eakc-breadcrumbs {
+    background: #f8f9fa;
+    padding: 16px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.eakc-breadcrumb-list {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    gap: 8px;
+}
+
+.eakc-breadcrumb-item {
+    margin: 0;
+}
+
+.eakc-breadcrumb-item a {
+    color: #4fa6e4;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: color 0.2s ease;
+}
+
+.eakc-breadcrumb-item a:hover {
+    color: #3b82f6;
+    text-decoration: underline;
+}
+
+.eakc-breadcrumb-separator {
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+}
+
+.eakc-breadcrumb-separator svg {
+    width: 12px;
+    height: 12px;
+}
+
+@media (max-width: 768px) {
+    .eakc-breadcrumbs {
+        padding: 12px 0;
+    }
+    
+    .eakc-breadcrumb-item a {
+        font-size: 0.85rem;
+    }
+    
+    .eakc-breadcrumb-separator svg {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* =================================================================
    GLOSSARY PAGE STYLES
    ================================================================= */
 
@@ -1941,16 +2003,17 @@
     z-index: 1;
 }
 
-/* Letter Navigation */
-.eakc-letter-navigation {
-    background: #f8f9fa;
-    border-bottom: 1px solid #e9ecef;
-    padding: 20px 0;
-    margin-bottom: 40px;
+/* Letter Navigation in Hero */
+.eakc-hero .eakc-letter-navigation {
+    margin-top: 30px;
+    background: transparent;
+    border: none;
+    padding: 0;
     position: relative;
     z-index: 100;
 }
 
+/* Letter Navigation when sticky */
 .eakc-letter-navigation.sticky {
     position: fixed;
     top: 0;
@@ -1958,6 +2021,26 @@
     right: 0;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     background: #fff;
+    padding: 15px 0;
+    z-index: 1000;
+}
+
+/* Letter navigation wrapper in hero */
+.eakc-hero .eakc-letter-nav-wrapper {
+    padding: 0;
+}
+
+/* Letter buttons in hero have white background */
+.eakc-hero .eakc-letter-btn {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: #374151;
+}
+
+.eakc-hero .eakc-letter-btn.has-definitions:hover {
+    background: #fff;
+    border-color: #fff;
+    color: #3b82f6;
 }
 
 .eakc-letter-nav-wrapper {
@@ -2030,9 +2113,29 @@
     font-weight: 700;
     color: #1f2937;
     margin-bottom: 30px;
-    border-bottom: 3px solid #3b82f6;
     padding-bottom: 10px;
-    display: inline-block;
+    display: block;
+    position: relative;
+    width: 100%;
+}
+
+.eakc-letter-heading::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    width: 100%;
+}
+
+/* Alternating colors for letter sections */
+.eakc-letter-section:nth-child(odd) .eakc-letter-heading::after {
+    background-color: #4fa6e4;
+}
+
+.eakc-letter-section:nth-child(even) .eakc-letter-heading::after {
+    background-color: #97c34e;
 }
 
 .eakc-definitions-group {
@@ -2150,6 +2253,45 @@
 }
 
 #eakc-clear-search:hover {
+    background: #4b5563;
+}
+
+/* Glossary Filter Container */
+.eakc-glossary-filter-container {
+    margin-bottom: 40px;
+}
+
+.eakc-glossary-filter-container .eakc-search-wrapper {
+    max-width: none;
+    margin: 0;
+}
+
+.eakc-glossary-filter-container .eakc-search-input {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 16px 60px 16px 20px;
+    font-size: 1rem;
+}
+
+.eakc-glossary-filter-container .eakc-search-input:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.eakc-glossary-filter-container .eakc-search-button {
+    background: #6b7280;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 8px;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.eakc-glossary-filter-container .eakc-search-button:hover {
     background: #4b5563;
 }
 

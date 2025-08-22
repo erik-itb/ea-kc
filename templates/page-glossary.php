@@ -57,16 +57,6 @@ $definitions_by_letter = eakc_organize_definitions_by_letter();
     <section class="eakc-hero">
         <div class="eakc-container">
             <div class="eakc-hero-content">
-                <!-- Back to Knowledge Center Button -->
-                <div class="eakc-back-navigation">
-                    <a href="<?php echo esc_url(home_url('/knowledge-center/')); ?>" class="eakc-back-button">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="15,18 9,12 15,6"/>
-                        </svg>
-                        <?php _e('Back to Knowledge Center', 'energy-alabama-kc'); ?>
-                    </a>
-                </div>
-                
                 <h1 class="eakc-hero-title">
                     <?php _e('Glossary', 'energy-alabama-kc'); ?>
                 </h1>
@@ -76,41 +66,70 @@ $definitions_by_letter = eakc_organize_definitions_by_letter();
                 
                 <!-- Search Form -->
                 <div class="eakc-search-container">
-                    <div class="eakc-search-wrapper">
-                        <input type="search" 
-                               id="eakc-glossary-search" 
-                               class="eakc-search-input" 
-                               placeholder="<?php esc_attr_e('Search definitions...', 'energy-alabama-kc'); ?>"
-                               autocomplete="off"
-                               aria-label="<?php esc_attr_e('Search glossary definitions', 'energy-alabama-kc'); ?>">
-                        <button type="button" id="eakc-clear-search" class="eakc-search-button" style="display: none;" aria-label="<?php esc_attr_e('Clear search', 'energy-alabama-kc'); ?>">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                            </svg>
-                        </button>
+                    <form class="eakc-search-form" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
+                        <div class="eakc-search-wrapper">
+                            <input type="search" 
+                                    class="eakc-search-input" 
+                                    placeholder="<?php esc_attr_e('Search knowledge center...', 'energy-alabama-kc'); ?>"
+                                    value="<?php echo get_search_query(); ?>" 
+                                    name="s" 
+                                    autocomplete="off"
+                                    aria-label="<?php esc_attr_e('Search knowledge center', 'energy-alabama-kc'); ?>">
+                            <input type="hidden" name="post_type" value="kc_article">
+                            <button type="submit" class="eakc-search-button" aria-label="<?php esc_attr_e('Search', 'energy-alabama-kc'); ?>">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"></circle>
+                                    <path d="m21 21-4.35-4.35"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="eakc-search-results" style="display: none;"></div>
+                    </form>
+                </div>
+
+                <!-- Letter Navigation -->
+                <div class="eakc-letter-navigation" id="eakc-letter-nav">
+                    <div class="eakc-letter-nav-wrapper">
+                        <?php foreach (array_merge(range('A', 'Z'), array('#')) as $letter): ?>
+                            <?php $has_definitions = !empty($definitions_by_letter[$letter]); ?>
+                            <button type="button" 
+                                    class="eakc-letter-btn <?php echo $has_definitions ? 'has-definitions' : 'no-definitions'; ?>" 
+                                    data-letter="<?php echo esc_attr($letter); ?>"
+                                    <?php echo $has_definitions ? '' : 'disabled'; ?>>
+                                <?php echo esc_html($letter); ?>
+                            </button>
+                        <?php endforeach; ?>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Breadcrumbs -->
+    <?php 
+    $template_manager = Energy_Alabama_KC_Template_Manager::get_instance();
+    echo $template_manager->render_breadcrumbs(); 
+    ?>
+
     <!-- Glossary Content -->
     <section class="eakc-glossary-content">
         <div class="eakc-container">
             
-            <!-- Letter Navigation -->
-            <div class="eakc-letter-navigation" id="eakc-letter-nav">
-                <div class="eakc-letter-nav-wrapper">
-                    <?php foreach (array_merge(range('A', 'Z'), array('#')) as $letter): ?>
-                        <?php $has_definitions = !empty($definitions_by_letter[$letter]); ?>
-                        <button type="button" 
-                                class="eakc-letter-btn <?php echo $has_definitions ? 'has-definitions' : 'no-definitions'; ?>" 
-                                data-letter="<?php echo esc_attr($letter); ?>"
-                                <?php echo $has_definitions ? '' : 'disabled'; ?>>
-                            <?php echo esc_html($letter); ?>
-                        </button>
-                    <?php endforeach; ?>
+            <!-- Glossary Filter Search -->
+            <div class="eakc-glossary-filter-container">
+                <div class="eakc-search-wrapper">
+                    <input type="search" 
+                           id="eakc-glossary-search" 
+                           class="eakc-search-input" 
+                           placeholder="<?php esc_attr_e('Search definitions...', 'energy-alabama-kc'); ?>"
+                           autocomplete="off"
+                           aria-label="<?php esc_attr_e('Search glossary definitions', 'energy-alabama-kc'); ?>">
+                    <button type="button" id="eakc-clear-search" class="eakc-search-button" style="display: none;" aria-label="<?php esc_attr_e('Clear search', 'energy-alabama-kc'); ?>">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
                 </div>
             </div>
             
@@ -206,17 +225,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Make letter navigation sticky
     function makeLetterNavSticky() {
-        const navTop = letterNav.offsetTop;
+        const heroSection = document.querySelector('.eakc-hero');
+        const heroHeight = heroSection ? heroSection.offsetHeight : 0;
         
         function checkSticky() {
-            if (window.pageYOffset >= navTop) {
+            if (window.pageYOffset >= heroHeight - 60) {
                 letterNav.classList.add('sticky');
+                // Add padding to content to prevent jump
+                document.querySelector('.eakc-glossary-content').style.paddingTop = '75px';
             } else {
                 letterNav.classList.remove('sticky');
+                document.querySelector('.eakc-glossary-content').style.paddingTop = '0';
             }
         }
         
         window.addEventListener('scroll', checkSticky);
+        window.addEventListener('resize', function() {
+            const newHeroHeight = heroSection ? heroSection.offsetHeight : 0;
+            checkSticky();
+        });
         checkSticky();
     }
     

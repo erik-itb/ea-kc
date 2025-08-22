@@ -57,15 +57,6 @@ function eakc_get_document_icon($type) {
         <section class="eakc-hero">
             <div class="eakc-container">
                 <div class="eakc-hero-content">
-                    <!-- Back to Knowledge Center Button -->
-                    <div class="eakc-back-navigation">
-                        <a href="<?php echo esc_url(home_url('/knowledge-center/')); ?>" class="eakc-back-button">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="15,18 9,12 15,6"/>
-                            </svg>
-                            <?php _e('Back to Knowledge Center', 'energy-alabama-kc'); ?>
-                        </a>
-                    </div>
                     
                     <h1 class="eakc-hero-title">Energy Alabama<br>Knowledge Center</h1>
                     
@@ -94,6 +85,12 @@ function eakc_get_document_icon($type) {
                 </div>
             </div>
         </section>
+
+        <!-- Breadcrumbs -->
+        <?php 
+        $template_manager = Energy_Alabama_KC_Template_Manager::get_instance();
+        echo $template_manager->render_breadcrumbs(); 
+        ?>
 
         <!-- Docket Meta Information (below hero) -->
         <section class="eakc-docket-meta-section">

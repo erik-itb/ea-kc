@@ -54,15 +54,6 @@ $category_color = eakc_get_category_color($category_slug);
     <section class="eakc-hero">
         <div class="eakc-container">
             <div class="eakc-hero-content">
-                <!-- Back to Knowledge Center Button -->
-                <div class="eakc-back-navigation">
-                    <a href="<?php echo esc_url(home_url('/knowledge-center/')); ?>" class="eakc-back-button">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="15,18 9,12 15,6"/>
-                        </svg>
-                        <?php _e('Back to Knowledge Center', 'energy-alabama-kc'); ?>
-                    </a>
-                </div>
                 
                 <h1 class="eakc-hero-title">
                     <?php echo esc_html($category_name); ?>
@@ -103,6 +94,12 @@ $category_color = eakc_get_category_color($category_slug);
             </div>
         </div>
     </section>
+
+    <!-- Breadcrumbs -->
+    <?php 
+    $template_manager = Energy_Alabama_KC_Template_Manager::get_instance();
+    echo $template_manager->render_breadcrumbs(); 
+    ?>
 
     <!-- Category Content -->
     <section class="eakc-category-content">

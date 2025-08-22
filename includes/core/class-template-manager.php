@@ -283,4 +283,147 @@ class Energy_Alabama_KC_Template_Manager {
     public function get_category_count($category_id) {
         return get_term_meta($category_id, 'article_count', true) ?: 0;
     }
+
+    /**
+     * Generate breadcrumbs for KC pages
+     */
+    public function get_breadcrumbs() {
+        global $post, $wp_query;
+        
+        $breadcrumbs = array();
+        
+        // Main KC page has no breadcrumbs
+        if (is_page() && $post && $post->post_name === 'knowledge-center') {
+            return $breadcrumbs;
+        }
+        
+        // Glossary page
+        if (get_query_var('eakc_glossary')) {
+            $breadcrumbs[] = array(
+                'title' => 'Knowledge Center',
+                'url' => home_url('/knowledge-center/')
+            );
+            return $breadcrumbs;
+        }
+        
+        // Category pages
+        if (is_tax('kc_category')) {
+            $breadcrumbs[] = array(
+                'title' => 'Knowledge Center',
+                'url' => home_url('/knowledge-center/')
+            );
+            return $breadcrumbs;
+        }
+        
+        // Tag pages
+        if (is_tax('kc_tag')) {
+            $breadcrumbs[] = array(
+                'title' => 'Knowledge Center',
+                'url' => home_url('/knowledge-center/')
+            );
+            return $breadcrumbs;
+        }
+        
+        // Docket archive
+        if (is_post_type_archive('docket')) {
+            $breadcrumbs[] = array(
+                'title' => 'Knowledge Center',
+                'url' => home_url('/knowledge-center/')
+            );
+            return $breadcrumbs;
+        }
+        
+        // Docket jurisdiction pages
+        if (is_tax('docket_jurisdiction')) {
+            $breadcrumbs[] = array(
+                'title' => 'Knowledge Center',
+                'url' => home_url('/knowledge-center/')
+            );
+            return $breadcrumbs;
+        }
+        
+        // KC Article archive
+        if (is_post_type_archive('kc_article')) {
+            $breadcrumbs[] = array(
+                'title' => 'Knowledge Center',
+                'url' => home_url('/knowledge-center/')
+            );
+            return $breadcrumbs;
+        }
+        
+        // Individual KC articles
+        if (is_singular('kc_article')) {
+            $breadcrumbs[] = array(
+                'title' => 'Knowledge Center',
+                'url' => home_url('/knowledge-center/')
+            );
+            
+            // Get the first category
+            $categories = get_the_terms($post->ID, 'kc_category');
+            if ($categories && !is_wp_error($categories)) {
+                $category = $categories[0];
+                $breadcrumbs[] = array(
+                    'title' => $category->name,
+                    'url' => get_term_link($category)
+                );
+            }
+            return $breadcrumbs;
+        }
+        
+        // Individual dockets
+        if (is_singular('docket')) {
+            $breadcrumbs[] = array(
+                'title' => 'Knowledge Center',
+                'url' => home_url('/knowledge-center/')
+            );
+            
+            // Get the first jurisdiction
+            $jurisdictions = get_the_terms($post->ID, 'docket_jurisdiction');
+            if ($jurisdictions && !is_wp_error($jurisdictions)) {
+                $jurisdiction = $jurisdictions[0];
+                $breadcrumbs[] = array(
+                    'title' => $jurisdiction->name,
+                    'url' => get_term_link($jurisdiction)
+                );
+            }
+            return $breadcrumbs;
+        }
+        
+        return $breadcrumbs;
+    }
+
+    /**
+     * Render breadcrumbs HTML
+     */
+    public function render_breadcrumbs() {
+        $breadcrumbs = $this->get_breadcrumbs();
+        
+        if (empty($breadcrumbs)) {
+            return '';
+        }
+        
+        $output = '<nav class="eakc-breadcrumbs" aria-label="Breadcrumb">';
+        $output .= '<div class="eakc-container">';
+        $output .= '<ol class="eakc-breadcrumb-list">';
+        
+        foreach ($breadcrumbs as $index => $breadcrumb) {
+            $output .= '<li class="eakc-breadcrumb-item">';
+            $output .= '<a href="' . esc_url($breadcrumb['url']) . '">' . esc_html($breadcrumb['title']) . '</a>';
+            $output .= '</li>';
+            
+            if ($index < count($breadcrumbs) - 1) {
+                $output .= '<li class="eakc-breadcrumb-separator" aria-hidden="true">';
+                $output .= '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">';
+                $output .= '<polyline points="9,18 15,12 9,6"/>';
+                $output .= '</svg>';
+                $output .= '</li>';
+            }
+        }
+        
+        $output .= '</ol>';
+        $output .= '</div>';
+        $output .= '</nav>';
+        
+        return $output;
+    }
 }
