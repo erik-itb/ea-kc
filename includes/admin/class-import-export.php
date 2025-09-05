@@ -250,6 +250,7 @@ class Energy_Alabama_KC_Import_Export {
 
         $uploaded_file = $_FILES['import_file'];
         
+        // SECURITY FIX: Enhanced file upload validation with MIME type checking
         if ($uploaded_file['error'] !== UPLOAD_ERR_OK) {
             add_action('admin_notices', function() {
                 echo '<div class="notice notice-error"><p>File upload failed.</p></div>';
@@ -257,17 +258,42 @@ class Energy_Alabama_KC_Import_Export {
             return;
         }
 
+        // Validate file extension
         $file_type = wp_check_filetype($uploaded_file['name']);
-        
         if ($file_type['ext'] !== 'csv') {
             add_action('admin_notices', function() {
-                echo '<div class="notice notice-error"><p>Please upload a CSV file.</p></div>';
+                echo '<div class="notice notice-error"><p>Please upload a CSV file only.</p></div>';
             });
             return;
         }
 
-        // Store file temporarily
-        $upload = wp_handle_upload($uploaded_file, array('test_form' => false));
+        // SECURITY FIX: Validate MIME type beyond just file extension
+        $allowed_mime_types = array('text/csv', 'application/csv');
+        $file_mime_type = mime_content_type($uploaded_file['tmp_name']);
+        
+        if (!in_array($file_mime_type, $allowed_mime_types, true)) {
+            add_action('admin_notices', function() use ($file_mime_type) {
+                echo '<div class="notice notice-error"><p>Invalid file type. Expected CSV file, got: ' . esc_html($file_mime_type) . '</p></div>';
+            });
+            return;
+        }
+
+        // SECURITY FIX: Additional MIME type validation using WordPress function
+        $wp_filetype = wp_check_filetype_and_ext($uploaded_file['tmp_name'], $uploaded_file['name']);
+        if (!$wp_filetype['type'] || !in_array($wp_filetype['type'], $allowed_mime_types, true)) {
+            add_action('admin_notices', function() {
+                echo '<div class="notice notice-error"><p>File validation failed. Please ensure you are uploading a valid CSV file.</p></div>';
+            });
+            return;
+        }
+
+        // Store file temporarily in WordPress temp directory (more secure)
+        $upload = wp_handle_upload($uploaded_file, array(
+            'test_form' => false,
+            'mimes' => array(
+                'csv' => 'text/csv',
+            )
+        ));
         
         if (isset($upload['error'])) {
             add_action('admin_notices', function() use ($upload) {
