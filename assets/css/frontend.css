@@ -805,7 +805,7 @@
     font-size: 2.5rem;
     font-weight: 700;
     color: #1f2937;
-    margin: 0;
+    margin: 2rem 0 0 0; /* Top margin to separate from metadata above */
     line-height: 1.2;
 }
 
@@ -823,6 +823,7 @@
     
     .eakc-article-page-title {
         font-size: 2rem;
+        margin: 1.5rem 0 0 0; /* Reduced margin on smaller screens */
     }
 }
 
@@ -833,6 +834,7 @@
     
     .eakc-article-page-title {
         font-size: 1.75rem;
+        margin: 1.25rem 0 0 0; /* Further reduced margin on mobile */
     }
 }
 
