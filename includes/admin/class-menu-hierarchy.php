@@ -6,6 +6,11 @@
  * @since   1.0.0
  */
 
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 class Energy_Alabama_KC_Menu_Hierarchy {
 
     /**

@@ -35,6 +35,7 @@ class Energy_Alabama_KC_Meta_Boxes {
         add_action('add_meta_boxes', array($this, 'add_meta_boxes'));
         add_action('save_post', array($this, 'save_meta_boxes'), 10, 2);
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_scripts'));
+        add_action('admin_notices', array($this, 'display_validation_errors'));
     }
 
     /**
@@ -843,22 +844,64 @@ class Energy_Alabama_KC_Meta_Boxes {
             update_post_meta($post_id, '_eakc_read_time', $read_time);
         }
 
-        // Save resources
+        // Save resources with enhanced validation
         if (isset($_POST['eakc_article_resources_nonce']) && wp_verify_nonce($_POST['eakc_article_resources_nonce'], 'eakc_article_resources_nonce')) {
             $resources = array();
+            $validation_errors = array();
+            
             if (isset($_POST['eakc_resources']) && is_array($_POST['eakc_resources'])) {
-                foreach ($_POST['eakc_resources'] as $resource_data) {
+                foreach ($_POST['eakc_resources'] as $index => $resource_data) {
                     if (!empty($resource_data['title']) || !empty($resource_data['url'])) {
-                        $resources[] = array(
-                            'title' => sanitize_text_field(isset($resource_data['title']) ? $resource_data['title'] : ''),
-                            'type' => sanitize_text_field(isset($resource_data['type']) ? $resource_data['type'] : 'external'),
-                            'url' => esc_url_raw(isset($resource_data['url']) ? $resource_data['url'] : ''),
-                            'description' => sanitize_textarea_field(isset($resource_data['description']) ? $resource_data['description'] : ''),
-                            'embed_preference' => sanitize_text_field(isset($resource_data['embed_preference']) ? $resource_data['embed_preference'] : 'link')
-                        );
+                        $url = isset($resource_data['url']) ? trim($resource_data['url']) : '';
+                        
+                        // Enhanced URL validation
+                        if (!empty($url)) {
+                            $sanitized_url = esc_url_raw($url);
+                            
+                            // Check if URL is valid
+                            if (empty($sanitized_url) || !filter_var($sanitized_url, FILTER_VALIDATE_URL)) {
+                                $validation_errors[] = sprintf(__('Resource %d: Invalid URL format.', 'energy-alabama-kc'), $index + 1);
+                                continue;
+                            }
+                            
+                            // Check for allowed file extensions for uploaded files
+                            if (strpos($sanitized_url, home_url()) === 0) {
+                                $allowed_extensions = array('pdf', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'txt', 'zip', 'csv', 'png', 'jpg', 'jpeg', 'gif', 'svg');
+                                $url_path = parse_url($sanitized_url, PHP_URL_PATH);
+                                $extension = strtolower(pathinfo($url_path, PATHINFO_EXTENSION));
+                                
+                                if (!empty($extension) && !in_array($extension, $allowed_extensions)) {
+                                    $validation_errors[] = sprintf(__('Resource %d: File type "%s" is not allowed.', 'energy-alabama-kc'), $index + 1, $extension);
+                                    continue;
+                                }
+                            }
+                            
+                            $resources[] = array(
+                                'title' => sanitize_text_field(isset($resource_data['title']) ? $resource_data['title'] : ''),
+                                'type' => sanitize_text_field(isset($resource_data['type']) ? $resource_data['type'] : 'external'),
+                                'url' => $sanitized_url,
+                                'description' => sanitize_textarea_field(isset($resource_data['description']) ? $resource_data['description'] : ''),
+                                'embed_preference' => sanitize_text_field(isset($resource_data['embed_preference']) ? $resource_data['embed_preference'] : 'link')
+                            );
+                        } else {
+                            // Allow resources with title but no URL
+                            $resources[] = array(
+                                'title' => sanitize_text_field(isset($resource_data['title']) ? $resource_data['title'] : ''),
+                                'type' => sanitize_text_field(isset($resource_data['type']) ? $resource_data['type'] : 'external'),
+                                'url' => '',
+                                'description' => sanitize_textarea_field(isset($resource_data['description']) ? $resource_data['description'] : ''),
+                                'embed_preference' => sanitize_text_field(isset($resource_data['embed_preference']) ? $resource_data['embed_preference'] : 'link')
+                            );
+                        }
                     }
                 }
             }
+            
+            // Store validation errors as transient for display
+            if (!empty($validation_errors)) {
+                set_transient('eakc_resource_validation_errors_' . $post_id, $validation_errors, 60);
+            }
+            
             update_post_meta($post_id, '_eakc_resources', wp_json_encode($resources));
         }
 
@@ -1014,5 +1057,31 @@ class Energy_Alabama_KC_Meta_Boxes {
     private function get_icon_svg($icon_slug) {
         // Placeholder - return a simple icon for now
         return '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"/></svg>';
+    }
+
+    /**
+     * Display validation errors in admin notices
+     */
+    public function display_validation_errors() {
+        global $post;
+        
+        if (!$post || !in_array($post->post_type, array('kc_article', 'docket'))) {
+            return;
+        }
+        
+        $errors = get_transient('eakc_resource_validation_errors_' . $post->ID);
+        if (!empty($errors)) {
+            echo '<div class="notice notice-error is-dismissible">';
+            echo '<p><strong>' . __('Resource Validation Errors:', 'energy-alabama-kc') . '</strong></p>';
+            echo '<ul>';
+            foreach ($errors as $error) {
+                echo '<li>' . esc_html($error) . '</li>';
+            }
+            echo '</ul>';
+            echo '</div>';
+            
+            // Clear the transient after displaying
+            delete_transient('eakc_resource_validation_errors_' . $post->ID);
+        }
     }
 }

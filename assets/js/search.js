@@ -150,14 +150,34 @@
                 if (response.success) {
                     displayResults(response.data, $results, query);
                 } else {
-                    showError($results, response.data || 'Search failed');
+                    // Handle structured error responses
+                    const errorData = response.data || {};
+                    const message = errorData.message || 'Search failed. Please try again.';
+                    const code = errorData.code || 'unknown_error';
+                    
+                    showError($results, message, code);
                 }
             },
             error: function(xhr) {
                 currentRequest = null;
                 
                 if (xhr.statusText !== 'abort') {
-                    showError($results, 'Search request failed');
+                    let message = 'Search request failed. Please check your connection and try again.';
+                    let code = 'network_error';
+                    
+                    // Provide more specific error messages based on status
+                    if (xhr.status === 500) {
+                        message = 'Server error occurred. Please try again later.';
+                        code = 'server_error';
+                    } else if (xhr.status === 403) {
+                        message = 'Access denied. Please refresh the page and try again.';
+                        code = 'access_denied';
+                    } else if (xhr.status === 0) {
+                        message = 'Network connection lost. Please check your internet connection.';
+                        code = 'connection_lost';
+                    }
+                    
+                    showError($results, message, code);
                 }
             }
         });
@@ -244,14 +264,46 @@
         $results.html(html).slideDown(200);
     }
 
-    function showError($results, message) {
+    function showError($results, message, code = 'unknown_error') {
+        // Add appropriate CSS class based on error type
+        let errorClass = 'eakc-search-error';
+        let iconClass = 'dashicons-warning';
+        
+        if (code === 'security_failed' || code === 'access_denied') {
+            errorClass += ' eakc-search-error-security';
+            iconClass = 'dashicons-shield-alt';
+        } else if (code === 'network_error' || code === 'connection_lost') {
+            errorClass += ' eakc-search-error-network';
+            iconClass = 'dashicons-cloud';
+        } else if (code === 'server_error' || code === 'database_error') {
+            errorClass += ' eakc-search-error-server';
+            iconClass = 'dashicons-admin-tools';
+        }
+        
         const html = `
-            <div class="eakc-search-error">
-                <p>Error: ${message}</p>
+            <div class="${errorClass}" data-error-code="${code}">
+                <div class="eakc-search-error-content">
+                    <span class="dashicons ${iconClass}"></span>
+                    <p>${message}</p>
+                    ${(code === 'security_failed' || code === 'connection_lost') ? 
+                        '<button class="eakc-retry-search button button-small">Retry Search</button>' : ''
+                    }
+                </div>
             </div>
         `;
         
         $results.html(html).slideDown(200);
+        
+        // Handle retry button click
+        $results.find('.eakc-retry-search').on('click', function() {
+            const $form = $results.closest('.eakc-search-form');
+            const $input = $form.find('.eakc-search-input');
+            const query = $input.val().trim();
+            
+            if (query.length >= 2) {
+                performSearch(query, $form, $results);
+            }
+        });
     }
 
     function hideResults($results) {

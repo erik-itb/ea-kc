@@ -388,6 +388,67 @@
     font-weight: 500;
 }
 
+/* Enhanced Error Message Styles */
+.eakc-search-error-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-direction: column;
+}
+
+.eakc-search-error-content .dashicons {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.eakc-search-error-security {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+}
+
+.eakc-search-error-security .dashicons {
+    color: #dc2626;
+}
+
+.eakc-search-error-network {
+    background-color: #fef3c7;
+    border: 1px solid #fde68a;
+}
+
+.eakc-search-error-network .dashicons {
+    color: #d97706;
+}
+
+.eakc-search-error-server {
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+}
+
+.eakc-search-error-server .dashicons {
+    color: #6b7280;
+}
+
+.eakc-retry-search {
+    margin-top: 10px;
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+    background: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+    color: white !important;
+    border-radius: 4px !important;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.eakc-retry-search:hover {
+    background: #2563eb !important;
+    border-color: #2563eb !important;
+}
+
 /* Responsive adjustments for search results */
 @media (max-width: 768px) {
     .eakc-search-result-link {

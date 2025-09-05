@@ -76,3 +76,5 @@ gruntfile.js
 includes/admin/class-admin-backup.php
 project_context.md
 glossary-terms.csv
+/claudedocs/*
+CLAUDE.md

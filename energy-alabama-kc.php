@@ -3,7 +3,7 @@
  * Plugin Name: Energy Alabama Knowledge Center
  * Plugin URI: https://energyalabama.org
  * Description: Comprehensive knowledge center system for clean energy resources, dockets, and educational materials.
- * Version: 1.1.0
+ * Version: 1.11.0
  * Author: ehanson
  * License: GPL v2 or later
  * Text Domain: energy-alabama-kc
@@ -18,7 +18,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('EAKC_VERSION', '1.0.9');
+define('EAKC_VERSION', '1.11.0');
 define('EAKC_PLUGIN_FILE', __FILE__);
 define('EAKC_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('EAKC_PLUGIN_URL', plugin_dir_url(__FILE__));

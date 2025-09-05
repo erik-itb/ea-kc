@@ -9,6 +9,11 @@
  * @subpackage Energy_Alabama_KC/includes
  */
 
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 /**
  * The public-facing functionality of the plugin.
  *
@@ -740,25 +745,71 @@ class Energy_Alabama_KC_Frontend {
     public function ajax_live_search() {
         // Verify nonce
         if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'eakc_search_nonce' ) ) {
-            wp_send_json_error( 'Security check failed' );
+            wp_send_json_error( array(
+                'message' => __('Security check failed. Please refresh the page and try again.', 'energy-alabama-kc'),
+                'code' => 'security_failed'
+            ) );
         }
 
         $query = isset( $_POST['query'] ) ? sanitize_text_field( $_POST['query'] ) : '';
         $post_type = isset( $_POST['post_type'] ) ? sanitize_text_field( $_POST['post_type'] ) : 'kc_article';
         
-        // Get taxonomy filters
+        // Enhanced input validation
+        if ( empty( $query ) ) {
+            wp_send_json_error( array(
+                'message' => __('Please enter a search term.', 'energy-alabama-kc'),
+                'code' => 'empty_query'
+            ) );
+        }
+        
+        if ( strlen( $query ) < 2 ) {
+            wp_send_json_error( array(
+                'message' => __('Please enter at least 2 characters to search.', 'energy-alabama-kc'),
+                'code' => 'query_too_short'
+            ) );
+        }
+        
+        if ( strlen( $query ) > 100 ) {
+            wp_send_json_error( array(
+                'message' => __('Search term is too long. Please use fewer than 100 characters.', 'energy-alabama-kc'),
+                'code' => 'query_too_long'
+            ) );
+        }
+        
+        // Validate post type
+        $allowed_post_types = array( 'kc_article', 'docket', 'glossary' );
+        if ( ! in_array( $post_type, $allowed_post_types ) ) {
+            wp_send_json_error( array(
+                'message' => __('Invalid content type specified.', 'energy-alabama-kc'),
+                'code' => 'invalid_post_type'
+            ) );
+        }
+        
+        // Get taxonomy filters with validation
         $category_slug = isset( $_POST['category'] ) ? sanitize_text_field( $_POST['category'] ) : '';
         $tag_slug = isset( $_POST['tag'] ) ? sanitize_text_field( $_POST['tag'] ) : '';
         $jurisdiction_slug = isset( $_POST['jurisdiction'] ) ? sanitize_text_field( $_POST['jurisdiction'] ) : '';
 
-        if ( strlen( $query ) < 2 ) {
-            wp_send_json_error( 'Query too short' );
+        try {
+            // Get prioritized search results
+            $results = $this->get_prioritized_search_results( $query, $post_type, $category_slug, $tag_slug, $jurisdiction_slug );
+            
+            if ( is_wp_error( $results ) ) {
+                wp_send_json_error( array(
+                    'message' => __('Search failed due to a database error. Please try again.', 'energy-alabama-kc'),
+                    'code' => 'database_error'
+                ) );
+            }
+            
+            wp_send_json_success( $results );
+            
+        } catch ( Exception $e ) {
+            error_log( 'EAKC Search Error: ' . $e->getMessage() );
+            wp_send_json_error( array(
+                'message' => __('An error occurred while searching. Please try again or contact support.', 'energy-alabama-kc'),
+                'code' => 'search_exception'
+            ) );
         }
-
-        // Get prioritized search results
-        $results = $this->get_prioritized_search_results( $query, $post_type, $category_slug, $tag_slug, $jurisdiction_slug );
-
-        wp_send_json_success( $results );
     }
 
     /**

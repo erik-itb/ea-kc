@@ -9,6 +9,11 @@
  * @subpackage Energy_Alabama_KC/includes/admin
  */
 
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 /**
  * The admin-specific functionality of the plugin.
  *
