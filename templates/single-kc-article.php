@@ -101,76 +101,54 @@ function eakc_get_resource_icon($type) {
         echo $template_manager->render_breadcrumbs(); 
         ?>
 
-        <!-- Article Header with Metadata and Post Title -->
+        <!-- Article Header with Post Title and Metadata -->
         <section class="eakc-article-header-section">
             <div class="eakc-container">
-                <!-- Article Meta Information (above title) -->
-                    <!-- Row 1: Author, Date, Spanish Link -->
-                    <div class="eakc-article-details">
-                        <?php
-                        // Get author information
-                        $author_id = get_the_author_meta('ID');
-                        $author_name = get_the_author_meta('display_name');
-                        $author_avatar = get_avatar_url($author_id, array('size' => 40));
-                        ?>
-                        
-                        <div class="eakc-author-info">
-                            <img src="<?php echo esc_url($author_avatar); ?>" alt="<?php echo esc_attr($author_name); ?>" class="eakc-author-avatar">
-                            <span class="eakc-author-name"><?php echo esc_html($author_name); ?></span>
-                        </div>
-                        
-                        <span class="eakc-article-date">
-                            <?php echo get_the_date('M j, Y'); ?>
-                        </span>
-                        
-                        <?php if ($spanish_available && $spanish_post_id): ?>
-                            <a href="<?php echo esc_url(get_permalink($spanish_post_id)); ?>" class="eakc-spanish-link">
-                                <?php _e('Ver en español', 'energy-alabama-kc'); ?>
-                            </a>
-                        <?php endif; ?>
-                        
-                        <?php if ($is_spanish_content && $english_version): ?>
-                            <a href="<?php echo esc_url(get_permalink($english_version->ID)); ?>" class="eakc-english-link">
-                                <?php _e('View in English', 'energy-alabama-kc'); ?>
-                            </a>
-                        <?php endif; ?>
+                <!-- Post Title (now first) -->
+                <h1 class="eakc-article-page-title"><?php the_title(); ?></h1>
+                
+                <!-- Simplified Metadata Row (Author | Date | Read Time) -->
+                <div class="eakc-article-meta-horizontal">
+                    <?php
+                    // Get author information
+                    $author_id = get_the_author_meta('ID');
+                    $author_name = get_the_author_meta('display_name');
+                    $author_avatar = get_avatar_url($author_id, array('size' => 32));
+                    ?>
+                    
+                    <div class="eakc-author-info-inline">
+                        <img src="<?php echo esc_url($author_avatar); ?>" alt="<?php echo esc_attr($author_name); ?>" class="eakc-author-avatar-small">
+                        <span class="eakc-author-name-inline"><?php echo esc_html($author_name); ?></span>
                     </div>
                     
-                    <!-- Row 2: Category, Read Time, Tags -->
-                    <div class="eakc-article-meta">
-                        <?php
-                        $categories = get_the_terms(get_the_ID(), 'kc_category');
-                        if ($categories && !is_wp_error($categories)):
-                        ?>
-                            <span class="eakc-article-category">
-                                <a href="<?php echo esc_url(get_term_link($categories[0])); ?>">
-                                    <?php echo esc_html($categories[0]->name); ?>
-                                </a>
-                            </span>
-                        <?php endif; ?>
-                        
-                        <?php if ($read_time): ?>
-                            <span class="eakc-article-read-time">
-                                <?php printf(__('%d min read', 'energy-alabama-kc'), $read_time); ?>
-                            </span>
-                        <?php endif; ?>
-                        
-                        <?php 
-                        $tags = get_the_terms(get_the_ID(), 'kc_tag');
-                        if ($tags && !is_wp_error($tags)): 
-                        ?>
-                            <div class="eakc-article-tags-inline">
-                                <?php foreach ($tags as $tag): ?>
-                                    <a href="<?php echo esc_url(get_term_link($tag)); ?>" class="eakc-tag-inline">
-                                        <?php echo esc_html($tag->name); ?>
-                                    </a>
-                                <?php endforeach; ?>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                
-                <!-- Post Title (moved below metadata) -->
-                <h1 class="eakc-article-page-title"><?php the_title(); ?></h1>
+                    <span class="eakc-meta-separator">•</span>
+                    
+                    <span class="eakc-article-date-inline">
+                        <?php echo get_the_date('M j, Y'); ?>
+                    </span>
+                    
+                    <?php if ($read_time): ?>
+                        <span class="eakc-meta-separator">•</span>
+                        <span class="eakc-article-read-time-inline">
+                            <?php printf(__('%d min read', 'energy-alabama-kc'), $read_time); ?>
+                        </span>
+                    <?php endif; ?>
+                    
+                    <!-- Language links if available -->
+                    <?php if ($spanish_available && $spanish_post_id): ?>
+                        <span class="eakc-meta-separator">•</span>
+                        <a href="<?php echo esc_url(get_permalink($spanish_post_id)); ?>" class="eakc-spanish-link-inline">
+                            <?php _e('Ver en español', 'energy-alabama-kc'); ?>
+                        </a>
+                    <?php endif; ?>
+                    
+                    <?php if ($is_spanish_content && $english_version): ?>
+                        <span class="eakc-meta-separator">•</span>
+                        <a href="<?php echo esc_url(get_permalink($english_version->ID)); ?>" class="eakc-english-link-inline">
+                            <?php _e('View in English', 'energy-alabama-kc'); ?>
+                        </a>
+                    <?php endif; ?>
+                </div>
             </div>
         </section>
 
