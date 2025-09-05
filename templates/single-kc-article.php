@@ -101,7 +101,14 @@ function eakc_get_resource_icon($type) {
         echo $template_manager->render_breadcrumbs(); 
         ?>
 
-        <!-- Article Meta Information (below hero) -->
+        <!-- Article Header with Post Title -->
+        <section class="eakc-article-header-section">
+            <div class="eakc-container">
+                <h1 class="eakc-article-page-title"><?php the_title(); ?></h1>
+            </div>
+        </section>
+
+        <!-- Article Meta Information (below title) -->
         <section class="eakc-article-meta-section">
             <div class="eakc-container">
                 <!-- Row 1: Author, Date, Spanish Link -->

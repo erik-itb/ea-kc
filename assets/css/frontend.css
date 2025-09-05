@@ -789,6 +789,54 @@
 
 
 /* =================================================================
+   ARTICLE HEADER SECTION
+   ================================================================= */
+
+/* Article Header Section (post title) */
+.eakc-article-header-section {
+    background: #fff;
+    padding: 2rem 0;
+    border-bottom: #97c34e solid 2px;
+    position: relative;
+    z-index: 1;
+}
+
+.eakc-article-page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Responsive adjustments for article title */
+@media (max-width: 1024px) {
+    .eakc-article-page-title {
+        font-size: 2.25rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .eakc-article-header-section {
+        padding: 1.5rem 0;
+    }
+    
+    .eakc-article-page-title {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .eakc-article-header-section {
+        padding: 1.25rem 0;
+    }
+    
+    .eakc-article-page-title {
+        font-size: 1.75rem;
+    }
+}
+
+/* =================================================================
    META INFORMATION SECTIONS
    ================================================================= */
 
