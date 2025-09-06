@@ -795,7 +795,7 @@
 /* Article Header Section (post title) */
 .eakc-article-header-section {
     background: #fff;
-    padding: 2rem 0;
+    padding: 2rem 0 1rem 0;
     border-bottom: #97c34e solid 2px;
     position: relative;
     z-index: 1;
@@ -818,7 +818,7 @@
 
 @media (max-width: 768px) {
     .eakc-article-header-section {
-        padding: 1.5rem 0;
+        padding: 1.5rem 0 0.75rem 0;
     }
     
     .eakc-article-page-title {
@@ -829,7 +829,7 @@
 
 @media (max-width: 480px) {
     .eakc-article-header-section {
-        padding: 1.25rem 0;
+        padding: 1.25rem 0 0.625rem 0;
     }
     
     .eakc-article-page-title {
